@@ -278,8 +278,8 @@ var search = require('../search/elasticsearch');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		exports.getServices = function(data, reqUrl, resUrl){
-			console.log(data)
 			return new Promise(function (resolve, reject) {
+				console.log(data)
 				search.getByGUID(data.guid)
 				.then(function(retObj){
 					return resolve(retObj);
