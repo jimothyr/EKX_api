@@ -29,7 +29,7 @@ var search = require('../search/elasticsearch');
 		// 	},	
 			guid : function(guid){
 				return new Promise(function (resolve, reject) {
-					search.getByGUID(data.guid)
+					search.getByGUID(guid)
 					.then(function(retObj){
 						return resolve(retObj);
 					})
@@ -148,22 +148,23 @@ var search = require('../search/elasticsearch');
 		// 	        console.log('organisations - ', error)
 		// 	    });
 		// 	},
-		// 	related : function(data){
-		// 		var ret_obj={name: 'related'};
-		// 		return new Promise(function (resolve, reject) {
-		// 			if(!data.keywords.string){
-		// 				ret_obj.data = {'error' : 'invalid keywords'};
-		// 				return resolve (ret_obj);
-		// 			}
-		// 			search.getRelated(data.keywords.string, (data.guid ? data.guid : 0), data.requestDomain, data.thisDomain)
-		// 			.then(function(ret_related){
-		// 				ret_obj.data = ret_related
-		// 				return resolve(ret_obj)
-		// 			})
-		// 		}).catch((error) => {
-		// 	        console.log('related - ', error)
-		// 	    });
-		// 	},
+			related : function(data){
+				var ret_obj={name: 'related'};
+				return new Promise(function (resolve, reject) {
+					if(!data.keywords.string){
+						ret_obj.data = {'error' : 'invalid keywords'};
+						return resolve (ret_obj);
+					}
+					search.getRelated(data.keywords.string, (data.guid ? data.guid : 0), data.requestDomain, data.thisDomain)
+					.then(function(ret_related){
+						ret_obj.data = ret_related
+						return resolve(ret_obj)
+					})
+				}).catch((error) => {
+			        console.log('related - ', error)
+			        return reject(error);
+			    });
+			}
 		// 	funding : function(data){
 		// 		var ret_obj={name: 'funding'};
 		// 		return new Promise(function (resolve, reject) {

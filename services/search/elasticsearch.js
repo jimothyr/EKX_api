@@ -231,10 +231,11 @@ var appGlobals = require('../globals/globals.json');
 				    }else{
 				    	hits = [];
 				    }  
-					resolve(hits);
+					return resolve(hits);
 				});
 			}).catch((error) => {
 			    console.log('search - ', error)
+			    return reject(error);
 		   })
 		}
 // ║                                                                                                                      ║
