@@ -347,9 +347,9 @@ var search = require('../search/elasticsearch');
 		// 		}else{
 		// 				return resolve ({'error' : 'No valid methods - please send a guid from your rss feed, some keywords or some html content next time'});
 				}
-				retObj.requestDomain : reqUrl,
-				retObj.thisDomain : resUrl
-				
+				retObj.requestDomain = reqUrl;
+				retObj.thisDomain = resUrl;
+
 				var items = Promise.all(proms);
 			  	items.then(function(results){
 			  		if(data.action == 'all'){
