@@ -242,6 +242,7 @@ var search = require('../search/elasticsearch');
 		// --------------------------------------------------------┤ GET A SPECIFIC SERVICE
 		var get_service = function(data, action){
 			return new Promise(function (resolve, reject) {
+				console.log(data)
 				if(!data[action]){
 					if(services[action]){
 						services[action](data)
@@ -281,7 +282,6 @@ var search = require('../search/elasticsearch');
 // ║                                                                                                                      ║
 		exports.getServices = function(data, reqUrl, resUrl){
 			return new Promise(function (resolve, reject) {
-			console.log(data, reqUrl, resUrl)
 			var proms = [], retObj = {};
 				if(data.guid){
 					if(data.guid != ''){
