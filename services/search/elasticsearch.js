@@ -152,7 +152,7 @@ var appGlobals = require('../globals/globals.json');
 							} 
 						},
 						"_source": {
-					        "exclude": ["links.*"]
+					        "exclude": ["content.links.*"]
 					    },
 				    }
 				}, function (error, response, body){
