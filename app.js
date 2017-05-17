@@ -26,12 +26,12 @@ var app = express();
       app.get('/info/gen', function(req, res){
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Cache-Control', 'no-cache, no-store');
-        res.end(JSON.stringify(sysInfo[url.slice(6)]()));
+        res.end(JSON.stringify(sysInfo['gen']()));
       });
       app.get('/info/poll', function(req, res){
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Cache-Control', 'no-cache, no-store');
-        res.end(JSON.stringify(sysInfo[url.slice(6)]()));
+        res.end(JSON.stringify(sysInfo['poll']()));
       });
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
