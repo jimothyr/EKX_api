@@ -1,6 +1,6 @@
 var unfluff = require('unfluff');
-// var request = require('request');
-// var textract = require('textract');
+var request = require('request');
+var textract = require('textract');
 var appGlobals = require('../globals/globals.json');
 
 // var get_base64 = function(tUrl){
