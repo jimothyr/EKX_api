@@ -34,8 +34,8 @@ var search = require('../search/elasticsearch');
 						return resolve(retObj);
 					})
 					.catch((error) => {
-						return reject(error);
 				        console.log('improper guid - ', error)
+				        return reject(error);
 				    });
 				});
 			}
@@ -213,50 +213,52 @@ var search = require('../search/elasticsearch');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		// --------------------------------------------------------┤ GET EVERYTHING YOU CAN
-		// var get_all = function(data){
-		// 	return new Promise(function (resolve, reject) {
-		// 		var proms = [];
-		// 		for(var s in services){
-		// 			if(!data[s]){
-		// 				proms.push(
-		// 					services[s](data)
-		// 					.then(function(retData){
-		// 						data[retData.name] = retData.data;
-		// 					}).catch((error) => {
-		// 				        console.log(s+' - ', error)
-		// 				    })
-		// 				)
-		// 			}
-		// 		}
-		// 		var items = Promise.all(proms);
-		// 	  	items.then(function(results){
-		// 	  		return resolve (data);
-		// 	  	});
-		// 	}).catch((error) => {
-		//         console.log('get all services - ', error)
-		//     });	
-		// }
+		var get_all = function(data){
+			return new Promise(function (resolve, reject) {
+				var proms = [];
+				for(var s in services){
+					if(!data[s]){
+						proms.push(
+							services[s](data)
+							.then(function(retData){
+								data[retData.name] = retData.data;
+							}).catch((error) => {
+						        console.log(s+' - ', error)
+						    })
+						)
+					}
+				}
+				var items = Promise.all(proms);
+			  	items.then(function(results){
+			  		return resolve (data);
+			  	});
+			}).catch((error) => {
+		        console.log('get all services - ', error)
+		        return reject(error);
+		    });	
+		}
 
 		// --------------------------------------------------------┤ GET A SPECIFIC SERVICE
-		// var get_service = function(data, action){
-		// 	return new Promise(function (resolve, reject) {
-		// 		if(!data[action]){
-		// 			if(services[action]){
-		// 				services[action](data)
-		// 				.then(function(retData){
-		// 					return resolve(retData.data);
-		// 				}).catch((error) => {
-		// 			        console.log(action, ' - ', error)
-		// 			    })
-		// 			}else{
-		// 				return resolve({"error" : "not a valid service"})
-		// 			}
+		var get_service = function(data, action){
+			return new Promise(function (resolve, reject) {
+				if(!data[action]){
+					if(services[action]){
+						services[action](data)
+						.then(function(retData){
+							return resolve(retData.data);
+						}).catch((error) => {
+					        console.log(action, ' - ', error)
+					    })
+					}else{
+						return resolve({"error" : "not a valid service"})
+					}
 					
-		// 		}
-		// 	}).catch((error) => {
-		//         console.log('get single services - ', error)
-		//     });
-		// }
+				}
+			}).catch((error) => {
+		        console.log('get single services - ', error)
+		        return reject(error);
+		    });
+		}
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
@@ -276,6 +278,7 @@ var search = require('../search/elasticsearch');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		exports.getServices = function(data, reqUrl, resUrl){
+			console.log(data)
 			return new Promise(function (resolve, reject) {
 				search.getByGUID(data.guid)
 				.then(function(retObj){
