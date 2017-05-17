@@ -1,3 +1,5 @@
+var content = require('../content/get_content');
+var keywords = require('../keywords/get_keywords');
 var search = require('../search/elasticsearch');
 var social = require('../social/get_social');
 var organisations = require('../organisations/bridgelight');
