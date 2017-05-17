@@ -14,6 +14,7 @@
     "request": "*",
     "unfluff": "*",
     "textract": "^2.1.2",
+    "compromise": "*",
     "retext": "*"
   },
   "author": "Ionut-Cristian Florescu <ionut.florescu@gmail.com>",
