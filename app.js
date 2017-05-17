@@ -1,6 +1,7 @@
 const http         = require('http'),
       express      = require('express'),
       bodyParser   = require('body-parser'),
+      Fingerprint = require('express-fingerprint'),
       fs           = require('fs'),
       path         = require('path'),
       contentTypes = require('./utils/content-types'),
