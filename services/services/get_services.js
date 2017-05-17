@@ -167,19 +167,20 @@ var organisations = require('../organisations/bridgelight');
 			        return reject(error);
 			    });
 			},
-		// 	funding : function(data){
-		// 		var ret_obj={name: 'funding'};
-		// 		return new Promise(function (resolve, reject) {
-		// 			if(!data.keywords.string){
-		// 				ret_obj.data = {'error' : 'invalid keywords'};
-		// 				return resolve (ret_obj);
-		// 			}
-		// 			ret_obj.data = {'error' : 'Not currently available'};
-		// 			return resolve (ret_obj);
-		// 		}).catch((error) => {
-		// 	        console.log('funding - ', error)
-		// 	    });
-		// 	},
+			funding : function(data){
+				var ret_obj={name: 'funding'};
+				return new Promise(function (resolve, reject) {
+					if(!data.keywords.string){
+						ret_obj.data = {'error' : 'invalid keywords'};
+						return resolve (ret_obj);
+					}
+					ret_obj.data = {'error' : 'Not currently available'};
+					return resolve (ret_obj);
+				}).catch((error) => {
+			        console.log('funding - ', error)
+			        return reject(error);
+			    });
+			},
 			social : function(data){
 				var ret_obj={name: 'social'};
 				return new Promise(function (resolve, reject) {
@@ -322,19 +323,19 @@ var organisations = require('../organisations/bridgelight');
 		// 			}else{
 		// 				return resolve ({'error' : 'Not valid content'});
 		// 			}
-		// 		}else if(data.keywords){
-		// 			if(data.keywords != ''){
-		// 				data.keywords = data.keywords.replace(/,/g, '')
-		// 				retObj.keywords = {
-		// 					keywords : data.keywords.split(' '),
-		// 					string : data.keywords
-		// 				}
-		// 				retObj.content = 'Not available'
-		// 			}else{
-		// 				return resolve ({'error' : 'Not valid keywords'});
-		// 			}
-		// 		}else{
-		// 				return resolve ({'error' : 'No valid methods - please send a guid from your rss feed, some keywords or some html content next time'});
+				}else if(data.keywords){
+					if(data.keywords != ''){
+						data.keywords = data.keywords.replace(/,/g, '')
+						retObj.keywords = {
+							keywords : data.keywords.split(' '),
+							string : data.keywords
+						}
+						retObj.content = 'Not available'
+					}else{
+						return resolve ({'error' : 'Not valid keywords'});
+					}
+				}else{
+						return resolve ({'error' : 'No valid methods - please send a guid from your rss feed, some keywords or some html content next time'});
 				}
 				
 				var items = Promise.all(proms);
