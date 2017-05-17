@@ -1,5 +1,6 @@
 var search = require('../search/elasticsearch');
 var social = require('../social/get_social');
+var organisations = require('../organisations/bridgelight');
 
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -133,22 +134,22 @@ var social = require('../social/get_social');
 		// 	        console.log('people - ', error)
 		// 	    });
 		// 	},
-		// 	organisations : function(data){
-		// 		var ret_obj={name: 'organisations'};
-		// 		return new Promise(function (resolve, reject) {
-		// 			if(!data.keywords.string){
-		// 				ret_obj.data = {'error' : 'invalid keywords'};
-		// 				return resolve (ret_obj);
-		// 			}
-		// 			organisations.get_organisations(data.keywords.string)
-		// 			.then(function(ret_organisation){
-		// 				ret_obj.data = ret_organisation
-		// 				return resolve(ret_obj);
-		// 			})
-		// 		}).catch((error) => {
-		// 	        console.log('organisations - ', error)
-		// 	    });
-		// 	},
+			organisations : function(data){
+				var ret_obj={name: 'organisations'};
+				return new Promise(function (resolve, reject) {
+					if(!data.keywords.string){
+						ret_obj.data = {'error' : 'invalid keywords'};
+						return resolve (ret_obj);
+					}
+					organisations.get_organisations(data.keywords.string)
+					.then(function(ret_organisation){
+						ret_obj.data = ret_organisation
+						return resolve(ret_obj);
+					})
+				}).catch((error) => {
+			        console.log('organisations - ', error)
+			    });
+			},
 			related : function(data){
 				var ret_obj={name: 'related'};
 				return new Promise(function (resolve, reject) {

@@ -1,6 +1,7 @@
 var request = require('request');
 exports.get_stackExchange = function(keywords){
 	return new Promise(function (resolve, reject) {
+		console.log('social request')
 		request({
 			url: "https://api.stackexchange.com/2.2/similar?pagesize=10&order=desc&sort=relevance&title="+encodeURIComponent(keywords)+"&site=sustainability",
 			method: "GET",
