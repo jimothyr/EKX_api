@@ -191,6 +191,7 @@ var appGlobals = require('../globals/globals.json');
 		// --------------------------------------------------------┤ ALL RELATED
 		exports.getRelated = function(keywords, guid, reqUrl, resUrl){
 			return new Promise(function (resolve, reject) {
+				console.log(keywords, guid, reqUrl, resUrl);
 				request({
 				    url: appGlobals.searchURL+appGlobals.searchShard+"/_search",
 				    method: "POST",
@@ -222,7 +223,7 @@ var appGlobals = require('../globals/globals.json');
 				    	hits = body.hits.hits.reduce(function(memo, hit) {
 						    if (hit.guid != guid) {
 						    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
-						    	hit._source.link = resUrl+'/'+appGlobals.bounceRoute+'/'+encodeURIComponent(new Buffer(reqUrl).toString('base64'))+'/'+encodeURIComponent(new Buffer(hit._source.link).toString('base64'));
+						    	hit._source.link = resUrl+'/'+appGlobals.bounceRoute+'/'+encodeURIComponent(new Buffer(reqUrl || 'unkown').toString('base64'))+'/'+encodeURIComponent(new Buffer(hit._source.link).toString('base64'));
 						    	hit._source.url = hit._source.link;
 						        memo.push(hit);
 						    }
