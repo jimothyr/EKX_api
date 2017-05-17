@@ -11,7 +11,8 @@
     "express": "^4.14.0",
     "body-parser": "^1.10.2",
     "express-fingerprint" : "*",
-    "request": "*"
+    "request": "*",
+    "unfluff": "*"
   },
   "author": "Ionut-Cristian Florescu <ionut.florescu@gmail.com>",
   "license": "ISC"
