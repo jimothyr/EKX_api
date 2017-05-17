@@ -191,7 +191,6 @@ var appGlobals = require('../globals/globals.json');
 		// --------------------------------------------------------┤ ALL RELATED
 		exports.getRelated = function(keywords, guid, reqUrl, resUrl){
 			return new Promise(function (resolve, reject) {
-				console.log(keywords, guid, reqUrl, resUrl);
 				request({
 				    url: appGlobals.searchURL+appGlobals.searchShard+"/_search",
 				    method: "POST",
