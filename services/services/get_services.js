@@ -8,7 +8,7 @@ var search = require('../search/elasticsearch');
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
-		// var globalServices = {
+		var globalServices = {
 		// 	content : function(data){
 		// 		var ret_obj={name: 'content'};
 		// 		return new Promise(function (resolve, reject) {
@@ -27,16 +27,19 @@ var search = require('../search/elasticsearch');
 		// 	        console.log('content - ', error)
 		// 	    });
 		// 	},	
-		// 	guid : function(guid){
-		// 		return new Promise(function (resolve, reject) {
-		// 			search.getByGUID(guid).then(function(data){
-		// 				return resolve(data);
-		// 			});		
-		// 		}).catch((error) => {
-		// 	        console.log('guid - ', error)
-		// 	    });	
-		// 	}
-		// }
+			guid : function(guid){
+				return new Promise(function (resolve, reject) {
+					search.getByGUID(data.guid)
+					.then(function(retObj){
+						return resolve(retObj);
+					})
+					.catch((error) => {
+						return reject(error);
+				        console.log('improper guid - ', error)
+				    });
+				});
+			}
+		}
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
