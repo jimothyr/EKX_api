@@ -6,6 +6,7 @@ const http         = require('http'),
       contentTypes = require('./utils/content-types'),
       sysInfo      = require('./utils/sys-info'),
       services     = require('./services/services/get_services'),
+      appGlobals   = require('../globals/globals.json'),
       env          = process.env;
 
 var app = express();
@@ -37,6 +38,14 @@ app.use(bodyParser.urlencoded({
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Cache-Control', 'no-cache, no-store');
         res.end(JSON.stringify(sysInfo['poll']()));
+      });
+
+      // --------------------------------------------------------┤ RECORD A LINK CLICK
+      app.get('/'+appGlobals.bounceRoute+'/:from/:to', function(req, res){
+        var tfrom = new Buffer(req.params.from, 'base64').toString();
+        var tto = new Buffer(req.params.to, 'base64').toString();
+        bounces.bounce(tfrom,tto, req.fingerprint.hash);
+        res.redirect(tto);
       });
 
       // --------------------------------------------------------┤ SERVICES FROM API MANAGER

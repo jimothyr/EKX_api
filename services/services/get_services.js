@@ -1,4 +1,5 @@
 var search = require('../search/elasticsearch');
+var social = require('../social/get_social');
 
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -164,7 +165,7 @@ var search = require('../search/elasticsearch');
 			        console.log('related - ', error)
 			        return reject(error);
 			    });
-			}
+			},
 		// 	funding : function(data){
 		// 		var ret_obj={name: 'funding'};
 		// 		return new Promise(function (resolve, reject) {
@@ -178,22 +179,22 @@ var search = require('../search/elasticsearch');
 		// 	        console.log('funding - ', error)
 		// 	    });
 		// 	},
-		// 	social : function(data){
-		// 		var ret_obj={name: 'social'};
-		// 		return new Promise(function (resolve, reject) {
-		// 			if(!data.keywords.string){
-		// 				ret_obj.data = {'error' : 'invalid keywords'};
-		// 				return resolve (ret_obj);
-		// 			}
-		// 			social.get_stackExchange(data.keywords.string)
-		// 			.then(function(ret_social){
-		// 				ret_obj.data = ret_social
-		// 				return resolve(ret_obj);
-		// 			})
-		// 		}).catch((error) => {
-		// 	        console.log('social - ', error)
-		// 	    });
-		// 	}
+			social : function(data){
+				var ret_obj={name: 'social'};
+				return new Promise(function (resolve, reject) {
+					if(!data.keywords.string){
+						ret_obj.data = {'error' : 'invalid keywords'};
+						return resolve (ret_obj);
+					}
+					social.get_stackExchange(data.keywords.string)
+					.then(function(ret_social){
+						ret_obj.data = ret_social
+						return resolve(ret_obj);
+					})
+				}).catch((error) => {
+			        console.log('social - ', error)
+			    });
+			}
 		}
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
