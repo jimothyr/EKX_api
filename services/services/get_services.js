@@ -280,6 +280,7 @@ var search = require('../search/elasticsearch');
 					return resolve(retObj);
 				})
 				.catch((error) => {
+					return reject(error);
 			        console.log('improper guid - ', error)
 			    });
 			});

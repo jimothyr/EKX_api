@@ -8,7 +8,10 @@ const http         = require('http'),
       env          = process.env;
 
 var app = express();
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));   
 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
 // ║                                                                                                                      ║
@@ -16,7 +19,8 @@ var app = express();
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                                                                                      ║
-// ║                                                                                                                      ║
+// ║  
+                                                                                                                    ║
       // --------------------------------------------------------┤ HEALTH - REQUIRED BY OPENSHIFT
       app.get('/health', function(req, res){
         res.writeHead(200);
