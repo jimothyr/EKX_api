@@ -5,6 +5,7 @@ const http         = require('http'),
       path         = require('path'),
       contentTypes = require('./utils/content-types'),
       sysInfo      = require('./utils/sys-info'),
+      services     = require('./services/services/get_services'),
       env          = process.env;
 
 var app = express();
@@ -40,8 +41,13 @@ app.use(bodyParser.urlencoded({
 
       // --------------------------------------------------------┤ SERVICES FROM API MANAGER
       app.post('/services', function(req, res) {
-        var services = require('./services/services/get_services');
         services.getServices(req.body, req.headers.origin, req.protocol + '://' + req.get('host'))
+        .then(function(ret_obj){
+          res.send(ret_obj);
+        });
+      });
+      app.get('/services/:guid', function(req, res) {
+        services.getServices(req.params.guid, req.headers.origin, req.protocol + '://' + req.get('host'))
         .then(function(ret_obj){
           res.send(ret_obj);
         });
