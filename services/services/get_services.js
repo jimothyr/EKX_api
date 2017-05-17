@@ -273,10 +273,15 @@ var search = require('../search/elasticsearch');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		exports.getServices = function(data, reqUrl, resUrl){
+			console.log(data)
 			return new Promise(function (resolve, reject) {
-				search.get_guid(data.guid).then(function(retObj){
+				search.get_guid(data.guid)
+				.then(function(retObj){
 					return resolve(retObj);
-				});
+				})
+				.catch((error) => {
+			        console.log('improper guid - ', error)
+			    });
 			});
 		}
 
