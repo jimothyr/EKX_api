@@ -70,6 +70,12 @@ app.use(Fingerprint({
           res.send(ret_obj);
         });
       });
+      app.get('/services/:keywords/:action', function(req, res) {
+        services.getServices({keywords:req.params.keywords*1, action:req.params.action}, req.headers.origin, req.protocol + '://' + req.get('host'))
+        .then(function(ret_obj){
+          res.send(ret_obj);
+        });
+      });
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
