@@ -61,25 +61,26 @@ var organisations = require('../organisations/bridgelight');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		var services = {
-		// 	keywords : function(data){
-		// 		var ret_obj={name: 'keywords'};
-		// 		return new Promise(function (resolve, reject) {
-		// 			if(!data.content.text){
-		// 				ret_obj.data = {'error' : 'invalid content'};
-		// 				return resolve (ret_obj);
-		// 			}
-		// 			keywords.get_keywords(data.content.text)
-		// 			.then(function(ret_keywords){
-		// 				ret_obj.data = {
-		// 					keywords : ret_keywords,
-		// 					string : ret_keywords.map(function(k){return k.term}).join()
-		// 				}
-		// 				return resolve (ret_obj);
-		// 			});
-		// 		}).catch((error) => {
-		//         	console.log('keyword - ', error)
-		//     	});
-		// 	},
+			keywords : function(data){
+				var ret_obj={name: 'keywords'};
+				return new Promise(function (resolve, reject) {
+					if(!data.content.text){
+						ret_obj.data = {'error' : 'invalid content'};
+						return resolve (ret_obj);
+					}
+					keywords.get_keywords(data.content.text)
+					.then(function(ret_keywords){
+						ret_obj.data = {
+							keywords : ret_keywords,
+							string : ret_keywords.map(function(k){return k.term}).join()
+						}
+						return resolve (ret_obj);
+					});
+				}).catch((error) => {
+		        	console.log('keyword - ', error)
+			        return reject(error);
+		    	});
+			},
 		// 	summary : function(data){
 		// 		var ret_obj={name: 'summary'};
 		// 		return new Promise(function (resolve, reject) {
@@ -96,6 +97,7 @@ var organisations = require('../organisations/bridgelight');
 		//    			});
 		// 		}).catch((error) => {
 		//         	console.log('summary - ', error)
+			        // return reject(error);
 		//    		});
 		// 	},
 		// 	eng_lang_score : function(data){
@@ -114,6 +116,7 @@ var organisations = require('../organisations/bridgelight');
 					
 		// 		}).catch((error) => {
 		// 		    console.log('eng lang error - ', error)
+			        // return reject(error);
 		// 		});
 		// 	},
 		// 	people : function(data){
@@ -132,6 +135,7 @@ var organisations = require('../organisations/bridgelight');
 					
 		// 		}).catch((error) => {
 		// 	        console.log('people - ', error)
+			        // return reject(error);
 		// 	    });
 		// 	},
 			organisations : function(data){
@@ -148,6 +152,7 @@ var organisations = require('../organisations/bridgelight');
 					})
 				}).catch((error) => {
 			        console.log('organisations - ', error)
+			        return reject(error);
 			    });
 			},
 			related : function(data){
@@ -304,25 +309,27 @@ var organisations = require('../organisations/bridgelight');
 					}else{
 						return resolve ({'error' : 'Not a valid guid'});
 					}
-		// 		}else if(data.content){
-		// 			if(data.content != ''){
-		// 				proms.push(
-		// 					globalServices.content(data)
-		// 					.then(function(ret_content){
-		// 						retObj.content = ret_content.data;
-		// 						services.keywords(retObj)
-		// 						.then(function(ret_keys){
-		// 							retObj.keywords = ret_keys.data;
-		// 						}).catch((error) => {
-		// 					        console.log('keywords service - ', error)
-		// 					    });	
-		// 					}).catch((error) => {
-		// 				        console.log('content service - ', error)
-		// 				    })
-		// 				)		
-		// 			}else{
-		// 				return resolve ({'error' : 'Not valid content'});
-		// 			}
+				}else if(data.content){
+					if(data.content != ''){
+						proms.push(
+							globalServices.content(data)
+							.then(function(ret_content){
+								retObj.content = ret_content.data;
+								services.keywords(retObj)
+								.then(function(ret_keys){
+									retObj.keywords = ret_keys.data;
+								}).catch((error) => {
+							        console.log('keywords service - ', error)
+					        		return reject(error);
+							    });	
+							}).catch((error) => {
+						        console.log('content service - ', error)
+					        	return reject(error);
+						    })
+						)		
+					}else{
+						return resolve ({'error' : 'Not valid content'});
+					}
 				}else if(data.keywords){
 					if(data.keywords != ''){
 						data.keywords = data.keywords.replace(/,/g, '')

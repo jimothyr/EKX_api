@@ -13,7 +13,10 @@
     "express-fingerprint" : "*",
     "request": "*",
     "unfluff": "*",
-    "textract": "^2.1.2"
+    "textract": "^2.1.2",
+    "retext": "*",
+    "retext-keywords": "*",
+    "nlcst-to-string": "*"
   },
   "author": "Ionut-Cristian Florescu <ionut.florescu@gmail.com>",
   "license": "ISC"
