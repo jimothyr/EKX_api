@@ -37,7 +37,7 @@ var app = express();
 
       // --------------------------------------------------------┤ SERVICES FROM API MANAGER
       app.post('/services', function(req, res) {
-        var services = require('./services/services/get_service');
+        var services = require('./services/services/get_services');
         services.getServices(req.body, req.headers.origin, req.protocol + '://' + req.get('host'))
         .then(function(ret_obj){
           res.send(ret_obj);
