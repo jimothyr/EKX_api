@@ -1,5 +1,6 @@
 const http         = require('http'),
       express      = require('express'),
+      bodyParser   = require('body-parser'),
       fs           = require('fs'),
       path         = require('path'),
       contentTypes = require('./utils/content-types'),
@@ -33,6 +34,15 @@ var app = express();
         res.setHeader('Cache-Control', 'no-cache, no-store');
         res.end(JSON.stringify(sysInfo['poll']()));
       });
+
+      // --------------------------------------------------------┤ SERVICES FROM API MANAGER
+      app.post('/services', function(req, res) {
+        var services = require('./services/services/get_service');
+        services.getServices(req.body, req.headers.origin, req.protocol + '://' + req.get('host'))
+        .then(function(ret_obj){
+          res.send(ret_obj);
+        });
+      });
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
@@ -42,6 +52,25 @@ var app = express();
 
 
 
+
+
+
+
+// 
+// ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                                                                      ║
+// ║                                                PRIVATE ROOTS                                                         ║
+// ║                                                                                                                      ║
+// ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+// ║                                                                                                                      ║
+// ║                                                                                                                      ║
+// ║                                                                                                                      ║
+
+// ║                                                                                                                      ║
+// ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+// ║                                                END OF SECTION                                                        ║
+// ╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+//
 app.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', function () {
   console.log(`Application worker ${process.pid} started...`);
 });
