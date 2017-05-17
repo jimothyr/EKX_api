@@ -7,13 +7,21 @@ const http         = require('http'),
       sysInfo      = require('./utils/sys-info'),
       services     = require('./services/services/get_services'),
       appGlobals   = require('./globals/globals.json'),
+      bounces      = require('./bounce/bounce.json'),
       env          = process.env;
 
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
-}));   
+}));
+app.use(Fingerprint({
+  parameters:[
+    Fingerprint.useragent,
+    Fingerprint.acceptHeaders,
+    Fingerprint.geoip,
+  ]
+}));
 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
 // ║                                                                                                                      ║
