@@ -63,26 +63,26 @@ var organisations = require('../organisations/bridgelight');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		var services = {
-			// keywords : function(data){
-			// 	var ret_obj={name: 'keywords'};
-			// 	return new Promise(function (resolve, reject) {
-			// 		if(!data.content.text){
-			// 			ret_obj.data = {'error' : 'invalid content'};
-			// 			return resolve (ret_obj);
-			// 		}
-			// 		keywords.get_keywords(data.content.text)
-			// 		.then(function(ret_keywords){
-			// 			ret_obj.data = {
-			// 				keywords : ret_keywords,
-			// 				string : ret_keywords.map(function(k){return k.term}).join()
-			// 			}
-			// 			return resolve (ret_obj);
-			// 		});
-			// 	}).catch((error) => {
-		 //        	console.log('keyword - ', error)
-			//         return reject(error);
-		 //    	});
-			// },
+			keywords : function(data){
+				var ret_obj={name: 'keywords'};
+				return new Promise(function (resolve, reject) {
+					if(!data.content.text){
+						ret_obj.data = {'error' : 'invalid content'};
+						return resolve (ret_obj);
+					}
+					keywords.get_keywords(data.content.text)
+					.then(function(ret_keywords){
+						ret_obj.data = {
+							keywords : ret_keywords,
+							string : ret_keywords.map(function(k){return k.term}).join()
+						}
+						return resolve (ret_obj);
+					});
+				}).catch((error) => {
+		        	console.log('keyword - ', error)
+			        return reject(error);
+		    	});
+			},
 		// 	summary : function(data){
 		// 		var ret_obj={name: 'summary'};
 		// 		return new Promise(function (resolve, reject) {
