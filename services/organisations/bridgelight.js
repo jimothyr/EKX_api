@@ -1,4 +1,4 @@
-var request = require('../node_modules/request');
+var request = require('request');
 exports.get_organisations = function(keywords){
 	return new Promise(function (resolve, reject) {
 		request({
