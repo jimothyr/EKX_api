@@ -1,4 +1,4 @@
-var search = require('../services/search/elasticsearch');
+var search = require('../search/elasticsearch');
 
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
