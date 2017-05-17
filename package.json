@@ -15,7 +15,8 @@
     "unfluff": "*",
     "textract": "^2.1.2",
     "compromise": "*",
-    "retext": "*"
+    "retext": "*",
+    "keyword-extractor" : "*"
   },
   "author": "Ionut-Cristian Florescu <ionut.florescu@gmail.com>",
   "license": "ISC"
