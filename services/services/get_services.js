@@ -294,6 +294,7 @@ var search = require('../search/elasticsearch');
 
 		exports.getServices = function(data, reqUrl, resUrl){
 			return new Promise(function (resolve, reject) {
+				console.log(data, reqUrl, resUrl)
 			var retObj = {
 				requestDomain : reqUrl,
 				thisDomain : resUrl
