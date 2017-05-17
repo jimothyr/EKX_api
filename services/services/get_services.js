@@ -14,12 +14,12 @@ var search = require('../search/elasticsearch');
 		// 		return new Promise(function (resolve, reject) {
 		// 			if(!data.content){
 		// 				ret_obj.data = {'error' : 'invalid content'};
-		// 				resolve (ret_obj);
+		// 				return resolve (ret_obj);
 		// 			}
 		//  			content.get_content_from_html(data.content)
 		// 			.then(function(ret_content){
 		// 				ret_obj.data = ret_content;
-		// 				resolve (ret_obj);
+		// 				return resolve (ret_obj);
 		// 			}).catch((error) => {
 		// 		      console.log('content error - ', html)
 		// 		    })
@@ -30,7 +30,7 @@ var search = require('../search/elasticsearch');
 		// 	guid : function(guid){
 		// 		return new Promise(function (resolve, reject) {
 		// 			search.getByGUID(guid).then(function(data){
-		// 				resolve(data);
+		// 				return resolve(data);
 		// 			});		
 		// 		}).catch((error) => {
 		// 	        console.log('guid - ', error)
@@ -61,7 +61,7 @@ var search = require('../search/elasticsearch');
 		// 		return new Promise(function (resolve, reject) {
 		// 			if(!data.content.text){
 		// 				ret_obj.data = {'error' : 'invalid content'};
-		// 				resolve (ret_obj);
+		// 				return resolve (ret_obj);
 		// 			}
 		// 			keywords.get_keywords(data.content.text)
 		// 			.then(function(ret_keywords){
@@ -69,7 +69,7 @@ var search = require('../search/elasticsearch');
 		// 					keywords : ret_keywords,
 		// 					string : ret_keywords.map(function(k){return k.term}).join()
 		// 				}
-		// 				resolve (ret_obj);
+		// 				return resolve (ret_obj);
 		// 			});
 		// 		}).catch((error) => {
 		//         	console.log('keyword - ', error)
@@ -80,12 +80,12 @@ var search = require('../search/elasticsearch');
 		// 		return new Promise(function (resolve, reject) {
 		// 			if(!data.content.text){
 		// 				ret_obj.data = {'error' : 'invalid content'};
-		// 				resolve (ret_obj);
+		// 				return resolve (ret_obj);
 		// 			}
 		// 			summary.get_summary(data.content.html)
 		// 			.then(function(ret_summary){
 		// 				ret_obj.data = ret_summary
-		// 				resolve(ret_obj);
+		// 				return resolve(ret_obj);
 		// 			}).catch((error) => {
 		//         		console.log('summary - ', error)
 		//    			});
@@ -98,12 +98,12 @@ var search = require('../search/elasticsearch');
 		// 		return new Promise(function (resolve, reject) {
 		// 			if(!data.content.text){
 		// 				ret_obj.data = {'error' : 'invalid content'};
-		// 				resolve (ret_obj);
+		// 				return resolve (ret_obj);
 		// 			}else{
 		// 				els.get_score(data.content.text)
 		// 				.then(function(ret_score){
 		// 					ret_obj.data = ret_score;
-		// 					resolve(ret_obj);
+		// 					return resolve(ret_obj);
 		// 				})
 		// 			}
 					
@@ -116,12 +116,12 @@ var search = require('../search/elasticsearch');
 		// 		return new Promise(function (resolve, reject) {
 		// 			if(!data.content.text){
 		// 				ret_obj.data = {'error' : 'invalid content'};
-		// 				resolve (ret_obj);
+		// 				return resolve (ret_obj);
 		// 			}else{
 		// 				people.get_people(data.content.text)
 		// 				.then(function(ret_people){
 		// 					ret_obj.data = ret_people;
-		// 					resolve(ret_obj);
+		// 					return resolve(ret_obj);
 		// 				})
 		// 			}
 					
@@ -134,12 +134,12 @@ var search = require('../search/elasticsearch');
 		// 		return new Promise(function (resolve, reject) {
 		// 			if(!data.keywords.string){
 		// 				ret_obj.data = {'error' : 'invalid keywords'};
-		// 				resolve (ret_obj);
+		// 				return resolve (ret_obj);
 		// 			}
 		// 			organisations.get_organisations(data.keywords.string)
 		// 			.then(function(ret_organisation){
 		// 				ret_obj.data = ret_organisation
-		// 				resolve(ret_obj);
+		// 				return resolve(ret_obj);
 		// 			})
 		// 		}).catch((error) => {
 		// 	        console.log('organisations - ', error)
@@ -150,12 +150,12 @@ var search = require('../search/elasticsearch');
 		// 		return new Promise(function (resolve, reject) {
 		// 			if(!data.keywords.string){
 		// 				ret_obj.data = {'error' : 'invalid keywords'};
-		// 				resolve (ret_obj);
+		// 				return resolve (ret_obj);
 		// 			}
 		// 			search.getRelated(data.keywords.string, (data.guid ? data.guid : 0), data.requestDomain, data.thisDomain)
 		// 			.then(function(ret_related){
 		// 				ret_obj.data = ret_related
-		// 				resolve(ret_obj)
+		// 				return resolve(ret_obj)
 		// 			})
 		// 		}).catch((error) => {
 		// 	        console.log('related - ', error)
@@ -166,10 +166,10 @@ var search = require('../search/elasticsearch');
 		// 		return new Promise(function (resolve, reject) {
 		// 			if(!data.keywords.string){
 		// 				ret_obj.data = {'error' : 'invalid keywords'};
-		// 				resolve (ret_obj);
+		// 				return resolve (ret_obj);
 		// 			}
 		// 			ret_obj.data = {'error' : 'Not currently available'};
-		// 			resolve (ret_obj);
+		// 			return resolve (ret_obj);
 		// 		}).catch((error) => {
 		// 	        console.log('funding - ', error)
 		// 	    });
@@ -179,12 +179,12 @@ var search = require('../search/elasticsearch');
 		// 		return new Promise(function (resolve, reject) {
 		// 			if(!data.keywords.string){
 		// 				ret_obj.data = {'error' : 'invalid keywords'};
-		// 				resolve (ret_obj);
+		// 				return resolve (ret_obj);
 		// 			}
 		// 			social.get_stackExchange(data.keywords.string)
 		// 			.then(function(ret_social){
 		// 				ret_obj.data = ret_social
-		// 				resolve(ret_obj);
+		// 				return resolve(ret_obj);
 		// 			})
 		// 		}).catch((error) => {
 		// 	        console.log('social - ', error)
@@ -227,7 +227,7 @@ var search = require('../search/elasticsearch');
 		// 		}
 		// 		var items = Promise.all(proms);
 		// 	  	items.then(function(results){
-		// 	  		resolve (data);
+		// 	  		return resolve (data);
 		// 	  	});
 		// 	}).catch((error) => {
 		//         console.log('get all services - ', error)
@@ -241,12 +241,12 @@ var search = require('../search/elasticsearch');
 		// 			if(services[action]){
 		// 				services[action](data)
 		// 				.then(function(retData){
-		// 					resolve(retData.data);
+		// 					return resolve(retData.data);
 		// 				}).catch((error) => {
 		// 			        console.log(action, ' - ', error)
 		// 			    })
 		// 			}else{
-		// 				resolve({"error" : "not a valid service"})
+		// 				return resolve({"error" : "not a valid service"})
 		// 			}
 					
 		// 		}
@@ -294,7 +294,7 @@ var search = require('../search/elasticsearch');
 		// 					.then(function(obj){
 		// 						if(obj.length == 0){
 		// 							retObj = {error:'not found'};
-		// 							resolve (retObj);
+		// 							return resolve (retObj);
 		// 						}else{
 		// 							retObj = obj[0]._source;
 		// 						}
@@ -303,7 +303,7 @@ var search = require('../search/elasticsearch');
 		// 				    })
 		// 				)
 		// 			}else{
-		// 				resolve ({'error' : 'Not a valid guid'});
+		// 				return resolve ({'error' : 'Not a valid guid'});
 		// 			}
 		// 		}else if(data.content){
 		// 			if(data.content != ''){
@@ -322,7 +322,7 @@ var search = require('../search/elasticsearch');
 		// 				    })
 		// 				)		
 		// 			}else{
-		// 				resolve ({'error' : 'Not valid content'});
+		// 				return resolve ({'error' : 'Not valid content'});
 		// 			}
 		// 		}else if(data.keywords){
 		// 			if(data.keywords != ''){
@@ -333,10 +333,10 @@ var search = require('../search/elasticsearch');
 		// 				}
 		// 				retObj.content = 'Not available'
 		// 			}else{
-		// 				resolve ({'error' : 'Not valid keywords'});
+		// 				return resolve ({'error' : 'Not valid keywords'});
 		// 			}
 		// 		}else{
-		// 				resolve ({'error' : 'No valid methods - please send a guid from your rss feed, some keywords or some html content next time'});
+		// 				return resolve ({'error' : 'No valid methods - please send a guid from your rss feed, some keywords or some html content next time'});
 		// 		}
 
 		// 		var items = Promise.all(proms);
@@ -344,14 +344,14 @@ var search = require('../search/elasticsearch');
 		// 	  		if(data.action == 'all'){
 		// 	  			get_all(retObj)
 		// 	  			.then(function(sendObj){
-		// 	  				resolve(sendObj);
+		// 	  				return resolve(sendObj);
 		// 	  			}).catch((error) => {
 		// 			        console.log('all services - ', error)
 		// 			    });
 		// 	  		}else{
 		// 				get_service(retObj, data.action)
 		// 				.then(function(sendObj){
-		// 					resolve(sendObj);
+		// 					return resolve(sendObj);
 		// 				}).catch((error) => {
 		// 			        console.log('specific service - ', error)
 		// 			    });

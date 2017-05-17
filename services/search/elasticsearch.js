@@ -1,5 +1,5 @@
 var request = require('request');
-var appGlobals = require('../Globals/globals.json');
+var appGlobals = require('../globals/globals.json');
 
 
 // 
@@ -22,11 +22,11 @@ var appGlobals = require('../Globals/globals.json');
 				}, 
 				function (error, response, body){
 					if(error){
-						reject(error);
+						return reject(error);
 					}else{
 						if(body.result){
 							var attachCount = ''
-							resolve(response);
+							return resolve(response);
 						}else{
 							console.log(body)
 						}
@@ -44,7 +44,7 @@ var appGlobals = require('../Globals/globals.json');
 					if(err) {
 						reject(err);
 					}
-		    		resolve("The file was saved! - "+data.url);
+		    		return resolve("The file was saved! - "+data.url);
 				}); 
 			});
 		}
@@ -128,9 +128,9 @@ var appGlobals = require('../Globals/globals.json');
 				}, 
 				function (error, response, body){
 				    if(error){
-						reject(error);
+						return reject(error);
 					}else{
-						resolve(body.hits ? body.hits.hits : []);
+						return resolve(body.hits ? body.hits.hits : []);
 					}
 				});	
 			});
@@ -160,7 +160,7 @@ var appGlobals = require('../Globals/globals.json');
 				    }else{
 				    	hits = [];
 				    }
-					resolve(hits);
+					return resolve(hits);
 				});
 			}).catch((error) => {
 		        console.log('guid search - ', error)
