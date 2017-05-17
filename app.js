@@ -46,8 +46,8 @@ app.use(bodyParser.urlencoded({
           res.send(ret_obj);
         });
       });
-      app.get('/services/:guid', function(req, res) {
-        services.getServices({guid:req.params.guid*1}, req.headers.origin, req.protocol + '://' + req.get('host'))
+      app.get('/services/:guid/:action', function(req, res) {
+        services.getServices({guid:req.params.guid*1, action:req.params.action}, req.headers.origin, req.protocol + '://' + req.get('host'))
         .then(function(ret_obj){
           res.send(ret_obj);
         });

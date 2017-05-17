@@ -58,7 +58,7 @@ var search = require('../search/elasticsearch');
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
-		// var services = {
+		var services = {
 		// 	keywords : function(data){
 		// 		var ret_obj={name: 'keywords'};
 		// 		return new Promise(function (resolve, reject) {
@@ -193,7 +193,7 @@ var search = require('../search/elasticsearch');
 		// 	        console.log('social - ', error)
 		// 	    });
 		// 	}
-		// }
+		}
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
@@ -248,6 +248,7 @@ var search = require('../search/elasticsearch');
 							return resolve(retData.data);
 						}).catch((error) => {
 					        console.log(action, ' - ', error)
+					        return reject(error);
 					    })
 					}else{
 						return resolve({"error" : "not a valid service"})
@@ -277,44 +278,45 @@ var search = require('../search/elasticsearch');
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
-		exports.getServices = function(data, reqUrl, resUrl){
-			return new Promise(function (resolve, reject) {
-				search.getByGUID(data.guid)
-				.then(function(retObj){
-					return resolve(retObj);
-				})
-				.catch((error) => {
-					return reject(error);
-			        console.log('improper guid - ', error)
-			    });
-			});
-		}
-
 		// exports.getServices = function(data, reqUrl, resUrl){
 		// 	return new Promise(function (resolve, reject) {
-		// 	var retObj = {
-		// 		requestDomain : reqUrl,
-		// 		thisDomain : resUrl
-		// 	};
-		// 	var proms = [];
-		// 		if(data.guid){
-		// 			if(data.guid != ''){
-		// 				proms.push(
-		// 					globalServices.guid(data.guid*1)
-		// 					.then(function(obj){
-		// 						if(obj.length == 0){
-		// 							retObj = {error:'not found'};
-		// 							return resolve (retObj);
-		// 						}else{
-		// 							retObj = obj[0]._source;
-		// 						}
-		// 					}).catch((error) => {
-		// 				        console.log('guid service - ', error)
-		// 				    })
-		// 				)
-		// 			}else{
-		// 				return resolve ({'error' : 'Not a valid guid'});
-		// 			}
+		// 		search.getByGUID(data.guid)
+		// 		.then(function(retObj){
+		// 			return resolve(retObj);
+		// 		})
+		// 		.catch((error) => {
+		// 			return reject(error);
+		// 	        console.log('improper guid - ', error)
+		// 	    });
+		// 	});
+		// }
+
+		exports.getServices = function(data, reqUrl, resUrl){
+			return new Promise(function (resolve, reject) {
+			var retObj = {
+				requestDomain : reqUrl,
+				thisDomain : resUrl
+			};
+			var proms = [];
+				if(data.guid){
+					if(data.guid != ''){
+						proms.push(
+							globalServices.guid(data.guid*1)
+							.then(function(obj){
+								if(obj.length == 0){
+									retObj = {error:'not found'};
+									return resolve (retObj);
+								}else{
+									retObj = obj[0]._source;
+								}
+							}).catch((error) => {
+						        console.log('guid service - ', error)
+						        return reject(error);
+						    })
+						)
+					}else{
+						return resolve ({'error' : 'Not a valid guid'});
+					}
 		// 		}else if(data.content){
 		// 			if(data.content != ''){
 		// 				proms.push(
@@ -347,31 +349,37 @@ var search = require('../search/elasticsearch');
 		// 			}
 		// 		}else{
 		// 				return resolve ({'error' : 'No valid methods - please send a guid from your rss feed, some keywords or some html content next time'});
-		// 		}
+				}
 
-		// 		var items = Promise.all(proms);
-		// 	  	items.then(function(results){
-		// 	  		if(data.action == 'all'){
-		// 	  			get_all(retObj)
-		// 	  			.then(function(sendObj){
-		// 	  				return resolve(sendObj);
-		// 	  			}).catch((error) => {
-		// 			        console.log('all services - ', error)
-		// 			    });
-		// 	  		}else{
-		// 				get_service(retObj, data.action)
-		// 				.then(function(sendObj){
-		// 					return resolve(sendObj);
-		// 				}).catch((error) => {
-		// 			        console.log('specific service - ', error)
-		// 			    });
-		// 	  		}
-		// 	  	});
+				var items = Promise.all(proms);
+			  	items.then(function(results){
+			  		if(data.action == 'all'){
+			  			get_all(retObj)
+			  			.then(function(sendObj){
+			  				return resolve(sendObj);
+			  			}).catch((error) => {
+					        console.log('all services - ', error)
+					        return reject(error);
+					    });
+			  		}else{
+						get_service(retObj, data.action)
+						.then(function(sendObj){
+							return resolve(sendObj);
+						}).catch((error) => {
+					        console.log('specific service - ', error)
+					        return reject(error);
+					    });
+			  		}
+			  	}).catch((error) => {
+			        console.log('service - ', error)
+			        return reject(error);
+			    });
 
-		// 	}).catch((error) => {
-		//         console.log('services - ', error)
-		//     });
-		// }
+			}).catch((error) => {
+		        console.log('services - ', error)
+		        return reject(error);
+		    });
+		}
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
