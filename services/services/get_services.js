@@ -279,22 +279,9 @@ var search = require('../search/elasticsearch');
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
-		// exports.getServices = function(data, reqUrl, resUrl){
-		// 	return new Promise(function (resolve, reject) {
-		// 		search.getByGUID(data.guid)
-		// 		.then(function(retObj){
-		// 			return resolve(retObj);
-		// 		})
-		// 		.catch((error) => {
-		// 			return reject(error);
-		// 	        console.log('improper guid - ', error)
-		// 	    });
-		// 	});
-		// }
-
 		exports.getServices = function(data, reqUrl, resUrl){
 			return new Promise(function (resolve, reject) {
-			var proms = [];
+			var proms = [], retObj = {};
 				if(data.guid){
 					if(data.guid != ''){
 						proms.push(
