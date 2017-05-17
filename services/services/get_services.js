@@ -294,11 +294,6 @@ var search = require('../search/elasticsearch');
 
 		exports.getServices = function(data, reqUrl, resUrl){
 			return new Promise(function (resolve, reject) {
-				console.log(data, reqUrl, resUrl)
-			var retObj = {
-				requestDomain : reqUrl,
-				thisDomain : resUrl
-			};
 			var proms = [];
 				if(data.guid){
 					if(data.guid != ''){
@@ -352,7 +347,9 @@ var search = require('../search/elasticsearch');
 		// 		}else{
 		// 				return resolve ({'error' : 'No valid methods - please send a guid from your rss feed, some keywords or some html content next time'});
 				}
-
+				retObj.requestDomain : reqUrl,
+				retObj.thisDomain : resUrl
+				
 				var items = Promise.all(proms);
 			  	items.then(function(results){
 			  		if(data.action == 'all'){
