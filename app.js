@@ -6,7 +6,7 @@ const http         = require('http'),
       contentTypes = require('./utils/content-types'),
       sysInfo      = require('./utils/sys-info'),
       services     = require('./services/services/get_services'),
-      appGlobals   = require('../globals/globals.json'),
+      appGlobals   = require('./globals/globals.json'),
       env          = process.env;
 
 var app = express();
