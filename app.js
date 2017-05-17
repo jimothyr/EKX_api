@@ -47,7 +47,7 @@ app.use(bodyParser.urlencoded({
         });
       });
       app.get('/services/:guid', function(req, res) {
-        services.getServices({guid:req.params.guid}, req.headers.origin, req.protocol + '://' + req.get('host'))
+        services.getServices({guid:req.params.guid*1}, req.headers.origin, req.protocol + '://' + req.get('host'))
         .then(function(ret_obj){
           res.send(ret_obj);
         });
