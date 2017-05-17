@@ -150,11 +150,13 @@ var appGlobals = require('../globals/globals.json');
 							"term" : { 
 								"guid" : guid
 							} 
-						}
+						},
+						"_source": {
+					        "exclude": ["links.*"]
+					    },
 				    }
 				}, function (error, response, body){
 				   var hits;
-				   console.log(hits)
 				    if(body.hits){
 				    	hits = body.hits.hits;
 				    }else{
