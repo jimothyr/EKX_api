@@ -7,7 +7,7 @@ const http         = require('http'),
       sysInfo      = require('./utils/sys-info'),
       services     = require('./services/services/get_services'),
       appGlobals   = require('./globals/globals.json'),
-      bounces      = require('./bounce/bounce.json'),
+      bounces      = require('./bounce/bounce'),
       env          = process.env;
 
 var app = express();
