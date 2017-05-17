@@ -1,4 +1,4 @@
-var retext = require('retext');
+// var retext = require('retext');
 // var keywords = require('retext-keywords');
 // var nlcstToString = require('nlcst-to-string');
 

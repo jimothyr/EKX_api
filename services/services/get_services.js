@@ -2,6 +2,7 @@ var content = require('../content/get_content');
 var keywords = require('../keywords/get_keywords');
 var search = require('../search/elasticsearch');
 var social = require('../social/get_social');
+var summary = require('../summary/get_summary');
 var organisations = require('../organisations/bridgelight');
 
 // 
@@ -83,25 +84,25 @@ var organisations = require('../organisations/bridgelight');
 			        return reject(error);
 		    	});
 			},
-		// 	summary : function(data){
-		// 		var ret_obj={name: 'summary'};
-		// 		return new Promise(function (resolve, reject) {
-		// 			if(!data.content.text){
-		// 				ret_obj.data = {'error' : 'invalid content'};
-		// 				return resolve (ret_obj);
-		// 			}
-		// 			summary.get_summary(data.content.html)
-		// 			.then(function(ret_summary){
-		// 				ret_obj.data = ret_summary
-		// 				return resolve(ret_obj);
-		// 			}).catch((error) => {
-		//         		console.log('summary - ', error)
-		//    			});
-		// 		}).catch((error) => {
-		//         	console.log('summary - ', error)
-			        // return reject(error);
-		//    		});
-		// 	},
+			summary : function(data){
+				var ret_obj={name: 'summary'};
+				return new Promise(function (resolve, reject) {
+					if(!data.content.text){
+						ret_obj.data = {'error' : 'invalid content'};
+						return resolve (ret_obj);
+					}
+					summary.get_summary(data.content.html)
+					.then(function(ret_summary){
+						ret_obj.data = ret_summary
+						return resolve(ret_obj);
+					}).catch((error) => {
+		        		console.log('summary - ', error)
+		   			});
+				}).catch((error) => {
+		        	console.log('summary - ', error)
+			        return reject(error);
+		   		});
+			},
 		// 	eng_lang_score : function(data){
 		// 		var ret_obj={name: 'eng_l;ang_score'};
 		// 		return new Promise(function (resolve, reject) {
@@ -311,11 +312,11 @@ var organisations = require('../organisations/bridgelight');
 					}else{
 						return resolve ({'error' : 'Not a valid guid'});
 					}
-				// }else if(data.content){
-				// 	if(data.content != ''){
-				// 		proms.push(
-				// 			globalServices.content(data)
-				// 			.then(function(ret_content){
+				}else if(data.content){
+					if(data.content != ''){
+						proms.push(
+							globalServices.content(data)
+							.then(function(ret_content){
 				// 				retObj.content = ret_content.data;
 				// 				// services.keywords(retObj)
 				// 				// .then(function(ret_keys){
@@ -324,14 +325,14 @@ var organisations = require('../organisations/bridgelight');
 				// 			 //        console.log('keywords service - ', error)
 				// 	   //      		return reject(error);
 				// 			 //    });	
-				// 			}).catch((error) => {
-				// 		        console.log('content service - ', error)
-				// 	        	return reject(error);
-				// 		    })
-				// 		)		
-				// 	}else{
-				// 		return resolve ({'error' : 'Not valid content'});
-				// 	}
+							}).catch((error) => {
+						        console.log('content service - ', error)
+					        	return reject(error);
+						    })
+						)		
+					}else{
+						return resolve ({'error' : 'Not valid content'});
+					}
 				}else if(data.keywords){
 					if(data.keywords != ''){
 						data.keywords = data.keywords.replace(/,/g, '')
