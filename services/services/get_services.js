@@ -311,27 +311,27 @@ var organisations = require('../organisations/bridgelight');
 					}else{
 						return resolve ({'error' : 'Not a valid guid'});
 					}
-				}else if(data.content){
-					if(data.content != ''){
-						proms.push(
-							globalServices.content(data)
-							.then(function(ret_content){
-								retObj.content = ret_content.data;
-								// services.keywords(retObj)
-								// .then(function(ret_keys){
-								// 	retObj.keywords = ret_keys.data;
-								// }).catch((error) => {
-							 //        console.log('keywords service - ', error)
-					   //      		return reject(error);
-							 //    });	
-							}).catch((error) => {
-						        console.log('content service - ', error)
-					        	return reject(error);
-						    })
-						)		
-					}else{
-						return resolve ({'error' : 'Not valid content'});
-					}
+				// }else if(data.content){
+				// 	if(data.content != ''){
+				// 		proms.push(
+				// 			globalServices.content(data)
+				// 			.then(function(ret_content){
+				// 				retObj.content = ret_content.data;
+				// 				// services.keywords(retObj)
+				// 				// .then(function(ret_keys){
+				// 				// 	retObj.keywords = ret_keys.data;
+				// 				// }).catch((error) => {
+				// 			 //        console.log('keywords service - ', error)
+				// 	   //      		return reject(error);
+				// 			 //    });	
+				// 			}).catch((error) => {
+				// 		        console.log('content service - ', error)
+				// 	        	return reject(error);
+				// 		    })
+				// 		)		
+				// 	}else{
+				// 		return resolve ({'error' : 'Not valid content'});
+				// 	}
 				}else if(data.keywords){
 					if(data.keywords != ''){
 						data.keywords = data.keywords.replace(/,/g, '')
