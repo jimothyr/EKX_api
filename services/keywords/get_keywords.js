@@ -1,6 +1,6 @@
 var retext = require('retext');
-var keywords = require('retext-keywords');
-var nlcstToString = require('nlcst-to-string');
+// var keywords = require('retext-keywords');
+// var nlcstToString = require('nlcst-to-string');
 
 exports.get_keywords = function(text){
 	// return new Promise(function (resolve, reject) {
