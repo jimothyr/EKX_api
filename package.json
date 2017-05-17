@@ -13,7 +13,8 @@
     "express-fingerprint" : "*",
     "request": "*",
     "unfluff": "*",
-    "textract": "^2.1.2"
+    "textract": "^2.1.2",
+    "retext": "*"
   },
   "author": "Ionut-Cristian Florescu <ionut.florescu@gmail.com>",
   "license": "ISC"
