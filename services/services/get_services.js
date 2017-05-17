@@ -4,6 +4,8 @@ var search = require('../search/elasticsearch');
 var social = require('../social/get_social');
 var summary = require('../summary/get_summary');
 var organisations = require('../organisations/bridgelight');
+var eng_lang_score = require('../eng_lang/get_els');
+var people = require('../people/get_people');
 
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -26,10 +28,12 @@ var organisations = require('../organisations/bridgelight');
 						ret_obj.data = ret_content;
 						return resolve (ret_obj);
 					}).catch((error) => {
-				      console.log('content error - ', html)
+				    	console.log('content error - ', html)
+				    	return reject(error)
 				    })
 				}).catch((error) => {
 			        console.log('content - ', error)
+				    return reject(error)
 			    });
 			},	
 			guid : function(guid){
@@ -103,44 +107,44 @@ var organisations = require('../organisations/bridgelight');
 			        return reject(error);
 		   		});
 			},
-		// 	eng_lang_score : function(data){
-		// 		var ret_obj={name: 'eng_l;ang_score'};
-		// 		return new Promise(function (resolve, reject) {
-		// 			if(!data.content.text){
-		// 				ret_obj.data = {'error' : 'invalid content'};
-		// 				return resolve (ret_obj);
-		// 			}else{
-		// 				els.get_score(data.content.text)
-		// 				.then(function(ret_score){
-		// 					ret_obj.data = ret_score;
-		// 					return resolve(ret_obj);
-		// 				})
-		// 			}
+			eng_lang_score : function(data){
+				var ret_obj={name: 'eng_l;ang_score'};
+				return new Promise(function (resolve, reject) {
+					if(!data.content.text){
+						ret_obj.data = {'error' : 'invalid content'};
+						return resolve (ret_obj);
+					}else{
+						els.get_score(data.content.text)
+						.then(function(ret_score){
+							ret_obj.data = ret_score;
+							return resolve(ret_obj);
+						})
+					}
 					
-		// 		}).catch((error) => {
-		// 		    console.log('eng lang error - ', error)
-			        // return reject(error);
-		// 		});
-		// 	},
-		// 	people : function(data){
-		// 		var ret_obj={name: 'people'};
-		// 		return new Promise(function (resolve, reject) {
-		// 			if(!data.content.text){
-		// 				ret_obj.data = {'error' : 'invalid content'};
-		// 				return resolve (ret_obj);
-		// 			}else{
-		// 				people.get_people(data.content.text)
-		// 				.then(function(ret_people){
-		// 					ret_obj.data = ret_people;
-		// 					return resolve(ret_obj);
-		// 				})
-		// 			}
+				}).catch((error) => {
+				    console.log('eng lang error - ', error)
+			        return reject(error);
+				});
+			},
+			people : function(data){
+				var ret_obj={name: 'people'};
+				return new Promise(function (resolve, reject) {
+					if(!data.content.text){
+						ret_obj.data = {'error' : 'invalid content'};
+						return resolve (ret_obj);
+					}else{
+						people.get_people(data.content.text)
+						.then(function(ret_people){
+							ret_obj.data = ret_people;
+							return resolve(ret_obj);
+						})
+					}
 					
-		// 		}).catch((error) => {
-		// 	        console.log('people - ', error)
-			        // return reject(error);
-		// 	    });
-		// 	},
+				}).catch((error) => {
+			        console.log('people - ', error)
+			        return reject(error);
+			    });
+			},
 			organisations : function(data){
 				var ret_obj={name: 'organisations'};
 				return new Promise(function (resolve, reject) {
