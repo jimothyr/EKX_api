@@ -11,24 +11,24 @@ var organisations = require('../organisations/bridgelight');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		var globalServices = {
-		// 	content : function(data){
-		// 		var ret_obj={name: 'content'};
-		// 		return new Promise(function (resolve, reject) {
-		// 			if(!data.content){
-		// 				ret_obj.data = {'error' : 'invalid content'};
-		// 				return resolve (ret_obj);
-		// 			}
-		//  			content.get_content_from_html(data.content)
-		// 			.then(function(ret_content){
-		// 				ret_obj.data = ret_content;
-		// 				return resolve (ret_obj);
-		// 			}).catch((error) => {
-		// 		      console.log('content error - ', html)
-		// 		    })
-		// 		}).catch((error) => {
-		// 	        console.log('content - ', error)
-		// 	    });
-		// 	},	
+			content : function(data){
+				var ret_obj={name: 'content'};
+				return new Promise(function (resolve, reject) {
+					if(!data.content){
+						ret_obj.data = {'error' : 'invalid content'};
+						return resolve (ret_obj);
+					}
+		 			content.get_content_from_html(data.content)
+					.then(function(ret_content){
+						ret_obj.data = ret_content;
+						return resolve (ret_obj);
+					}).catch((error) => {
+				      console.log('content error - ', html)
+				    })
+				}).catch((error) => {
+			        console.log('content - ', error)
+			    });
+			},	
 			guid : function(guid){
 				return new Promise(function (resolve, reject) {
 					search.getByGUID(guid)
