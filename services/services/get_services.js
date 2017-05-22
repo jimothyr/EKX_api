@@ -47,6 +47,11 @@ var people = require('../people/get_people');
 				        return reject(error);
 				    });
 				});
+			},
+			emptyProm : function(){
+				return new Promise(function (resolve, reject) {
+					return resolve();
+				});
 			}
 		}
 // ║                                                                                                                      ║
@@ -244,9 +249,7 @@ var people = require('../people/get_people');
 						)
 					}
 				}
-				proms.push(return new Promise(function(resolve, reject){
-					return resolve();
-				}))
+				proms.push(globalServices.emptyProm())
 				var items = Promise.all(proms);
 			  	items.then(function(results){
 			  		return resolve (data);
