@@ -234,12 +234,11 @@ var people = require('../people/get_people');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		// --------------------------------------------------------┤ GET EVERYTHING YOU CAN
-		var get_all = function(data){
+		var get_all = function(data, action){
 			return new Promise(function (resolve, reject) {
-				console.log(data)
 				var proms = [];
 				for(var s in services){
-					if(!data[s] && (data.action == 'all' || data.action.indexOf(s) != -1)){
+					if(!data[s] && (action == 'all' || action.indexOf(s) != -1)){
 						proms.push(
 							services[s](data)
 							.then(function(retData){
