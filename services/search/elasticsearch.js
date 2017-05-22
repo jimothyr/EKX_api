@@ -153,7 +153,7 @@ var appGlobals = require('../globals/globals.json');
 							} 
 						},
 						"_source": {
-					        "exclude": ["content.links.*"]
+					        "exclude": ["content.links.*", "keywords.keyword_*", "url"]
 					    },
 				    }
 				}, function (error, response, body){
@@ -199,7 +199,7 @@ var appGlobals = require('../globals/globals.json');
 				    auth: appGlobals.indexAuth,
 			    	body: {
 			    		"_source": {
-					        "exclude": [ "attachments.*", "links.*", "content.*" ]
+					        "exclude": [ "attachments.*", "links.*", "content.*", "keywords.*", "url", "provider_guid", "guid" ]
 					    },
 			    		"query": {
 					        "match" : {

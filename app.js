@@ -62,7 +62,7 @@ var app = express();
       app.post('/services/:action', function(req, res) {
         var setData = req.body;
         console.log(req.params.action)
-        setData.action = (req.params.action == 'all' ? 'all' : req.params.action.split('&'));
+        setData.action = (req.params.action == 'all' ? 'all' : req.params.action.split(','));
         setData.guid = setData.guid || search.get_guid(setData.itemID, setData.providerID);
         services.getServices(setData, req.headers.origin, req.protocol + '://' + req.get('host'))
         .then(function(ret_obj){
