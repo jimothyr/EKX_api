@@ -236,6 +236,7 @@ var people = require('../people/get_people');
 		// --------------------------------------------------------┤ GET EVERYTHING YOU CAN
 		var get_all = function(data){
 			return new Promise(function (resolve, reject) {
+				console.log(data)
 				var proms = [];
 				for(var s in services){
 					if(!data[s] && (data.action == 'all' || data.action.indexOf(s) != -1)){
