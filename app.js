@@ -60,10 +60,9 @@ var app = express();
 
       // --------------------------------------------------------┤ SERVICES FROM API MANAGER
       app.post('/services/:action', function(req, res) {
-        console.log(req.params.action)
         var setData = req.body;
-        // setData.action = [];
-        setData.guid = search.get_guid(setData.itemID, setData.providerID);
+        setData.action = (req.params.action == 'all' ? 'all', req.params.action.split('&'));
+        setData.guid = setData.guid || search.get_guid(setData.itemID, setData.providerID);
         services.getServices(setData, req.headers.origin, req.protocol + '://' + req.get('host'))
         .then(function(ret_obj){
           res.send(ret_obj);
