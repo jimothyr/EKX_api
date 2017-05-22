@@ -59,7 +59,8 @@ var app = express();
       });
 
       // --------------------------------------------------------┤ SERVICES FROM API MANAGER
-      app.post('/services', function(req, res) {
+      app.post('/services/:action', function(req, res) {
+        console.log(req.params.action)
         var setData = req.body;
         // setData.action = [];
         setData.guid = search.get_guid(setData.itemID, setData.providerID);
