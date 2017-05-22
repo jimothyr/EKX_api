@@ -233,7 +233,7 @@ var people = require('../people/get_people');
 			return new Promise(function (resolve, reject) {
 				var proms = [];
 				for(var s in services){
-					if(!data[s]){
+					if(!data[s] && (data.action == 'all' || data.action.indexOf(s) != -1)){
 						proms.push(
 							services[s](data)
 							.then(function(retData){
@@ -244,6 +244,9 @@ var people = require('../people/get_people');
 						)
 					}
 				}
+				proms.push(return new Promise(function(resolve, reject){
+					return resolve();
+				}))
 				var items = Promise.all(proms);
 			  	items.then(function(results){
 			  		return resolve (data);
@@ -356,23 +359,24 @@ var people = require('../people/get_people');
 			  	items.then(function(results){
 			  		retObj.requestDomain = reqUrl;
 					retObj.thisDomain = resUrl;
-			  		if(data.action == 'all'){
-			  			get_all(retObj)
-			  			.then(function(sendObj){
-			  				return resolve(sendObj);
-			  			}).catch((error) => {
-					        console.log('all services - ', error)
-					        return reject(error);
-					    });
-			  		}else{
-						get_service(retObj, data.action)
-						.then(function(sendObj){
-							return resolve(sendObj);
-						}).catch((error) => {
-					        console.log('specific service - ', error)
-					        return reject(error);
-					    });
-			  		}
+					get_all(retObj, data.action)
+			  	// 	if(data.action == 'all'){
+			  	// 		get_all(retObj)
+		  			.then(function(sendObj){
+		  				return resolve(sendObj);
+		  			}).catch((error) => {
+				        console.log('get services - ', error)
+				        return reject(error);
+				    });
+			  	// 	}else{
+						// get_service(retObj, data.action)
+						// .then(function(sendObj){
+						// 	return resolve(sendObj);
+						// }).catch((error) => {
+					 //        console.log('specific service - ', error)
+					 //        return reject(error);
+					 //    });
+			  	// 	}
 			  	}).catch((error) => {
 			        console.log('service - ', error)
 			        return reject(error);

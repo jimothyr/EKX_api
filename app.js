@@ -7,6 +7,7 @@ const http         = require('http'),
       contentTypes = require('./utils/content-types'),
       sysInfo      = require('./utils/sys-info'),
       services     = require('./services/services/get_services'),
+      search       = require('./services/search/elasticsearch'),
       appGlobals   = require('./services/globals/globals.json'),
       bounces      = require('./bounce/bounce'),
       env          = process.env;
@@ -58,14 +59,11 @@ var app = express();
       });
 
       // --------------------------------------------------------┤ SERVICES FROM API MANAGER
-      app.post('/services', function(req, res) {
-        services.getServices(req.body, req.headers.origin, req.protocol + '://' + req.get('host'))
-        .then(function(ret_obj){
-          res.send(ret_obj);
-        });
-      });
-      app.get('/services/:guid/:action', function(req, res) {
-        services.getServices({guid:req.params.guid*1, action:req.params.action}, req.headers.origin, req.protocol + '://' + req.get('host'))
+      app.post('/services/:action', function(req, res) {
+        var setData = req.body;
+        // setData.action = [];
+        setData.guid = search.get_guid(setData.itemID, setData.providerID);
+        services.getServices(setData, req.headers.origin, req.protocol + '://' + req.get('host'))
         .then(function(ret_obj){
           res.send(ret_obj);
         });

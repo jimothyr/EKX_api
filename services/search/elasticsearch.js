@@ -78,7 +78,8 @@ var appGlobals = require('../globals/globals.json');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		// --------------------------------------------------------┤ CONVERT A PROVIDER GUID INTO AN INTEGER
-		var create_guid = function(guid){
+		var create_guid = function(itemID, providerID){
+			var guid = itemID+providerID;
 			function hashCode(str) {
 			  return str.split('').reduce((prevHash, currVal) =>
 			    ((prevHash << 5) - prevHash) + currVal.charCodeAt(0), 0);
@@ -87,8 +88,8 @@ var appGlobals = require('../globals/globals.json');
 		}
 
 		// --------------------------------------------------------┤ API
-		exports.get_guid = function(guid){
-			return(create_guid(guid));
+		exports.get_guid = function(itemID, providerID){
+			return(create_guid(itemID, providerID));
 		}
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
