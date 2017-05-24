@@ -53,13 +53,14 @@ var app = express();
 
       // --------------------------------------------------------┤ RECORD A LINK CLICK
       app.get('/'+appGlobals.bounceRoute+'/:to', function(req, res){
-        var tfrom = req.headers.origin;
-        var tto = req.params.to;
-        var retUrl = search.decrypt(tto);
-        retUrl = retUrl.split('|');
-        console.log(retUrl)
-        // bounces.bounce(tfrom,tto, req.fingerprint.hash);
-        res.redirect(retUrl[0]);
+       res.send(JSON.stringify(req));
+        // var tfrom = req.headers.origin;
+        // var tto = req.params.to;
+        // var retUrl = search.decrypt(tto);
+        // retUrl = retUrl.split('|');
+        // console.log(retUrl)
+        // // bounces.bounce(tfrom,tto, req.fingerprint.hash);
+        // res.redirect(retUrl[0]);
       });
 
       // --------------------------------------------------------┤ SERVICES FROM API MANAGER
