@@ -242,7 +242,7 @@ var crypto = require('crypto'),
 				    	hits = body.hits.hits.reduce(function(memo, hit) {
 						    if (hit.guid != guid) {
 						    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
-						    	hit._source.link = appGlobals.apiManager+'/'+appGlobals.bounceRoute+'/'+encodeURIComponent(encrypt(hit._source.link + '|' + new Date()))+'/'+apiManagerKey;
+						    	hit._source.link = appGlobals.apiManager+'/'+appGlobals.bounceRoute+'/'+encodeURIComponent(encrypt(hit._source.link + '|' + new Date()))+'/'+appGlobals.apiManagerKey;
 						    	hit._source.url = hit._source.link;
 						        memo.push(hit);
 						    }
