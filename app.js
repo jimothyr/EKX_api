@@ -52,22 +52,22 @@ var app = express();
       });
 
       // --------------------------------------------------------┤ RECORD A LINK CLICK
-      app.get('/'+appGlobals.bounceRoute, function(req, res){
-        // res.send(JSON.stringify(req.fingerprint));
+      // app.get('/'+appGlobals.bounceRoute, function(req, res){
+      //   // res.send(JSON.stringify(req.fingerprint));
 
-        var tfrom = req.headers.origin;
-        var tto = req.query[appGlobals.bounceTo];
-        // var retUrl = search.decrypt(tto);
-        // retUrl = retUrl.split('|');
-        res.send([tfrom, tto, req.fingerprint]);
-        // console.log(retUrl)
-        // // bounces.bounce(tfrom,tto, req.fingerprint.hash);
-        // res.redirect(retUrl[0]);
-      });
+      //   var tfrom = req.headers.origin;
+      //   var tto = req.query[appGlobals.bounceTo];
+      //   // var retUrl = search.decrypt(tto);
+      //   // retUrl = retUrl.split('|');
+      //   res.send([tfrom, tto, req.fingerprint]);
+      //   // console.log(retUrl)
+      //   // // bounces.bounce(tfrom,tto, req.fingerprint.hash);
+      //   // res.redirect(retUrl[0]);
+      // });
 
       app.post('/'+appGlobals.bounceRoute, function(req, res){
         console.log(req.body)
-        res.send("#############################################################\n###################################################   #######\n###############################################   /~\   #####\n############################################   _- `~~~', ####\n##########################################  _-~       )  ####\n#######################################  _-~          |  ####\n####################################  _-~            ;  #####\n##########################  __---___-~              |   #####\n#######################   _~   ,,                  ;  `,,  ##\n#####################  _-~    ;'                  |  ,'   ##\n###################  _~      '                    `~'   ; ###\n############   __---;                                 ,' ####\n########   __~~  ___                                ,' ######\n#####  _-~~   -~~ _                               ,' ########\n##### `-_         _                              ; #########\n#######  ~~----~~~   ;                          ; ###########\n#########  /          ;                        ; ############\n#######  /             ;                      ; #############\n#####  /                `                    ; ##############\n###  /                                      ; ##############\n#                                            ################\n");
+        res.send(req.body);
       });
 
       // --------------------------------------------------------┤ GET SERVICES
