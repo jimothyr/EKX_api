@@ -73,146 +73,172 @@ var people = require('../people/get_people');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		var services = {
-			keywords : function(data){
-				var ret_obj={name: 'keywords'};
-				return new Promise(function (resolve, reject) {
-					if(!data.content.text){
-						ret_obj.data = {'error' : 'invalid content'};
-						return resolve (ret_obj);
-					}
-					keywords.get_keywords(data.content.text)
-					.then(function(ret_keywords){
-						ret_obj.data = {
-							keywords : ret_keywords,
-							string : ret_keywords.map(function(k){return k.term}).join()
+			keywords : {
+				type : 'info',
+				action : function(data){
+							var ret_obj={name: 'keywords'};
+							return new Promise(function (resolve, reject) {
+								if(!data.content.text){
+									ret_obj.data = {'error' : 'invalid content'};
+									return resolve (ret_obj);
+								}
+								keywords.get_keywords(data.content.text + (data.content.pdfs?data.content.pdfs:''))
+								.then(function(ret_keywords){
+									ret_obj.data = {
+										keywords : ret_keywords,
+										string : ret_keywords.map(function(k){return k.term}).join()
+									}
+									for(var i=0;i<ret_keywords.length;i++){
+										ret_obj.data['keyword_'+i] = ret_keywords[i].term;
+									}
+									return resolve (ret_obj);
+								});
+							}).catch((error) => {
+					        	console.log('keyword - ', error)
+						        return reject(error);
+					    	});
 						}
-						return resolve (ret_obj);
-					});
-				}).catch((error) => {
-		        	console.log('keyword - ', error)
-			        return reject(error);
-		    	});
-			},
-			summary : function(data){
-				var ret_obj={name: 'summary'};
-				return new Promise(function (resolve, reject) {
-					if(!data.content.text){
-						ret_obj.data = {'error' : 'invalid content'};
-						return resolve (ret_obj);
-					}
-					summary.get_summary(data.content.html)
-					.then(function(ret_summary){
-						ret_obj.data = ret_summary
-						return resolve(ret_obj);
+					},
+			summary : {
+				type : 'info',
+				action : function(data){
+					var ret_obj={name: 'summary'};
+					return new Promise(function (resolve, reject) {
+						if(!data.content.text){
+							ret_obj.data = {'error' : 'invalid content'};
+							return resolve (ret_obj);
+						}
+						summary.get_summary(data.content.html)
+						.then(function(ret_summary){
+							ret_obj.data = ret_summary
+							return resolve(ret_obj);
+						}).catch((error) => {
+			        		console.log('summary - ', error)
+			   			});
 					}).catch((error) => {
-		        		console.log('summary - ', error)
-		   			});
-				}).catch((error) => {
-		        	console.log('summary - ', error)
-			        return reject(error);
-		   		});
+			        	console.log('summary - ', error)
+			   		});
+				}
 			},
-			eng_lang_score : function(data){
-				var ret_obj={name: 'eng_l;ang_score'};
-				return new Promise(function (resolve, reject) {
-					if(!data.content.text){
-						ret_obj.data = {'error' : 'invalid content'};
-						return resolve (ret_obj);
-					}else{
-						els.get_score(data.content.text)
-						.then(function(ret_score){
-							ret_obj.data = ret_score;
+			eng_lang_score :{
+				type : 'info',
+				action :  function(data){
+					var ret_obj={name: 'eng_lang_score'};
+					return new Promise(function (resolve, reject) {
+						if(!data.content.text){
+							ret_obj.data = {'error' : 'invalid content'};
+							return resolve (ret_obj);
+						}else{
+							eng_lang_score.get_score(data.content.text)
+							.then(function(ret_score){
+								ret_obj.data = ret_score;
+								return resolve(ret_obj);
+							})
+						}
+						
+					}).catch((error) => {
+					    console.log('eng lang error - ', error)
+				        return reject(error);
+					});
+				}
+			},
+			people : {
+				type : 'info',
+				action : function(data){
+					var ret_obj={name: 'people'};
+					return new Promise(function (resolve, reject) {
+						if(!data.content.text){
+							ret_obj.data = {'error' : 'invalid content'};
+							return resolve (ret_obj);
+						}else{
+							people.get_people(data.content.text)
+							.then(function(ret_people){
+								ret_obj.data = ret_people;
+								return resolve(ret_obj);
+							})
+						}
+						
+					}).catch((error) => {
+				        console.log('people - ', error)
+				        return reject(error);
+				    });
+				}
+			},
+			organisations : {
+				type : 'related',
+				action : function(data){
+					var ret_obj={name: 'organisations'};
+					return new Promise(function (resolve, reject) {
+						if(!data.keywords.string){
+							ret_obj.data = {'error' : 'invalid keywords'};
+							return resolve (ret_obj);
+						}
+						organisations.get_organisations(data.keywords.string)
+						.then(function(ret_organisation){
+							ret_obj.data = ret_organisation
 							return resolve(ret_obj);
 						})
-					}
-					
-				}).catch((error) => {
-				    console.log('eng lang error - ', error)
-			        return reject(error);
-				});
+					}).catch((error) => {
+				        console.log('organisations - ', error)
+				        return reject(error);
+				    });
+				}
 			},
-			people : function(data){
-				var ret_obj={name: 'people'};
-				return new Promise(function (resolve, reject) {
-					if(!data.content.text){
-						ret_obj.data = {'error' : 'invalid content'};
+			related : {
+				type : 'related',
+				action : function(data){
+					var ret_obj={name: 'related'};
+					return new Promise(function (resolve, reject) {
+						if(!data.keywords.string){
+							ret_obj.data = {'error' : 'invalid keywords'};
+							return resolve (ret_obj);
+						}
+						search.getRelated(data.keywords.string, (data.guid ? data.guid : 0), data.thisDomain)
+						.then(function(ret_related){
+							ret_obj.data = ret_related
+							return resolve(ret_obj)
+						})
+					}).catch((error) => {
+				        console.log('related - ', error)
+				        return reject(error);
+				    });
+				}
+			},
+			funding : {
+				type : 'related',
+				action : function(data){
+					var ret_obj={name: 'funding'};
+					return new Promise(function (resolve, reject) {
+						if(!data.keywords.string){
+							ret_obj.data = {'error' : 'invalid keywords'};
+							return resolve (ret_obj);
+						}
+						ret_obj.data = {'error' : 'Not currently available'};
 						return resolve (ret_obj);
-					}else{
-						people.get_people(data.content.text)
-						.then(function(ret_people){
-							ret_obj.data = ret_people;
+					}).catch((error) => {
+				        console.log('funding - ', error)
+				        return reject(error);
+				    });
+				}
+			},
+			social : {
+				type : 'related',
+				action : function(data){
+					var ret_obj={name: 'social'};
+					return new Promise(function (resolve, reject) {
+						if(!data.keywords.string){
+							ret_obj.data = {'error' : 'invalid keywords'};
+							return resolve (ret_obj);
+						}
+						social.get_stackExchange(data.keywords.string)
+						.then(function(ret_social){
+							ret_obj.data = ret_social
 							return resolve(ret_obj);
 						})
-					}
-					
-				}).catch((error) => {
-			        console.log('people - ', error)
-			        return reject(error);
-			    });
-			},
-			organisations : function(data){
-				var ret_obj={name: 'organisations'};
-				return new Promise(function (resolve, reject) {
-					if(!data.keywords.string){
-						ret_obj.data = {'error' : 'invalid keywords'};
-						return resolve (ret_obj);
-					}
-					organisations.get_organisations(data.keywords.string)
-					.then(function(ret_organisation){
-						ret_obj.data = ret_organisation
-						return resolve(ret_obj);
-					})
-				}).catch((error) => {
-			        console.log('organisations - ', error)
-			        return reject(error);
-			    });
-			},
-			related : function(data){
-				var ret_obj={name: 'related'};
-				return new Promise(function (resolve, reject) {
-					if(!data.keywords.string){
-						ret_obj.data = {'error' : 'invalid keywords'};
-						return resolve (ret_obj);
-					}
-					search.getRelated(data.keywords.string, (data.guid ? data.guid : 0), data.requestDomain, data.thisDomain)
-					.then(function(ret_related){
-						ret_obj.data = ret_related
-						return resolve(ret_obj)
-					})
-				}).catch((error) => {
-			        console.log('related - ', error)
-			        return reject(error);
-			    });
-			},
-			funding : function(data){
-				var ret_obj={name: 'funding'};
-				return new Promise(function (resolve, reject) {
-					if(!data.keywords.string){
-						ret_obj.data = {'error' : 'invalid keywords'};
-						return resolve (ret_obj);
-					}
-					ret_obj.data = {'error' : 'Not currently available'};
-					return resolve (ret_obj);
-				}).catch((error) => {
-			        console.log('funding - ', error)
-			        return reject(error);
-			    });
-			},
-			social : function(data){
-				var ret_obj={name: 'social'};
-				return new Promise(function (resolve, reject) {
-					if(!data.keywords.string){
-						ret_obj.data = {'error' : 'invalid keywords'};
-						return resolve (ret_obj);
-					}
-					social.get_stackExchange(data.keywords.string)
-					.then(function(ret_social){
-						ret_obj.data = ret_social
-						return resolve(ret_obj);
-					})
-				}).catch((error) => {
-			        console.log('social - ', error)
-			    });
+					}).catch((error) => {
+				        console.log('social - ', error)
+				    });
+				}
 			}
 		}
 // ║                                                                                                                      ║
@@ -234,13 +260,13 @@ var people = require('../people/get_people');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		// --------------------------------------------------------┤ GET EVERYTHING YOU CAN
-		var get_all = function(data, action){
+		var get_all = function(data, action, type){
 			return new Promise(function (resolve, reject) {
 				var proms = [];
 				for(var s in services){
-					if(!data[s] && (action == 'all' || action.indexOf(s) != -1)){
+					if(!data[s] && (services[s].type == type || action == 'all' || action.indexOf(s) != -1)){
 						proms.push(
-							services[s](data)
+							services[s].action(data)
 							.then(function(retData){
 								data[retData.name] = retData.data;
 							}).catch((error) => {
@@ -255,33 +281,26 @@ var people = require('../people/get_people');
 			  		return resolve (data);
 			  	});
 			}).catch((error) => {
-		        console.log('get all services - ', error)
+		        console.error('get all services - ', error)
 		        return reject(error);
 		    });	
 		}
 
-		// --------------------------------------------------------┤ GET A SPECIFIC SERVICE
-		var get_service = function(data, action){
+		// --------------------------------------------------------┤ EXPOSE THIS FOR THE INGEST PROCESS
+		exports.itemServices = function(data, actions, type){
 			return new Promise(function (resolve, reject) {
-				if(!data[action]){
-					if(services[action]){
-						services[action](data)
-						.then(function(retData){
-							return resolve(retData.data);
-						}).catch((error) => {
-					        console.log(action, ' - ', error)
-					        return reject(error);
-					    })
-					}else{
-						return resolve({"error" : "not a valid service"})
-					}
-					
-				}
+				get_all(data, actions, type)
+				.then(function(sendObj){
+	  				return resolve(sendObj);
+	  			}).catch((error) => {
+			        console.error('item process error - ', error)
+			        return reject(error);
+			    });
 			}).catch((error) => {
-		        console.log('get single services - ', error)
-		        return reject(error);
-		    });
+		        console.error('item process error - ', error)
+		    });	
 		}
+
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
@@ -300,7 +319,7 @@ var people = require('../people/get_people');
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
-		exports.getServices = function(data, reqUrl, resUrl){
+		exports.getServices = function(data, resUrl){
 			return new Promise(function (resolve, reject) {
 			var proms = [], retObj = {};
 				if(data.guid){
@@ -315,7 +334,7 @@ var people = require('../people/get_people');
 									retObj = obj[0]._source;
 								}
 							}).catch((error) => {
-						        console.log('guid service - ', error)
+						        console.error('guid service - ', error)
 						        return reject(error);
 						    })
 						)
@@ -332,11 +351,11 @@ var people = require('../people/get_people');
 								.then(function(ret_keys){
 									retObj.keywords = ret_keys.data;
 								}).catch((error) => {
-							        console.log('keywords service - ', error)
+							        console.error('keywords service - ', error)
 					        		return reject(error);
 							    });	
 							}).catch((error) => {
-						        console.log('content service - ', error)
+						        console.error('content service - ', error)
 					        	return reject(error);
 						    })
 						)		
@@ -360,33 +379,22 @@ var people = require('../people/get_people');
 				
 				var items = Promise.all(proms);
 			  	items.then(function(results){
-			  		retObj.requestDomain = reqUrl;
+			  		// retObj.requestDomain = reqUrl;
 					retObj.thisDomain = resUrl;
-					get_all(retObj, data.action)
-			  	// 	if(data.action == 'all'){
-			  	// 		get_all(retObj)
+					get_all(retObj, data.action, data.type)
 		  			.then(function(sendObj){
 		  				return resolve(sendObj);
 		  			}).catch((error) => {
-				        console.log('get services - ', error)
+				        console.error('get services - ', error)
 				        return reject(error);
 				    });
-			  	// 	}else{
-						// get_service(retObj, data.action)
-						// .then(function(sendObj){
-						// 	return resolve(sendObj);
-						// }).catch((error) => {
-					 //        console.log('specific service - ', error)
-					 //        return reject(error);
-					 //    });
-			  	// 	}
 			  	}).catch((error) => {
-			        console.log('service - ', error)
+			        console.error('service - ', error)
 			        return reject(error);
 			    });
 
 			}).catch((error) => {
-		        console.log('services - ', error)
+		        console.error('services - ', error)
 		        return reject(error);
 		    });
 		}

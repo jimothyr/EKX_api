@@ -1,6 +1,9 @@
 var request = require('request');
 var appGlobals = require('../globals/globals.json');
-
+// Nodejs encryption with CTR
+var crypto = require('crypto'),
+    algorithm = 'aes-256-ctr',
+    password = 'thin_examine_clear_ball';
 
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -91,6 +94,22 @@ var appGlobals = require('../globals/globals.json');
 		exports.get_guid = function(itemID, providerID){
 			return(create_guid(itemID, providerID));
 		}
+
+		// --------------------------------------------------------┤ CREATE ENCRYPTED TEXT FOR LINKS
+		function encrypt(text){
+		  var cipher = crypto.createCipher(algorithm,password)
+		  var crypted = cipher.update(text,'utf8','hex')
+		  crypted += cipher.final('hex');
+		  return crypted;
+		}
+
+		// --------------------------------------------------------┤ DECRYPT LINKS
+		exports.decrypt = function(text){
+			var decipher = crypto.createDecipher(algorithm,password)
+			var dec = decipher.update(text,'hex','utf8')
+			dec += decipher.final('utf8');
+			return dec;
+		}
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
@@ -166,7 +185,7 @@ var appGlobals = require('../globals/globals.json');
 					return resolve(hits);
 				});
 			}).catch((error) => {
-		        console.log('guid search - ', error)
+		        console.error('guid search - ', error)
 		    })
 		}
 
@@ -190,7 +209,7 @@ var appGlobals = require('../globals/globals.json');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		// --------------------------------------------------------┤ ALL RELATED
-		exports.getRelated = function(keywords, guid, reqUrl, resUrl){
+		exports.getRelated = function(keywords, guid, resUrl){
 			return new Promise(function (resolve, reject) {
 				request({
 				    url: appGlobals.searchURL+appGlobals.searchShard+"/_search",
@@ -223,7 +242,7 @@ var appGlobals = require('../globals/globals.json');
 				    	hits = body.hits.hits.reduce(function(memo, hit) {
 						    if (hit.guid != guid) {
 						    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
-						    	hit._source.link = resUrl+'/'+appGlobals.bounceRoute+'/'+encodeURIComponent(new Buffer(reqUrl || 'unkown').toString('base64'))+'/'+encodeURIComponent(new Buffer(hit._source.link).toString('base64'));
+						    	hit._source.link = resUrl+'/'+appGlobals.bounceRoute+'/'+encodeURIComponent(encrypt(hit._source.link + '|' + new Date()));
 						    	hit._source.url = hit._source.link;
 						        memo.push(hit);
 						    }
@@ -235,7 +254,7 @@ var appGlobals = require('../globals/globals.json');
 					return resolve(hits);
 				});
 			}).catch((error) => {
-			    console.log('search - ', error)
+			    console.error('search - ', error)
 			    return reject(error);
 		   })
 		}
@@ -274,7 +293,8 @@ var appGlobals = require('../globals/globals.json');
 						    "ekxIndex" : {
 						    	"_source" : {
 						    		"excludes" : [
-										"pdfs"
+										"content.pdfs",
+										"content.html"
 							    	]
 						    	}
 					        }

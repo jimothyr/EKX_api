@@ -10,6 +10,7 @@ const http         = require('http'),
       search       = require('./services/search/elasticsearch'),
       appGlobals   = require('./services/globals/globals.json'),
       bounces      = require('./bounce/bounce'),
+      ingest      = require('./services/feeds/ingest'),
       env          = process.env;
 
 var app = express();
@@ -51,11 +52,14 @@ var app = express();
       });
 
       // --------------------------------------------------------┤ RECORD A LINK CLICK
-      app.get('/'+appGlobals.bounceRoute+'/:from/:to', function(req, res){
-        var tfrom = new Buffer(req.params.from, 'base64').toString();
-        var tto = new Buffer(req.params.to, 'base64').toString();
-        bounces.bounce(tfrom,tto, req.fingerprint.hash);
-        res.redirect(tto);
+      app.get('/'+appGlobals.bounceRoute+'/:to', function(req, res){
+        var tfrom = req.headers.origin;
+        var tto = req.params.to;
+        var retUrl = search.decrypt(tto);
+        retUrl = retUrl.split('|');
+        console.log(retUrl)
+        // bounces.bounce(tfrom,tto, req.fingerprint.hash);
+        res.redirect(retUrl[0]);
       });
 
       // --------------------------------------------------------┤ SERVICES FROM API MANAGER
@@ -64,7 +68,7 @@ var app = express();
         console.log(req.params.action)
         setData.action = (req.params.action == 'all' ? 'all' : req.params.action.split(','));
         setData.guid = setData.guid || search.get_guid(setData.itemID, setData.providerID);
-        services.getServices(setData, req.headers.origin, req.protocol + '://' + req.get('host'))
+        services.getServices(setData, req.protocol + '://' + req.get('host'))
         .then(function(ret_obj){
           res.send(ret_obj);
         });
@@ -91,7 +95,23 @@ var app = express();
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
+    // --------------------------------------------------------┤ CREATE THE SEARCH INDEX
+    app.get('/createIndex', function(req, res){
+      search.createIndex()
+      .then(function(resObj){
+        res.send(resObj)
+      })
+      .catch((error) => {
+          console.error('search - ', error)
+          return reject(error);
+       })
+    });
 
+    // --------------------------------------------------------┤ INGEST FEEDS
+    app.get('/ingestFeeds', function(req,res){
+      ingest.ingest_feeds();
+      res.send('Request acknowledged');
+    })
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                END OF SECTION                                                        ║

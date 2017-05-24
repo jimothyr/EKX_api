@@ -47,7 +47,6 @@ var getBase = function(base, relative) {
 
 var get_file = function(tUrl, baseUrl){
 	tUrl = (baseUrl ? getBase(baseUrl, tUrl) : tUrl);
-	console.log('opening pdf - '+tUrl)
 	return new Promise(function (resolve, reject) {
 		//how big is the file?
 		// remote(tUrl, function(err, o) {
@@ -55,7 +54,19 @@ var get_file = function(tUrl, baseUrl){
 				if(!error){
 					return resolve(text);
 				}else{
-					return reject(error);
+					// --------------------------------------------------------┤ HAVE A GO WITH HTTP INSTEAD OF HTTPS
+					if(tUrl.indexOf('https:') != -1){
+						textract.fromUrl(tUrl.replace(/^https:\/\//i, 'http://'), function( nerror, ntext ) {
+							if(!nerror){
+								return resolve(ntext);
+							}else{
+								return reject(nerror);
+							}
+						})
+					}else{
+						return reject(error);
+					}
+					
 				}
 			});
 		// })
@@ -63,7 +74,7 @@ var get_file = function(tUrl, baseUrl){
 	}).catch((error) => {
     	console.log('attachment error - ', tUrl);
     	console.log(error);
-		return reject(error);
+    	return('')
     });
 }
 
@@ -71,7 +82,6 @@ exports.get_content = function(tUrl){
 	return new Promise(function (resolve, reject) {
 		get_link_type(tUrl).then(function(thisType){
 			if(thisType.type == "document"){
-				console.log('main item is a document', tUrl)
 				get_file(tUrl).then(function(retData){
 					return resolve ({
 						html : '<html><head></head><body>'+retData+'</body></html>',
@@ -84,7 +94,6 @@ exports.get_content = function(tUrl){
 			    	return reject(error);
 			    });
 			}else{
-				console.log('opening ', tUrl)
 				request(tUrl, function(error, response, html){
 					if(!error){
 						var ret_obj = unfluff(html);
@@ -95,11 +104,12 @@ exports.get_content = function(tUrl){
 			        }
 				});
 			}			
-		})
-
+		}).catch((error) => {
+	    	console.log('item error - ',tUrl, error)
+			return reject(error);
+	    })
 	}).catch((error) => {
     	console.log('process error - ',tUrl, error)
-		return reject(error);
     })
 }
 
@@ -134,7 +144,10 @@ exports.get_links_content = function(links, baseUrl){
 						href : link.href,
 					})
 				};
-			})
+			}).catch((error) => {
+		    	console.log('link item - ', error)
+			   	return reject(error);
+		    })
 		})
 		var count = 0;
 		function get_item_content(a){
@@ -151,7 +164,10 @@ exports.get_links_content = function(links, baseUrl){
 			})
 		}
 		get_item_content(attachments[count]);
-	})
+	}).catch((error) => {
+    	console.log('link content - ',tUrl, error)
+	   	return reject(error);
+    })
 }
 
 exports.get_links_content = function(links, baseUrl){
