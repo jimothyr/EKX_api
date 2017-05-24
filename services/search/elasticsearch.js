@@ -93,7 +93,7 @@ var crypto = require('crypto');
 		}
 
 		// --------------------------------------------------------┤ CREATE ENCRYPTED TEXT FOR LINKS
-		exports.encryptLink = encryptLink = function(text){
+		var encryptLink = exports.encryptLink = function(text){
 		  var cipher = crypto.createCipher(appGlobals.cryptoAlgorithm,appGlobals.cryptoPassword);
 		  var crypted = cipher.update(text,'utf8','hex')
 		  crypted += cipher.final('hex');
@@ -101,7 +101,7 @@ var crypto = require('crypto');
 		}
 
 		// --------------------------------------------------------┤ DECRYPT LINKS
-		exports.decrypt = decrypt = function(text){
+		var decrypt = exports.decrypt = function(text){
 			var decipher = crypto.createDecipher(algorithm,password)
 			var dec = decipher.update(text,'hex','utf8')
 			dec += decipher.final('utf8');
