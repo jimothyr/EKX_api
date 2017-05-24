@@ -53,7 +53,7 @@ var app = express();
 
       // --------------------------------------------------------┤ RECORD A LINK CLICK
       app.get('/'+appGlobals.bounceRoute+'/:to', function(req, res){
-       res.send(JSON.stringify(req));
+       res.send(req);
         // var tfrom = req.headers.origin;
         // var tto = req.params.to;
         // var retUrl = search.decrypt(tto);
