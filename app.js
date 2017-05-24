@@ -66,8 +66,10 @@ var app = express();
       // });
 
       app.post('/'+appGlobals.bounceRoute, function(req, res){
-        console.log(req.body)
-        res.send(req.body);
+        var tfrom = req.headers.origin;
+        var tto = search.decrypt(req.body.q);
+        console.log(tto);
+        res.send(req.headers);
       });
 
       // --------------------------------------------------------┤ GET SERVICES
