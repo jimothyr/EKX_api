@@ -56,7 +56,7 @@ var app = express();
         // res.send(JSON.stringify(req.fingerprint));
 
         var tfrom = req.headers.origin;
-        var tto = req.params.to;
+        var tto = req.query[appGlobals.bounceTo];
         var retUrl = search.decrypt(tto);
         retUrl = retUrl.split('|');
         res.send([tfrom, retUrl, req.fingerprint]);

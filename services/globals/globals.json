@@ -9,6 +9,7 @@
 	},
 	"max_attachment_size" : 4000000,
 	"bounceRoute" : "b",
+	"bounceTo" : "q",
 	"apiManager" : "https://encraft.azure-api.net",
 	"apiManagerKey" : "key=1c6b55b48d90450080cc18a00c26eaf2"
 }
