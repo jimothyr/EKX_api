@@ -64,16 +64,39 @@ var app = express();
         // res.redirect(retUrl[0]);
       });
 
-      // --------------------------------------------------------┤ SERVICES FROM API MANAGER
-      app.post('/services/:action', function(req, res) {
+      // --------------------------------------------------------┤ GET SERVICES
+      app.post('/api/:method/:action', function(reqm,res){
+        res.setHeader('Content-Type', 'application/json');
         var setData = req.body;
-        setData.action = (req.params.action == 'all' ? 'all' : req.params.action.split(','));
-        // setData.guid = setData.guid || search.get_guid(setData.itemID, setData.providerID);
+        setData.action = (req.params.method == 'service' ? (req.params.action == 'all' ? 'all' : req.params.action.split(',')) : []);
+        setData.type = (req.params.method == 'type' ? (req.params.action == 'all' ? 'all' : req.params.action.split(',')) : []);
         services.getServices(setData, req.protocol + '://' + req.get('host'))
         .then(function(ret_obj){
           res.send(ret_obj);
         });
       });
+
+      app.post('/api/:method', function(reqm,res){
+        res.setHeader('Content-Type', 'application/json');
+        var setData = req.body;
+        setData.action = (req.params.method == 'service' ? 'all' : []);
+        setData.type = (req.params.method == 'type' ? 'all' : []);
+        services.getServices(setData, req.protocol + '://' + req.get('host'))
+        .then(function(ret_obj){
+          res.send(ret_obj);
+        });
+      });
+
+      // --------------------------------------------------------┤ LIST SERVICES
+      app.get('/api/:method', function(req,res){
+        res.setHeader('Content-Type', 'application/json');
+        res.send(services.listServices(req.params.method));
+      });
+      app.get('/api', function(req,res){
+        res.setHeader('Content-Type', 'application/json');
+        res.send(services.listServices());
+      });
+
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣

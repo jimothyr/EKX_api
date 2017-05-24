@@ -172,7 +172,7 @@ var crypto = require('crypto'),
 							} 
 						},
 						"_source": {
-					        "exclude": ["content.links.*", "keywords.keyword_*", "url"]
+					        "exclude": ["content.*", "keywords.keyword_*", "url"]
 					    },
 				    }
 				}, function (error, response, body){

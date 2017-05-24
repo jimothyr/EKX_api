@@ -263,22 +263,27 @@ var people = require('../people/get_people');
 		var get_all = function(data, action, type){
 			return new Promise(function (resolve, reject) {
 				var proms = [];
+				var retObj = {};
 				for(var s in services){
-					if(!data[s] && (services[s].type == type || action == 'all' || action.indexOf(s) != -1)){
-						proms.push(
-							services[s].action(data)
-							.then(function(retData){
-								data[retData.name] = retData.data;
-							}).catch((error) => {
-						        console.log(s+' - ', error)
-						    })
-						)
+					if(!retObj[s] && (type.indexOf(services[s].type) != -1 == type || action == 'all' || action.indexOf(s) != -1)){
+						if(data[s]){
+							retObj[s] = data[s];
+						}else{
+							proms.push(
+								services[s].action(data)
+								.then(function(retData){
+									retObj[retData.name] = retData.data;
+								}).catch((error) => {
+							        console.log(s+' - ', error)
+							    })
+							)	
+						}
 					}
 				}
 				proms.push(globalServices.emptyProm())
 				var items = Promise.all(proms);
 			  	items.then(function(results){
-			  		return resolve (data);
+			  		return resolve (retObj);
 			  	});
 			}).catch((error) => {
 		        console.error('get all services - ', error)
@@ -299,6 +304,23 @@ var people = require('../people/get_people');
 			}).catch((error) => {
 		        console.error('item process error - ', error)
 		    });	
+		}
+
+		// --------------------------------------------------------┤ LIST SERVICES
+		exports.listServices = function(retType){
+			var retArrr = [];
+			for(var s in services){
+				if(retType == 'service'){
+					retArrr.push(s)
+				}else if(retType == 'type'){
+					if(retArrr.indexOf(services[s].type) == -1){
+						retArrr.push(services[s].type)
+					}
+				}else{
+					retArrr.push({name: s, type : services[s].type})
+				}
+			}
+			return retArrr;
 		}
 
 // ║                                                                                                                      ║
