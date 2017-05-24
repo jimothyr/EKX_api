@@ -265,7 +265,7 @@ var people = require('../people/get_people');
 				var proms = [];
 				var retObj = {};
 				for(var s in services){
-					if(!retObj[s] && (type.indexOf(services[s].type) != -1 == type || action == 'all' || action.indexOf(s) != -1)){
+					if(!retObj[s] && (type.indexOf(services[s].type) != -1 || action == 'all' || action.indexOf(s) != -1)){
 						if(data[s]){
 							retObj[s] = data[s];
 						}else{
