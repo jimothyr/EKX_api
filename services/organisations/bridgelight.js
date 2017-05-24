@@ -12,11 +12,12 @@ exports.get_organisations = function(keywords){
 				return reject(error);
 			}
 			if(body.data){
-				body.data.forEach(function(o, i){
-					o.websites.forEach(function(w,x){
-						w = search.encryptLink(w);
+				body.data = body.data.map(function(item){
+					item.websites = item.websites.map(function(website){
+						return search.encryptLink(website);
 					});
-				});
+					return item;
+				})
 				body.data.sort(function(a, b){
 			    var keyA = a.pages,
 			        keyB = b.pages;
@@ -25,7 +26,7 @@ exports.get_organisations = function(keywords){
 			    if(keyA < keyB) return 1;
 			    return 0;
 			});
-				return resolve(body.data.slice(0, 10))
+				return resolve(body.data.slice(0, 20))
 			}else{
 			   return resolve([]);
 			}
