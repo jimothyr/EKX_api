@@ -1,0 +1,167 @@
+[
+	{
+		"provider" : {
+			"name" : "Building Data Exchange"
+		},
+		"feeds" : [
+			{
+				"url" : "http://buildingdataexchange.org.uk/feed/reports"
+			}
+		]
+	},
+	{
+		"provider" : {
+			"name" : "Encraft"
+		},
+		"feeds" : [
+			{
+				"url" : "https://www.encraft.co.uk/feed/"
+			}
+		]
+	},
+	
+	{
+		"provider" : {
+			"name" : "National Grid"
+		},
+		"feeds" : [
+			{
+				"url" :	"http://nationalgridconnecting.com/category/bulletins/feed/" 
+			},
+			{
+				"url" :	"http://nationalgridconnecting.com/category/debate/feed/" 
+			},
+			{
+				"url" :	"http://nationalgridconnecting.com/category/articles/feed/" 
+			}
+		]
+	},
+	{
+		"provider" : {
+			"name" : "Warwick University Energy Group"
+		},
+		"feeds" : [
+			{
+				"url" : "http://www2.warwick.ac.uk/sitebuilder2/api/rss/siteChanges.rss?page=/research/priorities/energy"
+			}
+		]
+	},
+	{
+		"provider" : {
+			"name" : "BEIS"
+		},
+		"feeds" : [
+			{
+				"url" : "https://www.gov.uk/government/organisations/department-for-business-energy-and-industrial-strategy.atom"
+			}
+		]
+	},
+	{
+		"provider" : {
+			"name" : "data.gov.uk"
+		},
+		"feeds" : [
+			{
+				"url" : "https://data.gov.uk/feeds/custom.atom?q=energy"
+			}
+		]
+	},
+	{
+		"provider" : {
+			"name" : "Energy Innovation Centre"
+		},
+		"feeds" : [
+			{
+				"url" : "http://energyinnovationcentre.com/feed/"
+			}
+		]
+	},
+	{
+		"provider" : {
+			"name" : "Ofgem"
+		},
+		"feeds" : [
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=497&sm_policy_area=&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=499&sm_policy_area=&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=505&sm_policy_area=&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=501&sm_policy_area=&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=502&sm_policy_area=&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=506&sm_policy_area=&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=507&sm_policy_area=&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=508&sm_policy_area=&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=509&sm_policy_area=&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=500&sm_policy_area=&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=503&sm_policy_area=&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=498&sm_policy_area=&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=57&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=58&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=59&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=60&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=61&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=62&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=63&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=64&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=65&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=66&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=67&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=68&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=69&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=70&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			},
+			{
+				"url" : "https://www.ofgem.gov.uk/search/rss?keyword=&ds_created%5Bmin%5D=&ds_created%5Bmax%5D=&ss_language=en-gb&sm_information_type=&sm_policy_area=71&sort_by=ds_created&sort_order=DESC&results_per_page=100"
+			}
+		]
+	}
+]
