@@ -53,9 +53,11 @@ var app = express();
 
       // --------------------------------------------------------┤ RECORD A LINK CLICK
       app.get('/'+appGlobals.bounceRoute+'/:to', function(req, res){
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Cache-Control', 'no-cache, no-store');
-        res.send(req);
+        res.set('Content-Type', 'text/plain');
+        var s = "";
+        for (var name in req.header) s += name + ': ' + req.header[name] + '\n';
+        req.send(s);
+
         // var tfrom = req.headers.origin;
         // var tto = req.params.to;
         // var retUrl = search.decrypt(tto);
