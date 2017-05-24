@@ -70,7 +70,7 @@ var app = express();
         var setData = req.body;
         setData.action = (req.params.method == 'service' ? (req.params.action == 'all' ? 'all' : req.params.action.split(',')) : []);
         setData.type = (req.params.method == 'type' ? (req.params.action == 'all' ? 'all' : req.params.action.split(',')) : []);
-        services.getServices(setData, req.protocol + '://' + req.get('host'))
+        services.getServices(setData)
         .then(function(ret_obj){
           res.send(ret_obj);
         });
@@ -81,7 +81,7 @@ var app = express();
         var setData = req.body;
         setData.action = (req.params.method == 'service' ? 'all' : []);
         setData.type = (req.params.method == 'type' ? 'all' : []);
-        services.getServices(setData, req.protocol + '://' + req.get('host'))
+        services.getServices(setData)
         .then(function(ret_obj){
           res.send(ret_obj);
         });

@@ -193,7 +193,7 @@ var people = require('../people/get_people');
 							ret_obj.data = {'error' : 'invalid keywords'};
 							return resolve (ret_obj);
 						}
-						search.getRelated(data.keywords.string, (data.guid ? data.guid : 0), data.thisDomain)
+						search.getRelated(data.keywords.string, (data.guid ? data.guid : 0))
 						.then(function(ret_related){
 							ret_obj.data = ret_related
 							return resolve(ret_obj)
@@ -291,7 +291,7 @@ var people = require('../people/get_people');
 		    });	
 		}
 
-		// --------------------------------------------------------┤ EXPOSE THIS FOR THE INGEST PROCESS
+		// --------------------------------------------------------┤ EXPOSE SERVICES FOR THE INGEST PROCESS
 		exports.itemServices = function(data, actions, type){
 			return new Promise(function (resolve, reject) {
 				get_all(data, actions, type)
@@ -341,7 +341,7 @@ var people = require('../people/get_people');
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
-		exports.getServices = function(data, resUrl){
+		exports.getServices = function(data){
 			return new Promise(function (resolve, reject) {
 			var proms = [], retObj = {};
 				if(data.guid){
@@ -401,8 +401,6 @@ var people = require('../people/get_people');
 				
 				var items = Promise.all(proms);
 			  	items.then(function(results){
-			  		// retObj.requestDomain = reqUrl;
-					retObj.thisDomain = resUrl;
 					get_all(retObj, data.action, data.type)
 		  			.then(function(sendObj){
 		  				return resolve(sendObj);

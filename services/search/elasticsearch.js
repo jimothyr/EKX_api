@@ -209,7 +209,7 @@ var crypto = require('crypto'),
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		// --------------------------------------------------------┤ ALL RELATED
-		exports.getRelated = function(keywords, guid, resUrl){
+		exports.getRelated = function(keywords, guid){
 			return new Promise(function (resolve, reject) {
 				request({
 				    url: appGlobals.searchURL+appGlobals.searchShard+"/_search",
@@ -242,7 +242,7 @@ var crypto = require('crypto'),
 				    	hits = body.hits.hits.reduce(function(memo, hit) {
 						    if (hit.guid != guid) {
 						    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
-						    	hit._source.link = resUrl+'/'+appGlobals.bounceRoute+'/'+encodeURIComponent(encrypt(hit._source.link + '|' + new Date()));
+						    	hit._source.link = appGlobals.apiManager+'/'+appGlobals.bounceRoute+'/'+encodeURIComponent(encrypt(hit._source.link + '|' + new Date()))+'/'+apiManagerKey;
 						    	hit._source.url = hit._source.link;
 						        memo.push(hit);
 						    }
