@@ -55,7 +55,7 @@ var app = express();
       app.post('/'+appGlobals.bounceRoute, function(req, res){
         var tto = search.decrypt(req.body.q).split('|');
         bounces.bounce(req.get('Referrer'), tto[0], tto[1], req.fingerprint.hash);
-        res.redirect(req.headers);
+        res.redirect(tto[0]);
       });
 
       // --------------------------------------------------------┤ GET SERVICES
