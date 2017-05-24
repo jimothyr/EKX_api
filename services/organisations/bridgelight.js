@@ -1,4 +1,6 @@
 var request = require('request');
+var search = require('../search/elasticsearch');
+
 exports.get_organisations = function(keywords){
 	return new Promise(function (resolve, reject) {
 		request({
@@ -10,6 +12,11 @@ exports.get_organisations = function(keywords){
 				return reject(error);
 			}
 			if(body.data){
+				body.data.forEach(function(o, i){
+					o.websites.forEach(function(w,x){
+						w = search.encryptLink(w);
+					});
+				});
 				body.data.sort(function(a, b){
 			    var keyA = a.pages,
 			        keyB = b.pages;

@@ -1,10 +1,7 @@
 var request = require('request');
 var appGlobals = require('../globals/globals.json');
 // Nodejs encryption with CTR
-var crypto = require('crypto'),
-    algorithm = 'blowfish',
-    password = 'zzz';
-
+var crypto = require('crypto');
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
 // ║                                                                                                                      ║
@@ -96,15 +93,15 @@ var crypto = require('crypto'),
 		}
 
 		// --------------------------------------------------------┤ CREATE ENCRYPTED TEXT FOR LINKS
-		function encrypt(text){
-		  var cipher = crypto.createCipher(algorithm,password)
+		exports.encryptLink = encryptLink = function(text){
+		  var cipher = crypto.createCipher(appGlobals.cryptoAlgorithm,appGlobals.cryptoPassword);
 		  var crypted = cipher.update(text,'utf8','hex')
 		  crypted += cipher.final('hex');
-		  return crypted;
+		  return appGlobals.apiManager+'/'+appGlobals.bounceRoute+'?q='+encodeURIComponent(crypted)+'&'+appGlobals.apiManagerKey;
 		}
 
 		// --------------------------------------------------------┤ DECRYPT LINKS
-		exports.decrypt = function(text){
+		exports.decrypt = decrypt = function(text){
 			var decipher = crypto.createDecipher(algorithm,password)
 			var dec = decipher.update(text,'hex','utf8')
 			dec += decipher.final('utf8');
@@ -242,7 +239,7 @@ var crypto = require('crypto'),
 				    	hits = body.hits.hits.reduce(function(memo, hit) {
 						    if (hit.guid != guid) {
 						    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
-						    	hit._source.link = appGlobals.apiManager+'/'+appGlobals.bounceRoute+'?q='+encodeURIComponent(encrypt(hit._source.link + '|' + new Date()))+'&'+appGlobals.apiManagerKey;
+						    	hit._source.link = encryptLink(hit._source.link);
 						    	hit._source.url = hit._source.link;
 						        memo.push(hit);
 						    }
