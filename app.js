@@ -59,7 +59,7 @@ var app = express();
         var tto = req.query[appGlobals.bounceTo];
         // var retUrl = search.decrypt(tto);
         // retUrl = retUrl.split('|');
-        res.send([tfrom, tto, retUrl, req.fingerprint]);
+        res.send([tfrom, tto, req.fingerprint]);
         // console.log(retUrl)
         // // bounces.bounce(tfrom,tto, req.fingerprint.hash);
         // res.redirect(retUrl[0]);
