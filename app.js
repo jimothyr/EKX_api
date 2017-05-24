@@ -65,7 +65,7 @@ var app = express();
       });
 
       // --------------------------------------------------------┤ GET SERVICES
-      app.post('/api/:method/:action', function(reqm,res){
+      app.post('/api/:method/:action', function(req,res){
         res.setHeader('Content-Type', 'application/json');
         var setData = req.body;
         setData.action = (req.params.method == 'service' ? (req.params.action == 'all' ? 'all' : req.params.action.split(',')) : []);
