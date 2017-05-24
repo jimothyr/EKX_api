@@ -52,13 +52,14 @@ var app = express();
       });
 
       // --------------------------------------------------------┤ RECORD A LINK CLICK
-      app.get('/'+appGlobals.bounceRoute+'/:to', function(req, res){
-        res.send(JSON.stringify(req.fingerprint));
+      app.get('/'+appGlobals.bounceRoute, function(req, res){
+        // res.send(JSON.stringify(req.fingerprint));
 
-        // var tfrom = req.headers.origin;
-        // var tto = req.params.to;
-        // var retUrl = search.decrypt(tto);
-        // retUrl = retUrl.split('|');
+        var tfrom = req.headers.origin;
+        var tto = req.params.to;
+        var retUrl = search.decrypt(tto);
+        retUrl = retUrl.split('|');
+        res.send([tfrom, retUrl, req.fingerprint]);
         // console.log(retUrl)
         // // bounces.bounce(tfrom,tto, req.fingerprint.hash);
         // res.redirect(retUrl[0]);

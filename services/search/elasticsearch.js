@@ -2,8 +2,8 @@ var request = require('request');
 var appGlobals = require('../globals/globals.json');
 // Nodejs encryption with CTR
 var crypto = require('crypto'),
-    algorithm = 'aes-256-ctr',
-    password = 'thin_examine_clear_ball';
+    algorithm = 'blowfish',
+    password = 'zzz';
 
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -242,7 +242,7 @@ var crypto = require('crypto'),
 				    	hits = body.hits.hits.reduce(function(memo, hit) {
 						    if (hit.guid != guid) {
 						    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
-						    	hit._source.link = appGlobals.apiManager+'/'+appGlobals.bounceRoute+'/'+encodeURIComponent(encrypt(hit._source.link + '|' + new Date()))+'/'+appGlobals.apiManagerKey;
+						    	hit._source.link = appGlobals.apiManager+'/'+appGlobals.bounceRoute+'?q='+encodeURIComponent(encrypt(hit._source.link + '|' + new Date()))+'&'+appGlobals.apiManagerKey;
 						    	hit._source.url = hit._source.link;
 						        memo.push(hit);
 						    }
