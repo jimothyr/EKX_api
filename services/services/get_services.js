@@ -389,7 +389,7 @@ var people = require('../people/get_people');
 							globalServices.content(data)
 							.then(function(ret_content){
 								retObj.content = ret_content.data;
-								services.keywords(retObj)
+								services.keywords.action(retObj)
 								.then(function(ret_keys){
 									retObj.keywords = ret_keys.data;
 								}).catch((error) => {
