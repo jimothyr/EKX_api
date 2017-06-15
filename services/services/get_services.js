@@ -392,6 +392,7 @@ var people = require('../people/get_people');
 								services.keywords.action(retObj)
 								.then(function(ret_keys){
 									retObj.keywords = ret_keys.data;
+									console.log(retObj)
 								}).catch((error) => {
 							        console.error('keywords service - ', error)
 					        		return reject(error);
