@@ -23,7 +23,7 @@ var people = require('../people/get_people');
 						ret_obj.data = {'error' : 'invalid content'};
 						return resolve (ret_obj);
 					}
-		 			content.get_content_from_html(data.html)
+		 			content.get_content_from_html(decodeURIComponent(data.html))
 					.then(function(ret_content){
 						ret_obj.data = ret_content;
 						return resolve (ret_obj);
