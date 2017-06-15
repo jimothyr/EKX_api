@@ -187,6 +187,7 @@ var people = require('../people/get_people');
 			documents : {
 				types : ['related'],
 				action : function(data){
+					console.log(data)
 					var ret_obj={name: 'related'};
 					return new Promise(function (resolve, reject) {
 						if(!data.keywords.string){
@@ -392,7 +393,6 @@ var people = require('../people/get_people');
 								services.keywords.action(retObj)
 								.then(function(ret_keys){
 									retObj.keywords = ret_keys.data;
-									console.log(retObj)
 								}).catch((error) => {
 							        console.error('keywords service - ', error)
 					        		return reject(error);
