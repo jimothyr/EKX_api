@@ -19,16 +19,16 @@ var people = require('../people/get_people');
 			content : function(data){
 				var ret_obj={name: 'content'};
 				return new Promise(function (resolve, reject) {
-					if(!data.content){
+					if(!data.html){
 						ret_obj.data = {'error' : 'invalid content'};
 						return resolve (ret_obj);
 					}
-		 			content.get_content_from_html(data.content)
+		 			content.get_content_from_html(data.html)
 					.then(function(ret_content){
 						ret_obj.data = ret_content;
 						return resolve (ret_obj);
 					}).catch((error) => {
-				    	console.log('content error - ', html)
+				    	console.log('content error - ', error)
 				    	return reject(error)
 				    })
 				}).catch((error) => {
@@ -364,10 +364,10 @@ var people = require('../people/get_people');
 		exports.getServices = function(data){
 			return new Promise(function (resolve, reject) {
 			var proms = [], retObj = {};
-				if(data.guid){
-					if(data.guid != ''){
+				if(data.rssItemGUID){
+					if(data.rssItemGUID != ''){
 						proms.push(
-							globalServices.guid(data.guid*1)
+							globalServices.guid(data.rssItemGUID*1)
 							.then(function(obj){
 								if(obj.length == 0){
 									retObj = {error:'not found'};
@@ -381,10 +381,10 @@ var people = require('../people/get_people');
 						    })
 						)
 					}else{
-						return resolve ({'error' : 'Not a valid guid'});
+						return resolve ({'error' : 'Not a valid rssItemGUID'});
 					}
-				}else if(data.content){
-					if(data.content != ''){
+				}else if(data.html){
+					if(data.html != ''){
 						proms.push(
 							globalServices.content(data)
 							.then(function(ret_content){
