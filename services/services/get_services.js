@@ -187,7 +187,6 @@ var people = require('../people/get_people');
 			documents : {
 				types : ['related'],
 				action : function(data){
-					console.log(data)
 					var ret_obj={name: 'related'};
 					return new Promise(function (resolve, reject) {
 						if(!data.keywords.string){
@@ -387,21 +386,23 @@ var people = require('../people/get_people');
 				}else if(data.html){
 					if(data.html != ''){
 						proms.push(
-							globalServices.content(data)
-							.then(function(ret_content){
-								retObj.content = ret_content.data;
-								services.keywords.action(retObj)
-								.then(function(ret_keys){
-									console.log(ret_keys)
-									retObj.keywords = ret_keys.data;
+							new Promise(function (xresolve, xreject) {
+								globalServices.content(data)
+								.then(function(ret_content){
+									retObj.content = ret_content.data;
+									services.keywords.action(retObj)
+									.then(function(ret_keys){
+										retObj.keywords = ret_keys.data;
+										return xresolve();
+									}).catch((error) => {
+								        console.error('keywords service - ', error)
+						        		return reject(error);
+								    });	
 								}).catch((error) => {
-							        console.error('keywords service - ', error)
-					        		return reject(error);
-							    });	
-							}).catch((error) => {
-						        console.error('content service - ', error)
-					        	return reject(error);
-						    })
+							        console.error('content service - ', error)
+						        	return reject(error);
+							    })
+							})
 						)		
 					}else{
 						return resolve ({'error' : 'Not valid content'});
