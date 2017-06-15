@@ -3,6 +3,8 @@
 	"indexURL" : "https://a4396bee4e6f416209c4cf535e3947d6.eu-west-1.aws.found.io:9243/",
 	"searchShard" : "ekx01",
 	"searchType" : "ekxIndex",
+	"eventShard" : "ekxevents",
+	"eventType" : "ekxEventIndex",
 	"indexAuth" : {
 		"user" : "elastic",
 		"pass" : "hx5wbcJlbEnI4hHEhdxFgkUe"
@@ -13,5 +15,6 @@
 	"apiManager" : "https://encraft.azure-api.net",
 	"apiManagerKey" : "key=530aa3ea67184a768620ebe81df672a2",
 	"cryptoAlgorithm" : "blowfish",
-    "cryptoPassword" : "zzz"
+    "cryptoPassword" : "zzz",
+    "eventbriteKey" : "5DCS3DIPWCYPNIZ72CBL"
 }

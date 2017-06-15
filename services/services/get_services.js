@@ -74,7 +74,7 @@ var people = require('../people/get_people');
 // ║                                                                                                                      ║
 		var services = {
 			keywords : {
-				type : 'info',
+				types : ['info'],
 				action : function(data){
 							var ret_obj={name: 'keywords'};
 							return new Promise(function (resolve, reject) {
@@ -100,7 +100,7 @@ var people = require('../people/get_people');
 						}
 					},
 			summary : {
-				type : 'info',
+				types : ['info'],
 				action : function(data){
 					var ret_obj={name: 'summary'};
 					return new Promise(function (resolve, reject) {
@@ -121,7 +121,7 @@ var people = require('../people/get_people');
 				}
 			},
 			eng_lang_score :{
-				type : 'info',
+				types : ['info'],
 				action :  function(data){
 					var ret_obj={name: 'eng_lang_score'};
 					return new Promise(function (resolve, reject) {
@@ -143,7 +143,7 @@ var people = require('../people/get_people');
 				}
 			},
 			people : {
-				type : 'info',
+				types : ['info'],
 				action : function(data){
 					var ret_obj={name: 'people'};
 					return new Promise(function (resolve, reject) {
@@ -165,7 +165,7 @@ var people = require('../people/get_people');
 				}
 			},
 			organisations : {
-				type : 'related',
+				types : ['related'],
 				action : function(data){
 					var ret_obj={name: 'organisations'};
 					return new Promise(function (resolve, reject) {
@@ -184,8 +184,8 @@ var people = require('../people/get_people');
 				    });
 				}
 			},
-			related : {
-				type : 'related',
+			documents : {
+				types : ['related'],
 				action : function(data){
 					var ret_obj={name: 'related'};
 					return new Promise(function (resolve, reject) {
@@ -205,7 +205,7 @@ var people = require('../people/get_people');
 				}
 			},
 			funding : {
-				type : 'related',
+				types : ['related'],
 				action : function(data){
 					var ret_obj={name: 'funding'};
 					return new Promise(function (resolve, reject) {
@@ -222,7 +222,7 @@ var people = require('../people/get_people');
 				}
 			},
 			social : {
-				type : 'related',
+				types : ['related'],
 				action : function(data){
 					var ret_obj={name: 'social'};
 					return new Promise(function (resolve, reject) {
@@ -237,6 +237,26 @@ var people = require('../people/get_people');
 						})
 					}).catch((error) => {
 				        console.log('social - ', error)
+				    });
+				}
+			},
+			events : {
+				types : ['related'],
+				action : function(data){
+					var ret_obj={name: 'events'};
+					return new Promise(function (resolve, reject) {
+						if(!data.keywords.string){
+							ret_obj.data = {'error' : 'invalid keywords'};
+							return resolve (ret_obj);
+						}
+						search.getEvents(data.keywords.string)
+						.then(function(ret_events){
+							ret_obj.data = ret_events
+							return resolve(ret_obj)
+						})
+					}).catch((error) => {
+				        console.log('events - ', error)
+				        return reject(error);
 				    });
 				}
 			}
@@ -265,7 +285,7 @@ var people = require('../people/get_people');
 				var proms = [];
 				var retObj = {};
 				for(var s in services){
-					if(!retObj[s] && (type.indexOf(services[s].type) != -1 || action == 'all' || action.indexOf(s) != -1)){
+					if(!retObj[s] && (services[s].types.some(r=> type.includes(r)) || action == 'all' || action.indexOf(s) != -1)){
 						if(data[s]){
 							retObj[s] = data[s];
 						}else{

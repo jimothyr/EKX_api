@@ -4,6 +4,7 @@ var FeedParser    = require('feedparser'),
 var search_engine = require('../search/elasticsearch'),
     content       = require('../content/get_content'), 
     services      = require('../services/get_services');
+    events        = require('../events/eventbrite');
 
 
 // 
@@ -14,6 +15,7 @@ var search_engine = require('../search/elasticsearch'),
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
+    // --------------------------------------------------------┤ GET RSS FEED ITEMS
     var get_items = function(url, provider){
       return new Promise(function (resolve, reject) {
         var req = request(url);
@@ -63,6 +65,24 @@ var search_engine = require('../search/elasticsearch'),
         });
       }).catch((error) => {
         console.log('get item error', error)
+      });
+    }
+
+    // --------------------------------------------------------┤ GET EVENTBRITE EVENT ITEMS
+    var get_events = function(id, providerName){
+      return new Promise(function (resolve, reject) {
+        console.log('--------------┤ FETCHING EVENTS FOR - ' + providerName)
+        events.getEvents(id)
+        .then(function(results){
+          for(var i=0;i<results.length;i++){
+            results[i].provider = providerName;
+          }
+          return resolve(results);
+        }).catch((error) => {
+          console.log('get event error', error)
+        });
+      }).catch((error) => {
+        console.log('get event error', error)
       });
     }
 // ║                                                                                                                      ║
@@ -182,19 +202,42 @@ exports.ingest_feeds = function(){
  console.log('║                                                                                                                      ║');
  console.log('║                                                                                                                      ║');
   var providers = require((process.env.OPENSHIFT_DATA_DIR || '../')+'Feeds/feeds.json');
-  var proms = [];
+  var feedProms = [];
+  var eventProms = [];
 
   providers.map(function(p){
-    p.feeds.map(function(f){
-      proms.push(get_items(f.url, p.provider.name))
-    })
+    if(p.feeds){
+      p.feeds.map(function(f){
+        feedProms.push(get_items(f.url, p.provider.name))
+      });
+    }
+
+    if(p.eventbrite){
+      p.eventbrite.map(function(e){
+        eventProms.push(get_events(e.id, p.provider.name))
+      });
+    }
+
+    
   });
-  var items = Promise.all(proms);
-  items.then(function(results){
+  var feedItems = Promise.all(feedProms);
+  var eventItems = Promise.all(eventProms);
+
+  feedItems.then(function(results){
     // --------------------------------------------------------┤  OUR RETURNED ARRAY IS ACTUALLY AN ARRAY OF ARRAYS WHICH IS USELESS. AS WE SEND IT OFF TO THE PROCESSING FUNCTION, WE FLATTEN IT OUT.
     process_items([].concat.apply([], results));
   }).catch((error) => {
     console.error('ingest error', error)
   });
+
+  eventItems.then(function(results){
+    var events = [].concat.apply([], results);
+    events.forEach(function(e,i){
+      search_engine.add_event(e);
+    })
+  }).catch((error) => {
+    console.error('ingest error', error)
+  });
+
 }
 

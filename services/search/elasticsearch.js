@@ -25,7 +25,6 @@ var crypto = require('crypto');
 						return reject(error);
 					}else{
 						if(body.result){
-							var attachCount = ''
 							return resolve(response);
 						}else{
 							console.log(body)
@@ -34,6 +33,31 @@ var crypto = require('crypto');
 				});
 			});
 		}
+
+		// --------------------------------------------------------┤ ADD OR UPDATE AN EVENT
+		var add_event = exports.add_event = function(event){
+			return new Promise(function(resolve, reject){
+				request({
+					url: appGlobals.searchURL+appGlobals.eventShard+'/'+appGlobals.eventType+(event.id ? '/'+event.id : ''),
+					method: "POST",
+					json: true,
+					auth: appGlobals.indexAuth,
+					body: event
+				}, 
+				function (error, response, body){
+					if(error){
+						return reject(error);
+					}else{
+						if(body.result){
+							return resolve(response);
+						}else{
+							console.log(body)
+						}
+					}
+				});
+			});
+		}
+
 
 		// --------------------------------------------------------┤ PRETEND TO WRITE TO ELASTICSEARCH - WRITES A FILE IN PERSISTANT DATA
 		var fake_update = function(data){
@@ -72,7 +96,7 @@ var crypto = require('crypto');
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
 // ║                                                                                                                      ║
-// ║                                           		 FUNCITONS                                                   		  ║
+// ║                                           		 FUNCTIONS                                                   		  ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                                                                                      ║
@@ -185,7 +209,6 @@ var crypto = require('crypto');
 		        console.error('guid search - ', error)
 		    })
 		}
-
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
@@ -255,6 +278,44 @@ var crypto = require('crypto');
 			    return reject(error);
 		   })
 		}
+
+				// --------------------------------------------------------┤ FIND AN EVENT
+		exports.getEvents = function(keywords){
+			return new Promise(function (resolve, reject) {
+				request({
+				    url: appGlobals.searchURL+appGlobals.eventShard+"/_search",
+				    method: "POST",
+				    json: true,   // <--Very important!!!
+				    auth: appGlobals.indexAuth,
+				    body:{
+				    	"query": {
+					        "match" : {
+					            "_all" : keywords
+					        }
+					    },
+						"size" : 100,
+						"min_score": 1.7
+				    }
+				}, function (error, response, body){
+				   var hits;
+				    if(body.hits){
+				    	hits = body.hits.hits.map(function(memo, hit) {
+					    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
+					    	hit._source.resource_uri = encryptLink(hit._source.resource_uri);
+					    	hit._source.url = hit._source.resource_uri;
+					        memo.push(hit);
+						    return memo;
+						}, []);
+				    }else{
+				    	hits = [];
+				    }  
+					return resolve(hits);
+				})
+			}).catch((error) => {
+		        console.error('events search - ', error)
+		    })
+		}
+
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣

@@ -6,10 +6,11 @@ exports.get_score = function(text){
   	returnObj.wordCount = getWordCount(text);
   	returnObj.syllableCounts = syl_count(text);
   	returnObj.totalSyls = returnObj.syllableCounts.reduce(function(a, b) { return a + b; }, 0);
-    var level = 206.835 - (1.015*(returnObj.wordCount / returnObj.sentences)) - (84.6*(returnObj.totalSyls / returnObj.wordCount));
-    var equiv = (level > 90 ? 0 : (level > 70 ? 1 : 2));
-    var engEquiv = (level > 90 ? 'easy' : (level > 70 ? 'medium' : 'hard'));
-  	resolve([level, equiv]);
+    returnObj.level = 206.835 - (1.015*(returnObj.wordCount / returnObj.sentences)) - (84.6*(returnObj.totalSyls / returnObj.wordCount));
+    returnObj.equiv = (returnObj.level > 90 ? 0 : (level > 70 ? 1 : 2));
+    returnObj.engEquiv = (returnObj.level > 90 ? 'easy' : (level > 70 ? 'medium' : 'hard'));
+    returnObj.rag = (returnObj.level > 90 ? 'green' : (level > 70 ? 'amber' : 'red'));
+  	resolve(returnObj);
   }).catch((error) => {
       console.log('enls - ', error)
   })
