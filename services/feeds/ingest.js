@@ -4,7 +4,7 @@ var FeedParser    = require('feedparser'),
 var search_engine = require('../search/elasticsearch'),
     content       = require('../content/get_content'), 
     services      = require('../services/get_services');
-    events        = require('../services/events/eventbrite');
+    events        = require('../events/eventbrite');
 
 
 // 
