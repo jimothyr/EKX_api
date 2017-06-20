@@ -301,10 +301,12 @@ var crypto = require('crypto');
 				    if(body.hits){
 				    	hits = body.hits.hits.map(function(memo, hit) {
 					    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
-					    	hit._source.resource_uri = encryptLink(hit._source.resource_uri);
-					    	hit._source.url = hit._source.resource_uri;
-					        memo.push(hit);
-						    return memo;
+					    	if(hit._source){
+								hit._source.resource_uri = encryptLink(hit._source.resource_uri);
+								hit._source.url = hit._source.resource_uri;
+								memo.push(hit);
+							}
+							return memo;						
 						}, []);
 				    }else{
 				    	hits = [];
