@@ -183,7 +183,7 @@ var people = require('../people/get_people');
 				}
 			},
 			documents : {
-				types : ['related'],
+				types : ['documents'],
 				action : function(data){
 					var ret_obj={name: 'related'};
 					return new Promise(function (resolve, reject) {
