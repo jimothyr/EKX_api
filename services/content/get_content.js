@@ -168,38 +168,38 @@ exports.get_links_content = function(links, baseUrl){
 	})
 }
 
-exports.get_links_content = function(links, baseUrl){
-	return new Promise(function (resolve, reject) {
-		var attachments = [];
-		var ret_att = '';
-		return Promise.all(links.map(function(link){
-			get_link_type(link.href)
-			.then(function(ret_data){
-				if(ret_data.type == "document"){
-					attachments.push({
-						ext : ret_data.ext,
-						type : ret_data.type,
-						href : link.href,
-					})
-				};
-			})
-		})
-		)
-		.then(function(){
-			var proms = [];
-			attachments.map(function(a){
-				proms.push(get_file(a.href, baseUrl)
-				.then(function(data){
-					ret_att += data;
-				}));
-			})
-			var items = Promise.all(proms);
-			items.then(function(){
-				return resolve(ret_att);
-			})
-		})
-	})
-}
+// exports.get_links_content = function(links, baseUrl){
+// 	return new Promise(function (resolve, reject) {
+// 		var attachments = [];
+// 		var ret_att = '';
+// 		return Promise.all(links.map(function(link){
+// 			get_link_type(link.href)
+// 			.then(function(ret_data){
+// 				if(ret_data.type == "document"){
+// 					attachments.push({
+// 						ext : ret_data.ext,
+// 						type : ret_data.type,
+// 						href : link.href,
+// 					})
+// 				};
+// 			})
+// 		})
+// 		)
+// 		.then(function(){
+// 			var proms = [];
+// 			attachments.map(function(a){
+// 				proms.push(get_file(a.href, baseUrl)
+// 				.then(function(data){
+// 					ret_att += data;
+// 				}));
+// 			})
+// 			var items = Promise.all(proms);
+// 			items.then(function(){
+// 				return resolve(ret_att);
+// 			})
+// 		})
+// 	})
+// }
 
 exports.get_content_from_html = function(html){
 	return new Promise(function (resolve, reject) {
