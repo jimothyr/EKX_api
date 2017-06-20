@@ -92,11 +92,11 @@ var people = require('../people/get_people');
 										ret_obj.data['keyword_'+i] = ret_keywords[i].term;
 									}
 									return resolve (ret_obj);
-								});
-							}).catch((error) => {
+								}).catch((error) => {
 					        	console.log('keyword - ', error)
 						        return reject(error);
 					    	});
+							})
 						}
 					},
 			summary : {
@@ -115,9 +115,7 @@ var people = require('../people/get_people');
 						}).catch((error) => {
 			        		console.log('summary - ', error)
 			   			});
-					}).catch((error) => {
-			        	console.log('summary - ', error)
-			   		});
+					});
 				}
 			},
 			eng_lang_score :{
@@ -133,13 +131,13 @@ var people = require('../people/get_people');
 							.then(function(ret_score){
 								ret_obj.data = ret_score;
 								return resolve(ret_obj);
-							})
-						}
-						
-					}).catch((error) => {
+							}).catch((error) => {
 					    console.log('eng lang error - ', error)
 				        return reject(error);
 					});
+						}
+						
+					})
 				}
 			},
 			people : {
@@ -155,13 +153,13 @@ var people = require('../people/get_people');
 							.then(function(ret_people){
 								ret_obj.data = ret_people;
 								return resolve(ret_obj);
-							})
-						}
-						
-					}).catch((error) => {
+							}).catch((error) => {
 				        console.log('people - ', error)
 				        return reject(error);
 				    });
+						}
+						
+					})
 				}
 			},
 			organisations : {
@@ -177,11 +175,11 @@ var people = require('../people/get_people');
 						.then(function(ret_organisation){
 							ret_obj.data = ret_organisation
 							return resolve(ret_obj);
-						})
-					}).catch((error) => {
+						}).catch((error) => {
 				        console.log('organisations - ', error)
 				        return reject(error);
 				    });
+					})
 				}
 			},
 			documents : {
@@ -197,11 +195,11 @@ var people = require('../people/get_people');
 						.then(function(ret_related){
 							ret_obj.data = ret_related
 							return resolve(ret_obj)
-						})
-					}).catch((error) => {
+						}).catch((error) => {
 				        console.log('related - ', error)
 				        return reject(error);
 				    });
+					})
 				}
 			},
 			funding : {
@@ -215,10 +213,7 @@ var people = require('../people/get_people');
 						}
 						ret_obj.data = {'error' : 'Not currently available'};
 						return resolve (ret_obj);
-					}).catch((error) => {
-				        console.log('funding - ', error)
-				        return reject(error);
-				    });
+					})
 				}
 			},
 			social : {
@@ -234,10 +229,10 @@ var people = require('../people/get_people');
 						.then(function(ret_social){
 							ret_obj.data = ret_social
 							return resolve(ret_obj);
-						})
-					}).catch((error) => {
+						}).catch((error) => {
 				        console.log('social - ', error)
 				    });
+					})
 				}
 			},
 			events : {
@@ -253,11 +248,11 @@ var people = require('../people/get_people');
 						.then(function(ret_events){
 							ret_obj.data = ret_events
 							return resolve(ret_obj)
-						})
-					}).catch((error) => {
+						}).catch((error) => {
 				        console.log('events - ', error)
 				        return reject(error);
 				    });
+					})
 				}
 			}
 		}
