@@ -183,9 +183,9 @@ var people = require('../people/get_people');
 				}
 			},
 			documents : {
-				types : ['documents'],
+				types : ['related'],
 				action : function(data){
-					var ret_obj={name: 'related'};
+					var ret_obj={name: 'documents'};
 					return new Promise(function (resolve, reject) {
 						if(!data.keywords.string){
 							ret_obj.data = {'error' : 'invalid keywords'};
