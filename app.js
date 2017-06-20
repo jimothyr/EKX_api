@@ -134,7 +134,7 @@ var app = express();
     app.post('/getFromURL/', function(req, res){
       res.setHeader('Access-Control-Allow-Origin','*');
       res.setHeader('Content-Type', 'application/json');      
-      services.getHTMLContent(req.params.url)
+      services.getHTMLContent(req.body.url)
       .then(function(retObj){
         res.send(retObj);
       })
@@ -142,7 +142,7 @@ var app = express();
     // --------------------------------------------------------┤ BROWSER EXTENSION INGEST FROM URL
     app.post('/saveFromUrl', function(req, res){
       if(req.params.rating > 0){
-				ingest.process_items([{link: req.params.url, userRating: req.params.rating, searchShard: appGlobals.extensionShard, guid: encodeURIComponent(req.params.url)}]);
+				ingest.process_items([{link: req.body.url, userRating: req.body.rating, searchShard: appGlobals.extensionShard, guid: encodeURIComponent(req.body.url)}]);
 			}
       res.send('thanks');
     })    
