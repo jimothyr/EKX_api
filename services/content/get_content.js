@@ -174,7 +174,7 @@ exports.get_links_content = function(links, baseUrl){
 		var attachments = [];
 		var ret_att = '';
 		return Promise.all(links.map(function(link){
-			console.log(link)
+			console.log('test-------',link)
 			get_link_type(link.href)
 			.then(function(ret_data){
 				if(ret_data.type == "document"){
