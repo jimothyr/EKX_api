@@ -113,8 +113,8 @@ var app = express();
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
     // --------------------------------------------------------┤ CREATE THE SEARCH INDEX
-    app.get('/createIndex', function(req, res){
-      search.createIndex()
+    app.get('/createIndex/:shard', function(req, res){
+      search.createIndex(req.params.shard)
       .then(function(resObj){
         res.send(resObj)
       })
@@ -129,11 +129,27 @@ var app = express();
       ingest.ingest_feeds();
       res.send('Request acknowledged');
     })
+
+    // --------------------------------------------------------┤ BROWSER EXTENSION GET RELATED
+    app.get('/getFromURL/:url', function(req, res){
+      res.setHeader('Content-Type', 'application/json');      
+      services.getHTMLContent(req.params.url)
+      .then(function(retObj){
+        res.send(retObj);
+      })
+    })
+    // --------------------------------------------------------┤ BROWSER EXTENSION INGEST FROM URL
+    app.get('/saveFromUrl/:url/:rating', function(req, res){
+      if(req.params.rating > 0){
+				ingest.process_items([{link: req.params.url, userRating: req.params.rating, searchShard: appGlobals.extensionShard, guid: encodeURIComponent(req.params.url)}]);
+			}
+      res.send('thanks');
+    })    
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                END OF SECTION                                                        ║
 // ╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 //
-app.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', function () {
+app.listen(env.NODE_PORT || 3003, env.NODE_IP || 'localhost', function () {
   console.log(`Application worker ${process.pid} started...`);
 });

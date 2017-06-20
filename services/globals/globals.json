@@ -4,6 +4,7 @@
 	"searchShard" : "ekx01",
 	"searchType" : "ekxIndex",
 	"eventShard" : "ekxevents",
+	"extensionShard" : "ekxextension",
 	"eventType" : "ekxEventIndex",
 	"indexAuth" : {
 		"user" : "elastic",

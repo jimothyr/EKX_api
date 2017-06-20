@@ -101,7 +101,7 @@ var search_engine = require('../search/elasticsearch'),
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
-    var process_items = function(items){
+    var process_items = exports.process_items = function(items){
       var count = 0;
       function process_item(item){
         var linkUrl = (item.link ? item.link : item.url);      
@@ -137,17 +137,23 @@ var search_engine = require('../search/elasticsearch'),
           // --------------------------------------------------------┤ GET ALL THE OTHER SERVICES WE WANT
           return services.itemServices(item, [], 'info')
         }).then(function(indexObj){
-          if(indexObj.content){
+          if(item.content){
             for(var k in indexObj){
               if(indexObj[k]){
-                if(indexObj[k].error){
-                  delete indexObj[k];
+                if(!indexObj[k].error){
+                  item[k] = indexObj[k];
                 }
               } 
             }
+
+            // --------------------------------------------------------┤ IF THIS ITEM HAS COME FROM A USER, ADD THE USER RATING
+            if(item.userRating){
+              indexObj.userRating = item.userRating;
+            }
+
             // --------------------------------------------------------┤ ADD THE OBJECT TO THE SEARCH ENGINE
             console.log('-------------------------┤ INDEXING '+count+' of '+ items.length);
-            search_engine.index(indexObj, function(){
+            search_engine.index(item, function(){
               count++;
               item = null;
               indexObj = null;

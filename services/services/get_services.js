@@ -312,7 +312,7 @@ var people = require('../people/get_people');
 		}
 
 		// --------------------------------------------------------┤ EXPOSE SERVICES FOR THE INGEST PROCESS
-		exports.itemServices = function(data, actions, type){
+		var itemServices = exports.itemServices = function(data, actions, type){
 			return new Promise(function (resolve, reject) {
 				get_all(data, actions, type)
 				.then(function(sendObj){
@@ -343,15 +343,43 @@ var people = require('../people/get_people');
 			return retArrr;
 		}
 
+		// --------------------------------------------------------┤ GET RELATED ITEMS FROM HTML
+		exports.getHTMLContent = function(tUrl){
+			return new Promise(function (resolve, reject) {
+				var sendObj = {};
+				content.get_content(tUrl)
+				.then(function(ret_content){
+					sendObj.content = ret_content;
+					services.keywords.action(sendObj)
+					.then(function(retKeys){
+						sendObj.keywords = retKeys.data;
+						itemServices(sendObj,[],['related'])
+						.then(function(retObj){
+							return resolve(retObj);
+						}).catch((error) => {
+							console.error('ext service - ', error)
+							return reject(error);
+						})
+					}).catch((error) => {
+						console.error('ext service - ', error)
+						return reject(error);
+					})
+				}).catch((error) => {
+					console.error('ext service - ', error)
+					return reject(error);
+				})
+			}).catch((error) => {
+				console.error('ext service - ', error)
+				return reject(error);
+			})
+		}
+
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                END OF SECTION                                                        ║
 // ╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 // 
-
-
-
 
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -361,7 +389,7 @@ var people = require('../people/get_people');
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
-		exports.getServices = function(data){
+		var get_services = exports.getServices = function(data){
 			return new Promise(function (resolve, reject) {
 			var proms = [], retObj = {};
 				if(data.rssItemGUID){

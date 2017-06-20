@@ -14,7 +14,7 @@ var crypto = require('crypto');
 		var add_update = function(data){
 			return new Promise(function (resolve, reject) {
 				request({
-					url: appGlobals.searchURL+appGlobals.searchShard+'/'+appGlobals.searchType+(data.guid ? '/'+data.guid : ''),
+					url: appGlobals.searchURL+(data.searchShard ? data.searchShard : appGlobals.searchShard)+'/'+ (data.searchType ? data.searchType : appGlobals.searchType)+(data.guid ? '/'+data.guid : ''),
 					method: "POST",
 					json: true,
 					auth: appGlobals.indexAuth,
@@ -336,10 +336,11 @@ var crypto = require('crypto');
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		// --------------------------------------------------------┤ CREATE INDEX AND MAPPINGS
-		exports.createIndex = function(){
+		exports.createIndex = function(shard){
 			return new Promise(function (resolve, reject) {
+				var tBod = 
 				request({
-			    	url: appGlobals.indexURL+appGlobals.searchShard,
+			    	url: appGlobals.indexURL+shard,
 			    	method: "PUT",
 			    	json: true,
 			    	auth: appGlobals.indexAuth,
