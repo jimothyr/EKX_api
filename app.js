@@ -131,7 +131,8 @@ var app = express();
     })
 
     // --------------------------------------------------------┤ BROWSER EXTENSION GET RELATED
-    app.get('/getFromURL/:url', function(req, res){
+    app.post('/getFromURL/', function(req, res){
+      res.setHeader('Access-Control-Allow-Origin','*');
       res.setHeader('Content-Type', 'application/json');      
       services.getHTMLContent(req.params.url)
       .then(function(retObj){
@@ -139,7 +140,7 @@ var app = express();
       })
     })
     // --------------------------------------------------------┤ BROWSER EXTENSION INGEST FROM URL
-    app.get('/saveFromUrl/:url/:rating', function(req, res){
+    app.post('/saveFromUrl', function(req, res){
       if(req.params.rating > 0){
 				ingest.process_items([{link: req.params.url, userRating: req.params.rating, searchShard: appGlobals.extensionShard, guid: encodeURIComponent(req.params.url)}]);
 			}
