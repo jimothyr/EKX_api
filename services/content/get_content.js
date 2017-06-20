@@ -132,6 +132,7 @@ exports.get_links_content = function(links, baseUrl){
 		var attachments = [];
 		var ret_att = '';
 		links.forEach(function(link, i){
+			console.log(link.href)
 			get_link_type(link.href)
 			.then(function(ret_data){
 				if(ret_data.type == "document"){
