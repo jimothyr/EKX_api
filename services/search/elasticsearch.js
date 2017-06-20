@@ -253,7 +253,7 @@ var crypto = require('crypto');
 								}
 							}
 						},
-						"size" : 100,
+						"size" : 10,
 						"min_score": 1.7
 					}
 				}, function (error, response, body){
