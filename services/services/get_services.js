@@ -348,7 +348,7 @@ var people = require('../people/get_people');
 					services.keywords.action(sendObj)
 					.then(function(retKeys){
 						sendObj.keywords = retKeys.data;
-						itemServices(sendObj,[],['related'])
+						itemServices(sendObj,['people'],['related'])
 						.then(function(retObj){
 							return resolve(retObj);
 						}).catch((error) => {
