@@ -115,6 +115,7 @@ exports.get_content = function(tUrl){
 
 var get_link_type = function(url){
 	return new Promise(function (resolve, reject) {
+		console.log(url)
 		url = url.split(/[?#]/)[0];
 		var link = {};
 		var re = /(?:\.([^.]+))?$/;
@@ -173,6 +174,7 @@ exports.get_links_content = function(links, baseUrl){
 		var attachments = [];
 		var ret_att = '';
 		return Promise.all(links.map(function(link){
+			console.log(link)
 			get_link_type(link.href)
 			.then(function(ret_data){
 				if(ret_data.type == "document"){
