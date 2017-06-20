@@ -119,7 +119,7 @@ var crypto = require('crypto');
 		// --------------------------------------------------------┤ CREATE ENCRYPTED TEXT FOR LINKS
 		var encryptLink = exports.encryptLink = function(text){
 		  var cipher = crypto.createCipher(appGlobals.cryptoAlgorithm,appGlobals.cryptoPassword);
-		  var crypted = cipher.update(text,'utf8','hex')
+		  var crypted = cipher.update(text+'|'+new Date(),'utf8','hex')
 		  crypted += cipher.final('hex');
 		  return appGlobals.apiManager+'/'+appGlobals.bounceRoute+'?q='+encodeURIComponent(crypted)+'&'+appGlobals.apiManagerKey;
 		}
