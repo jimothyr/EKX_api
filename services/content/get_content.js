@@ -124,10 +124,7 @@ var get_link_type = function(url){
 			link.ext = re.exec(url)[1];
 			link.type = (known_file_exts.indexOf(link.ext) == -1 ? (known_img_exts.indexOf(link.ext) == -1 ? 'webpage' : 'image') : 'document');
 		return resolve({ext: link.ext, type:link.type});
-	}).catch((error) => {
-    	console.log('link type error - ',tUrl, error)
-	   	return reject(error);
-    })
+	})
 }
 
 exports.get_links_content = function(links, baseUrl){
@@ -161,13 +158,13 @@ exports.get_links_content = function(links, baseUrl){
 				}else{
 					get_item_content(attachments[count]);
 				}
-			})
-		}
-		get_item_content(attachments[count]);
-	}).catch((error) => {
+			}).catch((error) => {
     	console.log('link content - ',tUrl, error)
 	   	return reject(error);
     })
+		}
+		get_item_content(attachments[count]);
+	})
 }
 
 exports.get_links_content = function(links, baseUrl){
@@ -209,8 +206,5 @@ exports.get_content_from_html = function(html){
 		var retObj = unfluff(html);
 		retObj.html = html;
 		return resolve(retObj);
-	}).catch((error) => {
-    	console.log('process error - ', html)
-	   	return reject(error);
-    })
+	})
 }
