@@ -127,52 +127,12 @@ var get_link_type = function(url){
 	})
 }
 
-exports.get_links_content = function(links, baseUrl){
-	return new Promise(function (resolve, reject) {
-		var attachments = [];
-		var ret_att = '';
-		links.forEach(function(link, i){
-			console.log(link.href)
-			get_link_type(link.href)
-			.then(function(ret_data){
-				if(ret_data.type == "document"){
-					attachments.push({
-						ext : ret_data.ext,
-						type : ret_data.type,
-						href : link.href,
-					})
-				};
-			}).catch((error) => {
-		    	console.log('link item - ', error)
-			   	return reject(error);
-		    })
-		})
-		var count = 0;
-		function get_item_content(a){
-			console.log(a)
-			get_file(a.href, baseUrl)
-			.then(function(data){
-				ret_att += data;
-				count++;
-				if(count == attachments.length || !attachments[count] ){
-					return resolve(ret_att);
-				}else{
-					get_item_content(attachments[count]);
-				}
-			}).catch((error) => {
-    	console.log('link content - ',tUrl, error)
-	   	return reject(error);
-    })
-		}
-		get_item_content(attachments[count]);
-	})
-}
-
 // exports.get_links_content = function(links, baseUrl){
 // 	return new Promise(function (resolve, reject) {
 // 		var attachments = [];
 // 		var ret_att = '';
-// 		return Promise.all(links.map(function(link){
+// 		links.forEach(function(link, i){
+// 			console.log(link.href)
 // 			get_link_type(link.href)
 // 			.then(function(ret_data){
 // 				if(ret_data.type == "document"){
@@ -182,24 +142,64 @@ exports.get_links_content = function(links, baseUrl){
 // 						href : link.href,
 // 					})
 // 				};
-// 			})
+// 			}).catch((error) => {
+// 		    	console.log('link item - ', error)
+// 			   	return reject(error);
+// 		    })
 // 		})
-// 		)
-// 		.then(function(){
-// 			var proms = [];
-// 			attachments.map(function(a){
-// 				proms.push(get_file(a.href, baseUrl)
-// 				.then(function(data){
-// 					ret_att += data;
-// 				}));
+// 		var count = 0;
+// 		function get_item_content(a){
+// 			console.log(a)
+// 			get_file(a.href, baseUrl)
+// 			.then(function(data){
+// 				ret_att += data;
+// 				count++;
+// 				if(count == attachments.length || !attachments[count] ){
+// 					return resolve(ret_att);
+// 				}else{
+// 					get_item_content(attachments[count]);
+// 				}
+// 			}).catch((error) => {
+// 				console.log('link content - ',tUrl, error)
+// 				return reject(error);
 // 			})
-// 			var items = Promise.all(proms);
-// 			items.then(function(){
-// 				return resolve(ret_att);
-// 			})
-// 		})
+// 		}
+// 		get_item_content(attachments[count]);
 // 	})
 // }
+
+exports.get_links_content = function(links, baseUrl){
+	return new Promise(function (resolve, reject) {
+		var attachments = [];
+		var ret_att = '';
+		return Promise.all(links.map(function(link){
+			get_link_type(link.href)
+			.then(function(ret_data){
+				if(ret_data.type == "document"){
+					attachments.push({
+						ext : ret_data.ext,
+						type : ret_data.type,
+						href : link.href,
+					})
+				};
+			})
+		})
+		)
+		.then(function(){
+			var proms = [];
+			attachments.map(function(a){
+				proms.push(get_file(a.href, baseUrl)
+				.then(function(data){
+					ret_att += data;
+				}));
+			})
+			var items = Promise.all(proms);
+			items.then(function(){
+				return resolve(ret_att);
+			})
+		})
+	})
+}
 
 exports.get_content_from_html = function(html){
 	return new Promise(function (resolve, reject) {
