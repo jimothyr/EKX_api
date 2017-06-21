@@ -35,7 +35,7 @@ exports.get_people = function(text){
     words.push(s.split(' ')); 
     });
 
-    foundNames = [];
+    var foundNames = [];
 
     words.forEach(function(w,i){
         w.forEach(function(x,y){
