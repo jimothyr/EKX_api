@@ -1,3 +1,5 @@
+var names = require("./names.json");
+
 function initialIsCapital( word ){
     if(!word) return false;
     if(!word[0]) return false;
@@ -25,6 +27,7 @@ function dedupe(arr) {
 
 exports.get_people = function(text){
   return new Promise(function (resolve, reject) {
+    var titles = ["Mr","Mrs","Miss","Ms","Dr","Professor","Prof","Lord","Lady"];
     var sentences = text.replace(/(?:\r\n|\r|\n)/g, '.').match(/\(?[^\.\?\!\:]+[\.!:\?]\)?/g);
     var words = [];
     sentences.forEach(function(s,i) {
