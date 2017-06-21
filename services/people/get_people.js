@@ -27,7 +27,7 @@ function dedupe(arr) {
 
 exports.get_people = function(text){
   return new Promise(function (resolve, reject) {
-    names = allNames.names;
+    var names = allNames.names;
     var titles = ["Mr","Mrs","Miss","Ms","Dr","Professor","Prof","Lord","Lady"];
     var sentences = text.replace(/(?:\r\n|\r|\n)/g, '.').match(/\(?[^\.\?\!\:]+[\.!:\?]\)?/g);
     var words = [];
