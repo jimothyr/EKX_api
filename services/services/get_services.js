@@ -191,6 +191,7 @@ var people = require('../people/get_people');
 							ret_obj.data = {'error' : 'invalid keywords'};
 							return resolve (ret_obj);
 						}
+						console.log(data.keywords)
 						search.getRelated(data.keywords.string, (data.guid ? data.guid : 0))
 						.then(function(ret_related){
 							ret_obj.data = ret_related
