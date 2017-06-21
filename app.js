@@ -145,6 +145,7 @@ var app = express();
     })
     // --------------------------------------------------------┤ BROWSER EXTENSION INGEST FROM URL
     app.post('/saveFromUrl', function(req, res){
+      res.setHeader('Access-Control-Allow-Origin','*');
       if(req.params.rating > 0){
 				ingest.process_items([{link: req.body.url, userRating: req.body.rating, searchShard: appGlobals.extensionShard, guid: encodeURIComponent(req.body.url)}]);
 			}
