@@ -60,6 +60,7 @@ var app = express();
 
       // --------------------------------------------------------┤ GET SERVICES
       app.post('/api/:method/:action', function(req,res){
+        res.setHeader('Access-Control-Allow-Origin','*');
         res.setHeader('Content-Type', 'application/json');
         var setData = req.body;
         setData.action = (req.params.method == 'service' ? (req.params.action == 'all' ? 'all' : req.params.action.split(',')) : []);
@@ -71,6 +72,7 @@ var app = express();
       });
 
       app.post('/api/:method', function(reqm,res){
+        res.setHeader('Access-Control-Allow-Origin','*');
         res.setHeader('Content-Type', 'application/json');
         var setData = req.body;
         setData.action = (req.params.method == 'service' ? 'all' : []);
@@ -83,10 +85,12 @@ var app = express();
 
       // --------------------------------------------------------┤ LIST SERVICES
       app.get('/api/:method', function(req,res){
+        res.setHeader('Access-Control-Allow-Origin','*');
         res.setHeader('Content-Type', 'application/json');
         res.send(services.listServices(req.params.method));
       });
       app.get('/api', function(req,res){
+        res.setHeader('Access-Control-Allow-Origin','*');
         res.setHeader('Content-Type', 'application/json');
         res.send(services.listServices());
       });
