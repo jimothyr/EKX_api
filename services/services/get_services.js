@@ -149,7 +149,7 @@ var people = require('../people/get_people');
 							ret_obj.data = {'error' : 'invalid content'};
 							return resolve (ret_obj);
 						}else{
-							people.get_people(data.content.text)
+							people.get_people(data.content.text + (data.content.pdfs?data.content.pdfs:'') + (data.author?data.author:''))
 							.then(function(ret_people){
 								ret_obj.data = ret_people;
 								return resolve(ret_obj);

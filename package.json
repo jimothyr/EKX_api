@@ -14,7 +14,6 @@
     "request": "*",
     "unfluff": "*",
     "textract": "^2.1.2",
-    "compromise": "*",
     "retext": "*",
     "gramophone" : "*",
     "feedparser": "*"
