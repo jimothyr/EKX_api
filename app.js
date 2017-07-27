@@ -71,7 +71,7 @@ var app = express();
         });
       });
 
-      app.post('/api/:method', function(reqm,res){
+      app.post('/api/:method', function(req,res){
         res.setHeader('Access-Control-Allow-Origin','*');
         res.setHeader('Content-Type', 'application/json');
         var setData = req.body;
@@ -150,6 +150,21 @@ var app = express();
 				ingest.process_items([{link: req.body.url, userRating: req.body.rating, searchShard: appGlobals.extensionShard, guid: encodeURIComponent(req.body.url)}]);
 			}
       res.send('thanks');
+    })
+
+    // --------------------------------------------------------┤ WEB CRAWLER INGEST FROM HTML
+    app.post('/crawlerIngest', function(req, res){
+      res.setHeader('Access-Control-Allow-Origin','*');
+      var processItems = [];
+      body.items.forEach(function(e, i) {
+        processItems.push({
+          link: req.body.url, 
+          searchShard: appGlobals.crawlerShard, 
+          guid: encodeURIComponent(req.body.url)
+        })
+      });
+      ingest.process_items();
+      res.send('this might take a while');
     })    
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣

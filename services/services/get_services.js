@@ -6,6 +6,8 @@ var summary = require('../summary/get_summary');
 var organisations = require('../organisations/bridgelight');
 var eng_lang_score = require('../eng_lang/get_els');
 var people = require('../people/get_people');
+var people = require('../people/get_people');
+var funding = require('../funding/researchGateway');
 
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -202,20 +204,6 @@ var people = require('../people/get_people');
 					})
 				}
 			},
-			funding : {
-				types : ['related'],
-				action : function(data){
-					var ret_obj={name: 'funding'};
-					return new Promise(function (resolve, reject) {
-						if(!data.keywords.string){
-							ret_obj.data = {'error' : 'invalid keywords'};
-							return resolve (ret_obj);
-						}
-						ret_obj.data = {'error' : 'Not currently available'};
-						return resolve (ret_obj);
-					})
-				}
-			},
 			social : {
 				types : ['related'],
 				action : function(data){
@@ -249,15 +237,35 @@ var people = require('../people/get_people');
 							ret_obj.data = ret_events
 							return resolve(ret_obj)
 						}).catch((error) => {
-				        console.log('events - ', error)
-				        return reject(error);
-				    });
+							console.log('events - ', error)
+							return reject(error);
+						});
 					})
 				}
+			},
+			funding : {
+				types : ['related'],
+				action : function(data){
+					var ret_obj={name: 'funding'};
+					return new Promise(function (resolve, reject) {
+						if(!data.keywords.string){
+							ret_obj.data = {'error' : 'invalid keywords'};
+							return resolve (ret_obj);
+						}
+						funding.gatewayProjectSearch(data.keywords.string)
+						.then(function(ret_funding){
+							ret_obj.data = ret_funding;
+							return resolve (ret_obj);
+						}).catch((error) => {
+							console.log('funding - ', error)
+							return reject(error);
+						});
+					})					
+				}				
 			}
 		}
 // ║                                                                                                                      ║
-// ║                                                                                                                      ║
+// ║		                                                                                                              ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                END OF SECTION                                                        ║
 // ╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
@@ -280,7 +288,7 @@ var people = require('../people/get_people');
 				var proms = [];
 				var retObj = {};
 				for(var s in services){
-					if(!retObj[s] && (services[s].types.some(r=> type.includes(r)) || action == 'all' || action.indexOf(s) != -1)){
+					if(!retObj[s] && ((services[s].types.some(r=> type.includes(r)) || type == 'all') || (action == 'all' || action.indexOf(s) != -1))){
 						if(data[s]){
 							retObj[s] = data[s];
 						}else{
@@ -328,9 +336,11 @@ var people = require('../people/get_people');
 				if(retType == 'service'){
 					retArrr.push(s)
 				}else if(retType == 'type'){
-					if(retArrr.indexOf(services[s].type) == -1){
-						retArrr.push(services[s].type)
-					}
+					services[s].types.forEach(function(t,i){
+						if(!retArrr.includes(t)){
+							retArrr.push(t)
+						}
+					});
 				}else{
 					retArrr.push({name: s, type : services[s].type})
 				}

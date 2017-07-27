@@ -5,6 +5,7 @@
 	"searchType" : "ekxIndex",
 	"eventShard" : "ekxevents",
 	"extensionShard" : "ekxextension",
+	"crawlerShard" : "webcrawler",
 	"eventType" : "ekxEventIndex",
 	"indexAuth" : {
 		"user" : "elastic",

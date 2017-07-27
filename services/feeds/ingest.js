@@ -104,6 +104,7 @@ var search_engine = require('../search/elasticsearch'),
     var process_items = exports.process_items = function(items){
       var count = 0;
       function process_item(item){
+        // --------------------------------------------------------┤ TODO: PROCESS A COMMA SEPERATED LIST OF URLS ENTERED AS A SINGLE URL (LILO ENA :\  )       
         var linkUrl = (item.link ? item.link : item.url);      
         console.log('--------------------------------------------------------┤ PROCESSING - ' + linkUrl + ' ' + item.guid)
         // --------------------------------------------------------┤ GET THE CONTENT
