@@ -298,7 +298,7 @@ exports.check_valid_feed = function(feed_url){
   // req.on('response', function (res) {
   //   return res;
   // });
-  request.get(feed_url)
+  request.get({url:feed_url})
   .on('response', function(response) {
     // console.log(response.statusCode) // 200 
     return(response.headers['content-type']) // 'image/png' 
