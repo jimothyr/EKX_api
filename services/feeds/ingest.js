@@ -289,13 +289,18 @@ exports.ingest_feeds = function(provider_id){
 }
 
 exports.check_valid_feed = function(feed_url){
-  var req = request(feed_url);
-  var feedparser = new FeedParser();
-  req.on('error', function (error) {
-    reject(error);
-  });
+  // var req = request(feed_url);
+  // var feedparser = new FeedParser();
+  // req.on('error', function (error) {
+  //   reject(error);
+  // });
 
-  req.on('response', function (res) {
-    return res;
-  });
+  // req.on('response', function (res) {
+  //   return res;
+  // });
+  request.get(feed_url)
+  .on('response', function(response) {
+    // console.log(response.statusCode) // 200 
+    return(response.headers['content-type']) // 'image/png' 
+  })
 }
