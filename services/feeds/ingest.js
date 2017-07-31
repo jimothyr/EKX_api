@@ -290,15 +290,9 @@ exports.ingest_feeds = function(provider_id){
 }
 
 exports.check_valid_feed = function(feed_url, res){
-  // var req = request(feed_url);
-  // var feedparser = new FeedParser();
-  // req.on('error', function (error) {
-  //   reject(error);
-  // });
-
-  // req.on('response', function (res) {
-  //   return res;
-  // });
+  if(!feed_url){
+    res.send({'result' : 'invalid'})
+  }
   request.get(feed_url)
   .on('response', function(response) {
     var thisType = response.headers['content-type'].split(';');
