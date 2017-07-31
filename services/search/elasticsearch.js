@@ -117,9 +117,9 @@ var crypto = require('crypto');
 		}
 
 		// --------------------------------------------------------┤ CREATE ENCRYPTED TEXT FOR LINKS
-		var encryptLink = exports.encryptLink = function(text, provider, feed){
+		var encryptLink = exports.encryptLink = function(text, provider, feedid, feedurl){
 		  var cipher = crypto.createCipher(appGlobals.cryptoAlgorithm,appGlobals.cryptoPassword);
-		  var crypted = cipher.update(text+'|'+provider+'|'+feed+'|'+new Date(),'utf8','hex')
+		  var crypted = cipher.update(text+'|'+provider+'|'+feedid+'|'+feedurl+'|'+new Date(),'utf8','hex')
 		  crypted += cipher.final('hex');
 		  return appGlobals.apiManager+'/'+appGlobals.bounceRoute+'?q='+encodeURIComponent(crypted)+'&'+appGlobals.apiManagerKey;
 		}
@@ -262,7 +262,7 @@ var crypto = require('crypto');
 				    	hits = body.hits.hits.reduce(function(memo, hit) {
 						    if (hit.guid != guid) {
 						    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
-						    	hit._source.link = encryptLink(hit._source.link, hit._source.provider.id, hit._source.feed_id);
+						    	hit._source.link = encryptLink(hit._source.link, hit._source.provider.id, hit._source.feed_id, hit._source.feed_url);
 						    	hit._source.url = hit._source.link;
 						        memo.push(hit);
 						    }
@@ -302,7 +302,7 @@ var crypto = require('crypto');
 				    	hits = body.hits.hits.map(function(memo, hit) {
 					    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
 					    	if(hit._source){
-								hit._source.resource_uri = encryptLink(hit._source.resource_uri, hit._source.provider.id, hit._source.feed_id);
+								hit._source.resource_uri = encryptLink(hit._source.link, hit._source.provider.id, hit._source.feed_id, hit._source.feed_url);
 								hit._source.url = hit._source.resource_uri;
 								memo.push(hit);
 							}
