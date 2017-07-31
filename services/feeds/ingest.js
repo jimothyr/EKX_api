@@ -301,7 +301,12 @@ exports.check_valid_feed = function(feed_url, res){
   // });
   request.get(feed_url)
   .on('response', function(response) {
-    console.log(response.headers) // 200 
-    res.send(response.headers) // 'image/png' 
+    var thisType = esponse.headers['content-type'].split(';');
+    if(thisType == 'application/xml' || thisType == 'application/rss' || thisType == 'application/rss+xml' || thisType == 'application/atom' || thisType == 'application/atom+xml'){
+      res.send('valid')
+    }else{
+      res.send('invalid')
+    }
+    // res.send(response.headers['content-type']) // 'image/png' 
   })
 }
