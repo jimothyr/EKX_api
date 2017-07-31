@@ -4,7 +4,8 @@ var FeedParser    = require('feedparser'),
 var search_engine = require('../search/elasticsearch'),
     content       = require('../content/get_content'), 
     services      = require('../services/get_services'),
-    events        = require('../events/eventbrite');
+    events        = require('../events/eventbrite'),
+    appGlobals    = require('../globals/globals.json');
 
 
 // 
@@ -16,7 +17,7 @@ var search_engine = require('../search/elasticsearch'),
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
     // --------------------------------------------------------┤ GET RSS FEED ITEMS
-    var get_items = function(url, provider){
+    var get_items = function(url, provider, feedId){
       return new Promise(function (resolve, reject) {
         var req = request(url);
         var feedparser = new FeedParser();
@@ -49,7 +50,8 @@ var search_engine = require('../search/elasticsearch'),
           while (item = stream.read()) {
             items.push({
               guid : search_engine.get_guid(item.guid,provider),
-              provider_guid : item.guid,
+              item_guid : item.guid,
+              feed_id : feedId,
               provider : provider,
               categories : item.categories,
               date : item.date,
@@ -101,9 +103,33 @@ var search_engine = require('../search/elasticsearch'),
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
+    
+    var completeIngest = function(providers){
+      providers.forEach(function(p,i){
+        request({
+          url: appGlobals.managerURL+'/update-feed-date/?providerId='+p,
+          method: "GET",
+          json: true,
+        }, 
+        function (error, response, body){
+          if(error){
+            console.log(error);
+          }
+        });
+      })
+      console.log('║                                                                                                                      ║');
+      console.log('║                                                                                                                      ║');
+      console.log('╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣');
+      console.log('║                                               INGEST COMPLETE                                                        ║');
+      console.log('╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝');
+    }
+
     var process_items = exports.process_items = function(items){
-      var count = 0;
+      var count = 0, providers=[];
       function process_item(item){
+        if(!providers.includes(item.provider.id)){
+          providers.push(item.provider.id);
+        }
         // --------------------------------------------------------┤ TODO: PROCESS A COMMA SEPERATED LIST OF URLS ENTERED AS A SINGLE URL (LILO ENA :\  )       
         var linkUrl = (item.link ? item.link : item.url);      
         console.log('--------------------------------------------------------┤ PROCESSING - ' + linkUrl + ' ' + item.guid)
@@ -161,11 +187,7 @@ var search_engine = require('../search/elasticsearch'),
               if(count < items.length){
                 process_item(items[count]);
               }else{
-                console.log('║                                                                                                                      ║');
-                console.log('║                                                                                                                      ║');
-                console.log('╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣');
-                console.log('║                                               INGEST COMPLETE                                                        ║');
-                console.log('╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝');
+                completeIngest(providers);
               }
             });
           }else{
@@ -175,11 +197,7 @@ var search_engine = require('../search/elasticsearch'),
             if(count < items.length){
               process_item(items[count]);
             }else{
-              console.log('║                                                                                                                      ║');
-              console.log('║                                                                                                                      ║');
-              console.log('╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣');
-              console.log('║                                               INGEST COMPLETE                                                        ║');
-              console.log('╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝');
+               completeIngest(providers);
             }
           }
           
@@ -199,8 +217,28 @@ var search_engine = require('../search/elasticsearch'),
 // ╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 // 
 
+var get_feeds = function(providerId){
+  return new Promise(function (resolve, reject) {
+    request({
+      url: appGlobals.managerURL+'/feeds-json/'+(provider_id ? '?providerId='+providerId : ''),
+      method: "GET",
+      json: true,
+    }, 
+    function (error, response, body){
+      if(error){
+        return reject(error);
+      }else{
+        if(body.result){
+          return resolve(response);
+        }else{
+          console.log(body)
+        }
+      }
+    });
+  });
+}
 
-exports.ingest_feeds = function(){
+exports.ingest_feeds = function(provider_id){
  console.log('╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗');
  console.log('║                                                                                                                      ║');
  console.log('║                                                STARTING INGEST                                                       ║');
@@ -208,43 +246,59 @@ exports.ingest_feeds = function(){
  console.log('╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣');
  console.log('║                                                                                                                      ║');
  console.log('║                                                                                                                      ║');
-  var providers = require((process.env.OPENSHIFT_DATA_DIR || '../')+'Feeds/feeds.json');
-  var feedProms = [];
-  var eventProms = [];
 
-  providers.map(function(p){
-    if(p.feeds){
-      p.feeds.map(function(f){
-        feedProms.push(get_items(f.url, p.provider.name))
-      });
-    }
+ get_feeds(provider_id)
+ .then(function(providers){
+    var feedProms = [];
+    var eventProms = [];
 
-    if(p.eventbrite){
-      p.eventbrite.map(function(e){
-        eventProms.push(get_events(e.id, p.provider.name))
-      });
-    }
+    providers.map(function(p){
+      if(p.feeds){
+        p.feeds.map(function(f){
+          feedProms.push(get_items(f.url, p.provider, f.id))
+        });
+      }
 
-    
-  });
-  var feedItems = Promise.all(feedProms);
-  var eventItems = Promise.all(eventProms);
+      if(p.eventbrite){
+        p.eventbrite.map(function(e){
+          eventProms.push(get_events(e.id, p.provider.name))
+        });
+      }
+    });
+    var feedItems = Promise.all(feedProms);
+    var eventItems = Promise.all(eventProms);
 
-  feedItems.then(function(results){
-    // --------------------------------------------------------┤  OUR RETURNED ARRAY IS ACTUALLY AN ARRAY OF ARRAYS WHICH IS USELESS. AS WE SEND IT OFF TO THE PROCESSING FUNCTION, WE FLATTEN IT OUT.
-    process_items([].concat.apply([], results));
-  }).catch((error) => {
-    console.error('ingest error', error)
-  });
+    feedItems.then(function(results){
+      // --------------------------------------------------------┤  OUR RETURNED ARRAY IS ACTUALLY AN ARRAY OF ARRAYS WHICH IS USELESS. AS WE SEND IT OFF TO THE PROCESSING FUNCTION, WE FLATTEN IT OUT.
+      process_items([].concat.apply([], results));
+    }).catch((error) => {
+      console.error('ingest error', error)
+    });
 
-  eventItems.then(function(results){
-    var events = [].concat.apply([], results);
-    events.forEach(function(e,i){
-      search_engine.add_event(e);
-    })
-  }).catch((error) => {
-    console.error('ingest error', error)
-  });
+    eventItems.then(function(results){
+      var events = [].concat.apply([], results);
+      events.forEach(function(e,i){
+        search_engine.add_event(e);
+      })
+    }).catch((error) => {
+      console.error('ingest error', error)
+    });
+ })
+
 
 }
 
+exports.check_valid_feed = function(feed_url){
+  request({
+      url: feed_url,
+      method: "GET",
+      json: true,
+    }, 
+    function (error, response, body){
+      if(error){
+        return error;
+      }else{
+        return response;
+      }
+    });
+}

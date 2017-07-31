@@ -18,5 +18,6 @@
 	"apiManagerKey" : "key=530aa3ea67184a768620ebe81df672a2",
 	"cryptoAlgorithm" : "blowfish",
     "cryptoPassword" : "zzz",
-    "eventbriteKey" : "5DCS3DIPWCYPNIZ72CBL"
+	"eventbriteKey" : "5DCS3DIPWCYPNIZ72CBL",
+	"managerURL" : "https://manage-ekx.rhcloud.com/"
 }
