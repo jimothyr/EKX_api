@@ -54,7 +54,7 @@ var app = express();
       // --------------------------------------------------------┤ RECORD A LINK CLICK
       app.post('/'+appGlobals.bounceRoute, function(req, res){
         var tto = search.decrypt(req.body.q).split('|');
-        bounces.bounce(req.get('Referrer'), tto[0], tto[1], req.fingerprint.hash);
+        bounces.bounce(req.get('Referrer'), tto[0], tto[1], tto[2], tto[3], req.fingerprint.hash);
         res.redirect(tto[0]);
       });
 
