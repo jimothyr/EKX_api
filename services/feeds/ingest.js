@@ -304,9 +304,9 @@ exports.check_valid_feed = function(feed_url, res){
     var thisType = response.headers['content-type'].split(';');
     thisType = thisType[0];
     if(thisType == 'application/xml' || thisType == 'application/rss' || thisType == 'application/rss+xml' || thisType == 'application/atom' || thisType == 'application/atom+xml'){
-      res.send('valid')
+      res.send({'result' : 'valid'})
     }else{
-      res.send('invalid')
+      res.send({'result' : 'invalid'})
     }
     // res.send(response.headers['content-type']) // 'image/png' 
   })
