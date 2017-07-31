@@ -289,16 +289,13 @@ exports.ingest_feeds = function(provider_id){
 }
 
 exports.check_valid_feed = function(feed_url){
-  request({
-      url: feed_url,
-      method: "GET",
-      json: true,
-    }, 
-    function (error, response, body){
-      if(error){
-        return error;
-      }else{
-        return response;
-      }
-    });
+  var req = request(feed_url);
+  var feedparser = new FeedParser();
+  req.on('error', function (error) {
+    reject(error);
+  });
+
+  req.on('response', function (res) {
+    return res;
+  });
 }
