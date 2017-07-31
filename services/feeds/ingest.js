@@ -295,7 +295,7 @@ exports.check_valid_feed = function(feed_url){
       method: "GET",
     }, 
     function (error, response, body){
-      return(response.headers['content-type']) // 'image/png' 
+      return(response) // 'image/png' 
     });
   
 }
