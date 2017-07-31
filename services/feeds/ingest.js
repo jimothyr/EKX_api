@@ -52,6 +52,7 @@ var search_engine = require('../search/elasticsearch'),
               guid : search_engine.get_guid(item.guid,provider),
               item_guid : item.guid,
               feed_id : feedId,
+              feed_url : url,
               provider : provider,
               categories : item.categories,
               date : item.date,
@@ -289,18 +290,12 @@ exports.ingest_feeds = function(provider_id){
 }
 
 exports.check_valid_feed = function(feed_url){
-  // var req = request(feed_url);
-  // var feedparser = new FeedParser();
-  // req.on('error', function (error) {
-  //   reject(error);
-  // });
-
-  // req.on('response', function (res) {
-  //   return res;
-  // });
-  request.get({url:feed_url})
-  .on('response', function(response) {
-    // console.log(response.statusCode) // 200 
-    return(response.headers['content-type']) // 'image/png' 
-  })
+  request({
+      url: feed_url,
+      method: "GET",
+    }, 
+    function (error, response, body){
+      return(response.headers['content-type']) // 'image/png' 
+    });
+  
 }
