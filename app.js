@@ -99,7 +99,7 @@ var app = express();
       app.post('/rss/check', function(req,res){
         res.setHeader('Access-Control-Allow-Origin','*');
         res.setHeader('Content-Type', 'application/json');
-        res.send(ingest.check_valid_feed(req.body.feed));
+        ingest.check_valid_feed(req.body.feed, res);
       })
 
 // ║                                                                                                                      ║

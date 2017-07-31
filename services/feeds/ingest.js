@@ -289,7 +289,7 @@ exports.ingest_feeds = function(provider_id){
 
 }
 
-exports.check_valid_feed = function(feed_url){
+exports.check_valid_feed = function(feed_url, res){
   // var req = request(feed_url);
   // var feedparser = new FeedParser();
   // req.on('error', function (error) {
@@ -302,6 +302,6 @@ exports.check_valid_feed = function(feed_url){
   request.get(feed_url)
   .on('response', function(response) {
     console.log(response.headers) // 200 
-    return(response.headers) // 'image/png' 
+    res.send(response.headers) // 'image/png' 
   })
 }
