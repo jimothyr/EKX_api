@@ -96,7 +96,7 @@ var app = express();
       });
 
       // --------------------------------------------------------┤ CHECK IF AN RSS FEED IS A VALID RSS FEED
-      app.get('/rss/check/:feed', function(req,res){
+      app.post('/rss/check/:feed', function(req,res){
         res.setHeader('Access-Control-Allow-Origin','*');
         res.setHeader('Content-Type', 'application/json');
         res.send(ingest.check_valid_feed(req.params.feed));
