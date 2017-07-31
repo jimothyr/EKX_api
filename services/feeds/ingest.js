@@ -302,6 +302,7 @@ exports.check_valid_feed = function(feed_url, res){
   request.get(feed_url)
   .on('response', function(response) {
     var thisType = response.headers['content-type'].split(';');
+    thisType = thisType[0];
     if(thisType == 'application/xml' || thisType == 'application/rss' || thisType == 'application/rss+xml' || thisType == 'application/atom' || thisType == 'application/atom+xml'){
       res.send('valid')
     }else{
