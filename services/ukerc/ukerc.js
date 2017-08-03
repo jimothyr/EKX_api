@@ -96,7 +96,7 @@ exports.getPage = function(link){
         relatedHTML = R$('#resultTemplatePeople').html();
         relatedContent = '';
         ukercObj.info.documents.forEach(function(e,i){
-            if(i==9){
+            if(i<9){
             e._source.people.forEach(function(p,i){
             var tPer = (p.text?p.text:p);
                 relatedContent += relatedHTML.replace(/{{name}}/g, tPer)
@@ -112,7 +112,7 @@ exports.getPage = function(link){
         relatedHTML = R$('#resultTemplateOrgs').html();
         relatedContent = '';
         ukercObj.info.organisations.forEach(function(e,i){
-            if(i==9){
+            if(i<9){
             relatedContent += relatedHTML.replace(/{{name}}/g, e.name)
                 .replace(/{{pages}}/g, e.pages)
                 .replace(/{{link}}/g, e.websites[0])
@@ -124,7 +124,7 @@ exports.getPage = function(link){
         relatedHTML = R$('#resultTemplateFunding').html();
         relatedContent = '';
         ukercObj.info.funding.forEach(function(e,i){
-            if(i==9){
+            if(i<9){
             relatedContent += relatedHTML.replace(/{{projectUrl}}/g, e.projectComposition.project.url)
                 .replace(/{{projectTitle}}/g, e.projectComposition.project.title)
                 .replace(/{{funderName}}/g, e.projectComposition.project.fund.funder.name)
@@ -142,7 +142,7 @@ exports.getPage = function(link){
         relatedHTML = R$('#resultTemplateSocial').html();
         relatedContent = '';
         ukercObj.info.social.items.forEach(function(e,i){
-            if(i==9){
+            if(i<9){
             relatedContent += relatedHTML.replace(/{{link}}/g, e.link)
                 .replace(/{{title}}/g, e.title)
             }
