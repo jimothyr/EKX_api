@@ -94,8 +94,8 @@ exports.get_content = function(tUrl){
 			    	return reject(error);
 			    });
 			}else{
+				console.log(tUrl)				
 				request(tUrl, function(error, response, html){
-					console.log(tUrl)
 					if(!error){
 						var ret_obj = unfluff(html);
 						ret_obj.html = html;
