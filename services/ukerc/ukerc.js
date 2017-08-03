@@ -89,7 +89,7 @@ exports.getPage = function(link){
                             .replace(/{{pubDate}}/g, e._source.pubDate.substring(0,e._source.pubDate.indexOf(':')-3))
                             if(i==9){return false;}
         })
-        relatedLinks += panelHTML.replace(/{{id}}/g, 'docs').replace(/{{title}}/g, 'Documents').replace(/{{content}}/g, relatedContent);
+        relatedLinks += panelHTML.replace(/{{id}}/g, 'docs').replace(/{{title}}/g, 'Documents').replace(/{{content}}/g, relatedContent).replace(/{{in}}/g, 'in');
 
         //----------------PEOPLE
         relatedHTML = R$('#resultTemplatePeople').html();
@@ -104,7 +104,7 @@ exports.getPage = function(link){
                         if(i==9){return false;}
             })
         })
-        relatedLinks += panelHTML.replace(/{{id}}/g, 'people').replace(/{{title}}/g, 'People').replace(/{{content}}/g, relatedContent);
+        relatedLinks += panelHTML.replace(/{{id}}/g, 'people').replace(/{{title}}/g, 'People').replace(/{{content}}/g, relatedContent).replace(/{{in}}/g, '');
         
         //----------------ORGS
         relatedHTML = R$('#resultTemplateOrgs').html();
@@ -115,7 +115,7 @@ exports.getPage = function(link){
                 .replace(/{{link}}/g, e.websites[0])
                 if(i==9){return false;}
         })
-        relatedLinks += panelHTML.replace(/{{id}}/g, 'orgs').replace(/{{title}}/g, 'Organisations').replace(/{{content}}/g, relatedContent);
+        relatedLinks += panelHTML.replace(/{{id}}/g, 'orgs').replace(/{{title}}/g, 'Organisations').replace(/{{content}}/g, relatedContent).replace(/{{in}}/g, '');
 
         //----------------FUNDING
         relatedHTML = R$('#resultTemplateFunding').html();
@@ -132,7 +132,7 @@ exports.getPage = function(link){
                 .replace(/{{fundEnd}}/g, e.projectComposition.project.fund.end.replace(/-/g, '/'))
                 if(i==9){return false;}
         })
-        relatedLinks += panelHTML.replace(/{{id}}/g, 'funding').replace(/{{title}}/g, 'Funding').replace(/{{content}}/g, relatedContent);
+        relatedLinks += panelHTML.replace(/{{id}}/g, 'funding').replace(/{{title}}/g, 'Funding').replace(/{{content}}/g, relatedContent).replace(/{{in}}/g, '');
 
         //----------------SOCIAL
         relatedHTML = R$('#resultTemplateSocial').html();
@@ -142,7 +142,7 @@ exports.getPage = function(link){
                 .replace(/{{title}}/g, e.title)
                 if(i==9){return false;}
         })
-        relatedLinks += panelHTML.replace(/{{id}}/g, 'social').replace(/{{title}}/g, 'Social').replace(/{{content}}/g, relatedContent);
+        relatedLinks += panelHTML.replace(/{{id}}/g, 'social').replace(/{{title}}/g, 'Social').replace(/{{content}}/g, relatedContent).replace(/{{in}}/g, '');
 
         relatedLinks += '</div>';        
         retString += ukercObj.html.body.replace(/{{UKERCTable}}/g, ukercTable).replace(/{{UKERCRelated}}/g, relatedLinks).replace(/{{title}}/g, ukercObj.info.content.title);
