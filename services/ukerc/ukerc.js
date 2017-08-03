@@ -8,7 +8,7 @@ exports.getSearchPost = function(keywords){
         if (err) {
             return console.error('upload failed:', err);
         }
-        var HTMLBody = unfluff(body);
+        var HTMLBody = unfluff(body.replace(/\n/g, ''));
         var links = HTMLBody.links || [];
         var retArr = [];
         links.forEach(function(l,i){
