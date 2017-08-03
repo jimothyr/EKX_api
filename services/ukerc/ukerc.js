@@ -69,6 +69,7 @@ exports.getPage = function(link){
     ]
     var items = Promise.all(proms);
     items.then(function(results){
+        console.log(ukercObj.html)
         var retString = ukercObj.html.head.replace(/{{title}}/g, ukercObj.info.content.title);
         var U$ = cheerio.load(ukercObj.info.content.html);
         var R$ = cheerio.load(ukercObj.html.related);
