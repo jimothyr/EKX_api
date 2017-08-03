@@ -80,6 +80,9 @@ var get_file = function(tUrl, baseUrl){
 
 exports.get_content = function(tUrl){
 	return new Promise(function (resolve, reject) {
+		if(!tUrl.includes(':')){
+			tUrl = decodeURIComponent(tUrl);
+		}
 		get_link_type(tUrl).then(function(thisType){
 			if(thisType.type == "document"){
 				get_file(tUrl).then(function(retData){
@@ -94,7 +97,6 @@ exports.get_content = function(tUrl){
 			    	return reject(error);
 			    });
 			}else{
-				console.log(tUrl)				
 				request(tUrl, function(error, response, html){
 					if(!error){
 						var ret_obj = unfluff(html);
