@@ -13,7 +13,8 @@ exports.getSearchPost = function(keywords){
         var retArr = [];
         $('.resultslist').each(function(i, elem){
             $(this).find('a').each(function(i, elem){
-                retArr.push($(this))
+                console.log($(this));
+                retArr.push({url: $(this).attr('href'), text: $(this).text()});
             })
         })
         // var HTMLBody = unfluff(body);
