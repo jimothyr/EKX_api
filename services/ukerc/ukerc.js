@@ -69,11 +69,10 @@ exports.getPage = function(link){
     ]
     var items = Promise.all(proms);
     items.then(function(results){
-        console.log(ukercObj.html)
         var retString = ukercObj.html.head.replace(/{{title}}/g, ukercObj.info.content.title);
         var U$ = cheerio.load(ukercObj.info.content.html);
         var R$ = cheerio.load(ukercObj.html.related);
-        var ukercTable = U$('.resultsblock').html();
+        var ukercTable = U$('.resultsblock').html().replace(/\n/g, '');
         var relatedLinks = '';
         retString += ukercObj.html.body.replace(/{{UKERCTable}}/g, ukercTable).replace(/{{UKERCRelated}}/g, relatedLinks);
         retString += ukercObj.html.foot;
