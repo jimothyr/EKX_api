@@ -1,6 +1,7 @@
 var request = require('request'),
     cheerio = require('cheerio'),
-    services = require('../services/get_services');
+    services = require('../services/get_services'),
+    fs       = require('fs');
 
 exports.getSearchPost = function(keywords){
 	return new Promise(function (resolve, reject) {
@@ -31,11 +32,51 @@ exports.getSearchPost = function(keywords){
 	})
 }
 
+var getHtmlTemplate = function(template){
+   return new Promise(function (resolve, reject) {
+        fs.readFile(process.env.OPENSHIFT_DATA_DIR+'UKERC_templates'+template+'.html', function read(err, data) {
+            return resolve(data);
+        });
+   }) 
+}
+
 exports.getPage = function(link){
    return new Promise(function (resolve, reject) {
+    var ukercObj = {
+        html:{}
+    }
+    var proms = [    
         services.getHTMLContent(link)
         .then(function(retObj){
-            return resolve(retObj);
+            ukercObj.info = retObj;
+        }),
+        getHtmlTemplate('head')
+        .then(function(retHTML){
+            ukercObj.html.head = retHTML;
+        }),
+        getHtmlTemplate('body')
+        .then(function(retHTML){
+            ukercObj.html.body = retHTML;
+        }),
+        getHtmlTemplate('related')
+        .then(function(retHTML){
+            ukercObj.html.related = retHTML;
+        }),
+        getHtmlTemplate('foot')
+        .then(function(retHTML){
+            ukercObj.html.foot = retHTML;
         })
+    ]
+    var items = Promise.all(proms);
+    items.then(function(results){
+        var retString = ukercObj.html.head.replace(/{{title}}/g, ukercObj.info.content.title);
+        var U$ = cheerio.load(ukercObj.info.content.html);
+        var R$ = cheerio.load(ukercObj.html.related);
+        var ukercTable = U$('.resultsblock').html();
+        var relatedLinks = '';
+        retString += ukercObj.html.body.replace(/{{UKERCTable}}/g, ukercTable).replace(/{{UKERCRelated}}/g, relatedLinks);
+        retString += ukercObj.html.foot;
+        return resolve(retString);
+    })
    }) 
 }
