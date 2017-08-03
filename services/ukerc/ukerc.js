@@ -18,11 +18,11 @@ exports.getSearchPost = function(keywords){
         })
         // var HTMLBody = unfluff(body);
         // var links = HTMLBody.links || [];
-        links.forEach(function(l,i){
-            if(l.href.includes('://') && l.text != 'Remove all Filters'){
-                retArr.push(l);
-            }
-        })
+        // links.forEach(function(l,i){
+        //     if(l.href.includes('://') && l.text != 'Remove all Filters'){
+        //         retArr.push(l);
+        //     }
+        // })
         return resolve({links: retArr, raw: body});
         });
 	})
