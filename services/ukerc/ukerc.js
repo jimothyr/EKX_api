@@ -73,8 +73,9 @@ exports.getPage = function(link){
         var U$ = cheerio.load(ukercObj.info.content.html.replace(/\n/g, ''));
         var R$ = cheerio.load(ukercObj.html.related);
         var ukercTable = U$('.resultsblock').html();
+        U$(table).addClass('table');
         var relatedLinks = '';
-        retString += ukercObj.html.body.replace(/{{UKERCTable}}/g, ukercTable).replace(/{{UKERCRelated}}/g, relatedLinks);
+        retString += ukercObj.html.body.replace(/{{UKERCTable}}/g, ukercTable).replace(/{{UKERCRelated}}/g, relatedLinks).replace(/{{title}}/g, ukercObj.info.content.title);
         retString += ukercObj.html.foot;
         return resolve(retString);
     })
