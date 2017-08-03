@@ -16,7 +16,7 @@ exports.getSearchPost = function(keywords){
                 retArr.push(l);
             }
         })
-        return resolve(retArr);
+        return resolve({links: retArr, orig: HTMLBody});
         });
 	})
 }
