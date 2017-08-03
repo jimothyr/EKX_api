@@ -9,7 +9,7 @@ exports.getSearchPost = function(keywords){
         if (err) {
             return console.error('upload failed:', err);
         }
-        $ = cheerio.load(body);
+        var $ = cheerio.load(body);
         var retArr = [];
         $('.resultslist').each(function(i, elem){
             $(this).find('a').each(function(i, elem){
