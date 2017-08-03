@@ -87,6 +87,7 @@ exports.getPage = function(link){
                             .replace(/{{lang_score}}/g, (e._source.eng_lang_score[0] > 90 ? 'success' : (e._source.eng_lang_score[0] > 70 ? 'warning' : 'danger')))
                             .replace(/{{author}}/g, e._source.author)
                             .replace(/{{pubDate}}/g, e._source.pubDate.substring(0,e._source.pubDate.indexOf(':')-3))
+                            if(i==9){return false;}
         })
         relatedLinks += panelHTML.replace(/{{id}}/g, 'docs').replace(/{{title}}/g, 'Documents').replace(/{{content}}/g, relatedContent);
 
@@ -100,6 +101,7 @@ exports.getPage = function(link){
                         .replace(/{{title}}/g, e._source.title)
                         .replace(/{{link}}/g, e._source.link)
                         .replace(/{{provider}}/g, (e._source.provider?e._source.provider+' | ':'')); 
+                        if(i==9){return false;}
             })
         })
         relatedLinks += panelHTML.replace(/{{id}}/g, 'people').replace(/{{title}}/g, 'People').replace(/{{content}}/g, relatedContent);
@@ -111,6 +113,7 @@ exports.getPage = function(link){
             relatedContent += relatedHTML.replace(/{{name}}/g, e.name)
                 .replace(/{{pages}}/g, e.pages)
                 .replace(/{{link}}/g, e.websites[0])
+                if(i==9){return false;}
         })
         relatedLinks += panelHTML.replace(/{{id}}/g, 'orgs').replace(/{{title}}/g, 'Organisations').replace(/{{content}}/g, relatedContent);
 
@@ -118,7 +121,7 @@ exports.getPage = function(link){
         relatedHTML = R$('#resultTemplateFunding').html();
         relatedContent = '';
         ukercObj.info.organisations.forEach(function(e,i){
-            relatedContent += relatedHTMLreplace(/{{projectUrl}}/g, e.projectComposition.project.url)
+            relatedContent += relatedHTML.replace(/{{projectUrl}}/g, e.projectComposition.project.url)
                 .replace(/{{projectTitle}}/g, e.projectComposition.project.title)
                 .replace(/{{funderName}}/g, e.projectComposition.project.fund.funder.name)
                 .replace(/{{grantCategory}}/g, e.projectComposition.project.grantCategory)
@@ -127,6 +130,7 @@ exports.getPage = function(link){
                 .replace(/{{fundValuePounds}}/g, Number(e.projectComposition.project.fund.valuePounds).toLocaleString())
                 .replace(/{{fundStart}}/g, e.projectComposition.project.fund.start.replace(/-/g, '/'))
                 .replace(/{{fundEnd}}/g, e.projectComposition.project.fund.end.replace(/-/g, '/'))
+                if(i==9){return false;}
         })
         relatedLinks += panelHTML.replace(/{{id}}/g, 'funding').replace(/{{title}}/g, 'Funding').replace(/{{content}}/g, relatedContent);
 
@@ -134,8 +138,9 @@ exports.getPage = function(link){
         relatedHTML = R$('#resultTemplateSocial').html();
         relatedContent = '';
         ukercObj.info.organisations.forEach(function(e,i){
-            relatedContent += relatedHTMLreplace(/{{link}}/g, e.link)
+            relatedContent += relatedHTML.replace(/{{link}}/g, e.link)
                 .replace(/{{title}}/g, e.title)
+                if(i==9){return false;}
         })
         relatedLinks += panelHTML.replace(/{{id}}/g, 'social').replace(/{{title}}/g, 'Social').replace(/{{content}}/g, relatedContent);
 
