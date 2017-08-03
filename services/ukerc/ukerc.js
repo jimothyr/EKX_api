@@ -35,7 +35,7 @@ exports.getSearchPost = function(keywords){
 var getHtmlTemplate = function(template){
    return new Promise(function (resolve, reject) {
         fs.readFile(process.env.OPENSHIFT_DATA_DIR+'UKERC_templates/'+template+'.html',"utf8",function read(err, data) {
-            return resolve(data);
+            return resolve(data.replace(/\n/g, ''));
         });
    }) 
 }
