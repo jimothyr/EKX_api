@@ -185,8 +185,8 @@ var app = express();
       });
     })
 
-    app.get('/UKERCpage/:link', function(req,res){
-      ukerc.getPage(req.params.link)
+    app.get('/UKERCpage', function(req,res){
+      ukerc.getPage(req.query.link)
       .then(function(data){
         res.setHeader('Access-Control-Allow-Origin','*');
         res.setHeader('Content-Type', 'text/html');
