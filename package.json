@@ -16,7 +16,8 @@
     "textract": "^2.1.2",
     "retext": "*",
     "gramophone" : "*",
-    "feedparser": "*"
+    "feedparser": "*",
+    "cheerio" : "*"
   },
   "author": "Ionut-Cristian Florescu <ionut.florescu@gmail.com>",
   "license": "ISC"

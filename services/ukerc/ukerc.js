@@ -1,5 +1,6 @@
 var request = require('request');
-var unfluff = require('unfluff');
+var cheerio = require('cheerio');
+// var unfluff = require('unfluff');
 // var search = require('../search/elasticsearch');
 
 exports.getSearchPost = function(keywords){
@@ -8,15 +9,21 @@ exports.getSearchPost = function(keywords){
         if (err) {
             return console.error('upload failed:', err);
         }
-        var HTMLBody = unfluff(body.replace(/\n/g, ''));
-        var links = HTMLBody.links || [];
+        $ = cheerio.load(body);
         var retArr = [];
+        $('.resultslist').each(function(i, elem){
+            $(this).find('a').each(function(i, elem){
+                retArr.push($(this);)
+            })
+        })
+        // var HTMLBody = unfluff(body);
+        // var links = HTMLBody.links || [];
         links.forEach(function(l,i){
             if(l.href.includes('://') && l.text != 'Remove all Filters'){
                 retArr.push(l);
             }
         })
-        return resolve({links: retArr, orig: HTMLBody, raw: body});
+        return resolve({links: retArr, raw: body});
         });
 	})
 }
