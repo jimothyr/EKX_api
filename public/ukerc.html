@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Title Page</title>
+
+        <!-- Bootstrap CSS -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        
+        <div class="container">
+            <h1 class="text-center">UKERC EKX SEARCH DEMO</h1>    
+            <div class="input-group">
+                <input type="text" class="form-control" id='keywords' placeholder="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" id="search" type="button">Go!</button>
+                </span>
+            </div><!-- /input-group -->
+
+            <hr>
+
+            <div class="row" id="results"></div>
+            
+
+        </div>
+        
+        
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Bootstrap JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script>
+
+            var writeOut = function(data){
+                for(var k in data.links){
+                    $('#results').append('<h3>'+k+'</h3><ul>');
+                    data.links[k].forEach(function(l,i){
+                        $('#results').append(
+                            '<li><a href="http://api-ekx.rhcloud.com/UKERCpage/?link='+encodeURIComponent(l.url)+'">'+l.text+'</a></li>'
+                        )
+                    })
+                    $('#results').append('</ul>');
+                }
+            }
+
+            if (sessionStorage.getItem("ekxUkercSearchResults")) {
+                console.log(sessionStorage.getItem("ekxUkercSearchResults"))
+                $('#keywords').val(sessionStorage.getItem("ekxUkercSearchTerms"));
+                writeOut(JSON.parse(sessionStorage.getItem("ekxUkercSearchResults")));
+            }
+
+            $(document).ready(function(){
+                $('#search').click(function(){
+                    $.ajax({
+                        type: "GET",
+                        url: 'http://api-ekx.rhcloud.com/UKERCsearch/'+$('#keywords').val(),
+                        success: function(data){
+                            console.log(data)
+                            sessionStorage.setItem('ekxUkercSearchTerms', $('#keywords').val());
+                            sessionStorage.setItem('ekxUkercSearchResults', JSON.stringify(data));
+                            writeOut(data);
+                        }
+                    });
+                })
+            })
+        </script>
+    </body>
+</html>
