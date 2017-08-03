@@ -8,7 +8,15 @@ exports.getSearchPost = function(keywords){
         if (err) {
             return console.error('upload failed:', err);
         }
-        return resolve(unfluff(body));
+        var HTMLBody = unfluff(body);
+        var links = HTMLBody.links || [];
+        var retArr = [];
+        links.forEach(function(l,i){
+            if(l.href.includes('://') && l.text != 'Remove all Filters'){
+                retArr.push(l);
+            }
+        })
+        return resolve(retArr);
         });
 	})
 }
