@@ -1,6 +1,6 @@
 var request = require('request'),
     cheerio = require('cheerio'),
-    keywords = require('../services/get_services');
+    services = require('../services/get_services');
 
 exports.getSearchPost = function(keywords){
 	return new Promise(function (resolve, reject) {
