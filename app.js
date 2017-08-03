@@ -189,7 +189,8 @@ var app = express();
       ukerc.getPage(req.query.link)
       .then(function(data){
         res.setHeader('Access-Control-Allow-Origin','*');
-        res.setHeader('Content-Type', 'text/html');
+        // res.setHeader('Content-Type', 'text/html');
+        res.setHeader('Content-Type', 'application/json');          
         res.send(data);
       })
     })
