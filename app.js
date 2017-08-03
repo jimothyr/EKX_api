@@ -172,7 +172,18 @@ var app = express();
       });
       ingest.process_items();
       res.send('this might take a while');
-    })    
+    })
+    
+    // --------------------------------------------------------┤ UKERC DEMO - GET SEARCH PAGE
+    app.get('/UKERCsearch', function(req,res){
+      res.setHeader('Access-Control-Allow-Origin','*');
+      var ukerc = require('./services/ukerc/ukerc');
+      ukerc.getSearchPost(req.body.sTerm)
+      .then(function(data){
+        res.send(data);
+      });
+
+    })
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                END OF SECTION                                                        ║
