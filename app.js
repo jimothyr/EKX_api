@@ -177,6 +177,7 @@ var app = express();
     // --------------------------------------------------------┤ UKERC DEMO - GET SEARCH PAGE
     app.get('/UKERCsearch/:sTerm', function(req,res){
       res.setHeader('Access-Control-Allow-Origin','*');
+      res.setHeader('Content-Type', 'application/json');  
       var ukerc = require('./services/ukerc/ukerc');
       ukerc.getSearchPost(req.params.sTerm)
       .then(function(data){
