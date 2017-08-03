@@ -99,9 +99,22 @@ exports.get_content = function(tUrl){
 			}else{
 				request(tUrl, function(error, response, html){
 					if(!error){
-						var ret_obj = unfluff(html);
-						ret_obj.html = html;
-						return resolve(ret_obj);
+						if(response.statusCode == 200){
+							var ret_obj = unfluff(html);
+							ret_obj.html = html;
+							return resolve(ret_obj);
+						}else{
+							tUrl = encodeURI(tUrl);
+							request(tUrl, function(error, response, html){
+								if(!error){
+									var ret_obj = unfluff(html);
+									ret_obj.html = html;
+									return resolve(ret_obj);
+								}else{
+									return reject(error);
+								}
+							})
+						}
 			        }else{
 			        	return reject(error);
 			        }
