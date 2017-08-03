@@ -11,6 +11,7 @@ const http         = require('http'),
       appGlobals   = require('./services/globals/globals.json'),
       bounces      = require('./bounce/bounce'),
       ingest      = require('./services/feeds/ingest'),
+      ukerc       = require('./services/ukerc/ukerc'),
       env          = process.env;
 
 var app = express();
@@ -176,14 +177,21 @@ var app = express();
     
     // --------------------------------------------------------┤ UKERC DEMO - GET SEARCH PAGE
     app.get('/UKERCsearch/:sTerm', function(req,res){
-      var ukerc = require('./services/ukerc/ukerc');
       ukerc.getSearchPost(req.params.sTerm)
       .then(function(data){
         res.setHeader('Access-Control-Allow-Origin','*');
         res.setHeader('Content-Type', 'application/json');  
         res.send(data);
       });
+    })
 
+    app.get('/UKERCpage/:link', function(req,res){
+      ukerc.getPage(req.params.link)
+      .then(function(data){
+        res.setHeader('Access-Control-Allow-Origin','*');
+        res.setHeader('Content-Type', 'text/html');
+        res.send(data);
+      })
     })
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣

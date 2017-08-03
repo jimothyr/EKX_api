@@ -1,5 +1,6 @@
-var request = require('request');
-var cheerio = require('cheerio');
+var request = require('request'),
+    cheerio = require('cheerio'),
+    keywords = require('../services/get_services');
 
 exports.getSearchPost = function(keywords){
 	return new Promise(function (resolve, reject) {
@@ -28,4 +29,13 @@ exports.getSearchPost = function(keywords){
         return resolve({links: {Data : dataArr, Projects : projectsArr, Landscapes : landscapesArr, Roadmaps : roadmapArr}, raw: body});
         });
 	})
+}
+
+exports.getPage = function(link){
+   return new Promise(function (resolve, reject) {
+        services.getHTMLContent(link)
+        .then(function(retObj){
+            return resolve(retObj);
+        })
+   }) 
 }
