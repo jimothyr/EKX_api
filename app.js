@@ -178,7 +178,7 @@ var app = express();
     app.get('/UKERCsearch', function(req,res){
       res.setHeader('Access-Control-Allow-Origin','*');
       var ukerc = require('./services/ukerc/ukerc');
-      ukerc.getSearchPost(req.body.sTerm)
+      ukerc.getSearchPost(req.params.sTerm)
       .then(function(data){
         res.send(data);
       });
