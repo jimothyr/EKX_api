@@ -73,8 +73,73 @@ exports.getPage = function(link){
         var U$ = cheerio.load(ukercObj.info.content.html.replace(/\n/g, ''));
         var R$ = cheerio.load(ukercObj.html.related);
         var ukercTable = U$('.resultsblock').html();
-        U$('.noborder').addClass('table');
-        var relatedLinks = '';
+        var relatedLinks = '<div class="panel-group" id="relatedAccordion" role="tablist" aria-multiselectable="true">';
+        var panelHTML = R$('#panelTemplate').html();
+        var relatedHTML,relatedContent;
+        
+        //----------------DOCS
+        relatedHTML = R$('#resultTemplatePages').html();
+        relatedContent = '';
+        ukercObj.info.documents.forEach(function(e,i){
+            relatedContent += relatedHTML.replace(/{{link}}/g, e._source.link)
+                            .replace(/{{title}}/g, e._source.title)
+                            .replace(/{{summary}}/g, e._source.summary)
+                            .replace(/{{lang_score}}/g, (e._source.eng_lang_score[0] > 90 ? 'success' : (e._source.eng_lang_score[0] > 70 ? 'warning' : 'danger')))
+                            .replace(/{{author}}/g, e._source.author)
+                            .replace(/{{pubDate}}/g, e._source.pubDate.substring(0,e._source.pubDate.indexOf(':')-3))
+        })
+        relatedLinks += panelHTML.replace(/{{id}}/g, 'docs').replace(/{{title}}/g, 'Documents').replace(/{{content}}/g, relatedContent);
+
+        //----------------PEOPLE
+        relatedHTML = R$('#resultTemplatePeople').html();
+        relatedContent = '';
+        ukercObj.info.documents.forEach(function(e,i){
+            e._source.people.forEach(function(p,i){
+            var tPer = (p.text?p.text:p);
+                relatedContent += relatedHTML.replace(/{{name}}/g, tPer)
+                        .replace(/{{title}}/g, e._source.title)
+                        .replace(/{{link}}/g, e._source.link)
+                        .replace(/{{provider}}/g, (e._source.provider?e._source.provider+' | ':'')); 
+            })
+        })
+        relatedLinks += panelHTML.replace(/{{id}}/g, 'people').replace(/{{title}}/g, 'People').replace(/{{content}}/g, relatedContent);
+        
+        //----------------ORGS
+        relatedHTML = R$('#resultTemplateOrgs').html();
+        relatedContent = '';
+        ukercObj.info.organisations.forEach(function(e,i){
+            relatedContent += relatedHTML.replace(/{{name}}/g, e.name)
+                .replace(/{{pages}}/g, e.pages)
+                .replace(/{{link}}/g, e.websites[0])
+        })
+        relatedLinks += panelHTML.replace(/{{id}}/g, 'orgs').replace(/{{title}}/g, 'Organisations').replace(/{{content}}/g, relatedContent);
+
+        //----------------FUNDING
+        relatedHTML = R$('#resultTemplateFunding').html();
+        relatedContent = '';
+        ukercObj.info.organisations.forEach(function(e,i){
+            relatedContent += relatedHTMLreplace(/{{projectUrl}}/g, e.projectComposition.project.url)
+                .replace(/{{projectTitle}}/g, e.projectComposition.project.title)
+                .replace(/{{funderName}}/g, e.projectComposition.project.fund.funder.name)
+                .replace(/{{grantCategory}}/g, e.projectComposition.project.grantCategory)
+                .replace(/{{leadResearchOrganisationUr}}/g, e.projectComposition.leadResearchOrganisation.url)
+                .replace(/{{leadResearchOrganisationName}}/g, e.projectComposition.leadResearchOrganisation.name)
+                .replace(/{{fundValuePounds}}/g, Number(e.projectComposition.project.fund.valuePounds).toLocaleString())
+                .replace(/{{fundStart}}/g, e.projectComposition.project.fund.start.replace(/-/g, '/'))
+                .replace(/{{fundEnd}}/g, e.projectComposition.project.fund.end.replace(/-/g, '/'))
+        })
+        relatedLinks += panelHTML.replace(/{{id}}/g, 'funding').replace(/{{title}}/g, 'Funding').replace(/{{content}}/g, relatedContent);
+
+        //----------------SOCIAL
+        relatedHTML = R$('#resultTemplateSocial').html();
+        relatedContent = '';
+        ukercObj.info.organisations.forEach(function(e,i){
+            relatedContent += relatedHTMLreplace(/{{link}}/g, e.link)
+                .replace(/{{title}}/g, e.title)
+        })
+        relatedLinks += panelHTML.replace(/{{id}}/g, 'social').replace(/{{title}}/g, 'Social').replace(/{{content}}/g, relatedContent);
+
+        relatedLinks += '</div>';        
         retString += ukercObj.html.body.replace(/{{UKERCTable}}/g, ukercTable).replace(/{{UKERCRelated}}/g, relatedLinks).replace(/{{title}}/g, ukercObj.info.content.title);
         retString += ukercObj.html.foot;
         return resolve(retString);
