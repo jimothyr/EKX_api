@@ -30,7 +30,7 @@ exports.get_people = function(text){
     var names = allNames.names;
     var titles = ["Mr","Mrs","Miss","Ms","Dr","Professor","Prof","Lord","Lady"];
     var sentences = text.replace(/(?:\r\n|\r|\n)/g, '.').match(/\(?[^\.\?\!\:]+[\.!:\?]\)?/g);
-    if(sentence.length == 0){
+    if(!sentences){
         sentences = [];    
     }
     var words = [];
