@@ -7,9 +7,9 @@ exports.get_score = function(text){
   	returnObj.syllableCounts = syl_count(text);
   	returnObj.totalSyls = returnObj.syllableCounts.reduce(function(a, b) { return a + b; }, 0);
     returnObj.level = 206.835 - (1.015*(returnObj.wordCount / returnObj.sentences)) - (84.6*(returnObj.totalSyls / returnObj.wordCount));
-    returnObj.equiv = (returnObj.level > 90 ? 0 : (level > 70 ? 1 : 2));
+    returnObj.equiv = (returnObj.level > 90 ? 0 : (returnObj.level > 70 ? 1 : 2));
     returnObj.engEquiv = (returnObj.level > 90 ? 'easy' : (level > 70 ? 'medium' : 'hard'));
-    returnObj.rag = (returnObj.level > 90 ? 'green' : (level > 70 ? 'amber' : 'red'));
+    returnObj.rag = (returnObj.level > 90 ? 'green' : (returnObj.level > 70 ? 'amber' : 'red'));
   	resolve(returnObj);
   }).catch((error) => {
       console.log('enls - ', error)
@@ -33,7 +33,7 @@ function syl_count(sz){
 	  }
 	  // return (word.match(/[aeiouy]{1,2}/g) ? word.match(/[aeiouy]{1,2}/g).length : 0);                   
 	};
-	var words = sz.replace(/([ .,;!?:]+)/g,'$1§sep§').split('§sep§');
+	var words = sz.replace(/([ .,;!?:]+)/g,'$1ï¿½sepï¿½').split('ï¿½sepï¿½');
 	for(var i=0;i<words.length;i++){
 		syls(words[i]);
 	}
