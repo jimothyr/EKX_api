@@ -229,11 +229,7 @@ var get_feeds = function(providerId){
       if(error){
         return reject(error);
       }else{
-        if(body.result){
-          return resolve(response);
-        }else{
-          console.log(body)
-        }
+        return resolve(body);
       }
     });
   });
@@ -251,48 +247,31 @@ exports.ingest_feeds = function(provider_id){
  get_feeds(provider_id)
  .then(function(providers){
     var feedProms = [];
-    var retItems = [];
-    // var eventProms = [];
 
     providers.map(function(p){
       if(p.feeds){
         p.feeds.map(function(f){
           feedProms.push(get_items(f.url, p.provider, f.id).then(function(res){
-            retItems.concat(res);
+            return res;
           }))
         });
       }
 
-      // --------------------------------------------------------┤ TOTDO: REDO EVENTS TO ALLOW WP JSON EVENTS - eg http://manage-ekx.rhcloud.com/feeds-json/?feedType=events
-      // if(p.eventbrite){
-      //   p.eventbrite.map(function(e){
-      //     eventProms.push(get_events(e.id, p.provider.name))
-      //   });
-      // }
+
     });
-    var feedItems = Promise.all(feedProms);
-    // var eventItems = Promise.all(eventProms);
+    return Promise.all(feedProms);
 
-    feedItems.then(function(results){
-      return retItems;
-    }).catch((error) => {
-      console.error('ingest error', error)
-    });
-
-    // eventItems.then(function(results){
-    //   var events = [].concat.apply([], results);
-    //   events.forEach(function(e,i){
-    //     search_engine.add_event(e);
-    //   })
-    // }).catch((error) => {
-    //   console.error('ingest error', error)
-    // });
- })
-.then(function(items){
-  console.log(items);
-  // process_items([].concat.apply([], results));
-})
-
+  })
+  .then(function(retItems){
+    process_items([].concat.apply([], retItems));
+  })
+  
+// --------------------------------------------------------┤ TOTDO: REDO EVENTS TO ALLOW WP JSON EVENTS - eg http://manage-ekx.rhcloud.com/feeds-json/?feedType=events
+// if(p.eventbrite){
+//   p.eventbrite.map(function(e){
+//     eventProms.push(get_events(e.id, p.provider.name))
+//   });
+// }
 }
 
 exports.check_valid_feed = function(feed_url, res){
