@@ -274,7 +274,7 @@ exports.ingest_feeds = function(provider_id){
     // var eventItems = Promise.all(eventProms);
 
     feedItems.then(function(results){
-      return results;
+      return feedItems;
     }).catch((error) => {
       console.error('ingest error', error)
     });
