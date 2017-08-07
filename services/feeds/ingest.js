@@ -221,7 +221,7 @@ var search_engine = require('../search/elasticsearch'),
 var get_feeds = function(providerId){
   return new Promise(function (resolve, reject) {
     request({
-      url: appGlobals.managerURL+'/feeds-json/'+(provider_id ? '?providerId='+providerId : ''),
+      url: appGlobals.managerURL+'/feeds-json/'+(providerId ? '?providerId='+providerId : ''),
       method: "GET",
       json: true,
     }, 
