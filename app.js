@@ -137,8 +137,8 @@ var app = express();
     });
 
     // --------------------------------------------------------┤ INGEST FEEDS
-    app.get('/ingestFeeds', function(req,res){
-      ingest.ingest_feeds();
+    app.get('/ingestFeeds/:providerID', function(req,res){
+      ingest.ingest_feeds(req.params.providerID);
       res.send('Request acknowledged');
     })
 

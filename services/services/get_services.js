@@ -360,6 +360,8 @@ var funding = require('../funding/researchGateway');
 						sendObj.keywords = retKeys.data;
 						itemServices(sendObj,['people'],['related'])
 						.then(function(retObj){
+							retObj.keywords = sendObj.keywords;
+							retObj.content = sendObj.content;
 							return resolve(retObj);
 						}).catch((error) => {
 							console.error('ext service - ', error)
