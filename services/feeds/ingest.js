@@ -41,7 +41,7 @@ var search_engine = require('../search/elasticsearch'),
           reject(error);
         });
         feedparser.on('end', function(){
-          resolve(items);
+          return resolve(items);
         });
         feedparser.on('readable', function () {
           var stream = this; 
@@ -251,12 +251,15 @@ exports.ingest_feeds = function(provider_id){
  get_feeds(provider_id)
  .then(function(providers){
     var feedProms = [];
+    var feedItems = [];
     // var eventProms = [];
 
     providers.map(function(p){
       if(p.feeds){
         p.feeds.map(function(f){
-          feedProms.push(get_items(f.url, p.provider, f.id))
+          feedProms.push(get_items(f.url, p.provider, f.id).then(function(res){
+            feedItems.concat(res);
+          }))
         });
       }
 
@@ -273,19 +276,19 @@ exports.ingest_feeds = function(provider_id){
     feedItems.then(function(results){
       // --------------------------------------------------------┤  OUR RETURNED ARRAY IS ACTUALLY AN ARRAY OF ARRAYS WHICH IS USELESS. AS WE SEND IT OFF TO THE PROCESSING FUNCTION, WE FLATTEN IT OUT.
       // process_items([].concat.apply([], results));
-      console.log([].concat.apply([], results))
+      console.log(feedItems)
     }).catch((error) => {
       console.error('ingest error', error)
     });
 
-    eventItems.then(function(results){
-      var events = [].concat.apply([], results);
-      events.forEach(function(e,i){
-        search_engine.add_event(e);
-      })
-    }).catch((error) => {
-      console.error('ingest error', error)
-    });
+    // eventItems.then(function(results){
+    //   var events = [].concat.apply([], results);
+    //   events.forEach(function(e,i){
+    //     search_engine.add_event(e);
+    //   })
+    // }).catch((error) => {
+    //   console.error('ingest error', error)
+    // });
  })
 
 
