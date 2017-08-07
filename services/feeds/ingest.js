@@ -274,9 +274,7 @@ exports.ingest_feeds = function(provider_id){
     // var eventItems = Promise.all(eventProms);
 
     feedItems.then(function(results){
-      // --------------------------------------------------------┤  OUR RETURNED ARRAY IS ACTUALLY AN ARRAY OF ARRAYS WHICH IS USELESS. AS WE SEND IT OFF TO THE PROCESSING FUNCTION, WE FLATTEN IT OUT.
-      // process_items([].concat.apply([], results));
-      console.log(feedItems)
+      return results;
     }).catch((error) => {
       console.error('ingest error', error)
     });
@@ -290,7 +288,10 @@ exports.ingest_feeds = function(provider_id){
     //   console.error('ingest error', error)
     // });
  })
-
+.then(function(items){
+  console.log(items);
+  // process_items([].concat.apply([], results));
+})
 
 }
 
