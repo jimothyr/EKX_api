@@ -251,7 +251,7 @@ exports.ingest_feeds = function(provider_id){
  get_feeds(provider_id)
  .then(function(providers){
     var feedProms = [];
-    var eventProms = [];
+    // var eventProms = [];
 
     providers.map(function(p){
       if(p.feeds){
@@ -268,7 +268,7 @@ exports.ingest_feeds = function(provider_id){
       // }
     });
     var feedItems = Promise.all(feedProms);
-    var eventItems = Promise.all(eventProms);
+    // var eventItems = Promise.all(eventProms);
 
     feedItems.then(function(results){
       // --------------------------------------------------------┤  OUR RETURNED ARRAY IS ACTUALLY AN ARRAY OF ARRAYS WHICH IS USELESS. AS WE SEND IT OFF TO THE PROCESSING FUNCTION, WE FLATTEN IT OUT.
