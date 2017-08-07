@@ -251,14 +251,14 @@ exports.ingest_feeds = function(provider_id){
  get_feeds(provider_id)
  .then(function(providers){
     var feedProms = [];
-    var feedItems = [];
+    var retItems = [];
     // var eventProms = [];
 
     providers.map(function(p){
       if(p.feeds){
         p.feeds.map(function(f){
           feedProms.push(get_items(f.url, p.provider, f.id).then(function(res){
-            feedItems.concat(res);
+            retItems.concat(res);
           }))
         });
       }
@@ -274,7 +274,7 @@ exports.ingest_feeds = function(provider_id){
     // var eventItems = Promise.all(eventProms);
 
     feedItems.then(function(results){
-      return feedItems;
+      return retItems;
     }).catch((error) => {
       console.error('ingest error', error)
     });
