@@ -1,7 +1,7 @@
-var request = require('request');
-var appGlobals = require('../globals/globals.json');
-// Nodejs encryption with CTR
-var crypto = require('crypto');
+var request 	= require('request'),
+	appGlobals 	= require('../globals/globals.json'),
+	crypto 		= require('crypto'),
+	url 		= require('url');
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
 // ║                                                                                                                      ║
@@ -261,7 +261,9 @@ var crypto = require('crypto');
 				    if(body.hits){
 				    	hits = body.hits.hits.reduce(function(memo, hit) {
 						    if (hit.guid != guid) {
-						    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
+								var tUrl = new URL(hit._source.link);
+								hit._source.host = tUrl.hostname;
+								// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
 						    	hit._source.link = encryptLink(hit._source.link, hit._source.provider.id, hit._source.feed_id, hit._source.feed_url);
 						    	hit._source.url = hit._source.link;
 						        memo.push(hit);
@@ -300,6 +302,8 @@ var crypto = require('crypto');
 				   var hits;
 				    if(body.hits){
 				    	hits = body.hits.hits.map(function(memo, hit) {
+							var tUrl = new URL(hit._source.link);	
+							hit._source.host = tUrl.hostname;
 					    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
 					    	if(hit._source){
 								hit._source.resource_uri = encryptLink(hit._source.link, hit._source.provider.id, hit._source.feed_id, hit._source.feed_url);

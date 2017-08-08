@@ -215,7 +215,7 @@ var funding = require('../funding/researchGateway');
 						}
 						social.get_stackExchange(data.keywords.string)
 						.then(function(ret_social){
-							ret_obj.data = ret_social
+							ret_obj.data = {"stackExchange" : ret_social}
 							return resolve(ret_obj);
 						}).catch((error) => {
 				        console.log('social - ', error)
@@ -234,7 +234,7 @@ var funding = require('../funding/researchGateway');
 						}
 						search.getEvents(data.keywords.string)
 						.then(function(ret_events){
-							ret_obj.data = ret_events
+							ret_obj.data = {"eventBrite" : ret_events}
 							return resolve(ret_obj)
 						}).catch((error) => {
 							console.log('events - ', error)
@@ -254,7 +254,7 @@ var funding = require('../funding/researchGateway');
 						}
 						funding.gatewayProjectSearch(data.keywords.string)
 						.then(function(ret_funding){
-							ret_obj.data = ret_funding;
+							ret_obj.data = {"GtR" : ret_funding};
 							return resolve (ret_obj);
 						}).catch((error) => {
 							console.log('funding - ', error)
