@@ -1,7 +1,7 @@
 var request 	= require('request'),
 	appGlobals 	= require('../globals/globals.json'),
 	crypto 		= require('crypto'),
-	url 		= require('url');
+	URL 		= require('url');
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
 // ║                                                                                                                      ║
