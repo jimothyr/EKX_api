@@ -261,7 +261,7 @@ var request 	= require('request'),
 				    if(body.hits){
 				    	hits = body.hits.hits.reduce(function(memo, hit) {
 						    if (hit.guid != guid) {
-								var tUrl = new URL(hit._source.link);
+								var tUrl = URL.parse(hit._source.link);	
 								hit._source.host = tUrl.hostname;
 								// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
 						    	hit._source.link = encryptLink(hit._source.link, hit._source.provider.id, hit._source.feed_id, hit._source.feed_url);
@@ -302,7 +302,7 @@ var request 	= require('request'),
 				   var hits;
 				    if(body.hits){
 				    	hits = body.hits.hits.map(function(memo, hit) {
-							var tUrl = new URL(hit._source.link);	
+							var tUrl = URL.parse(hit._source.link);	
 							hit._source.host = tUrl.hostname;
 					    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
 					    	if(hit._source){
