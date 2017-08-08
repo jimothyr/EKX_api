@@ -238,7 +238,7 @@ var request 	= require('request'),
 				    auth: appGlobals.indexAuth,
 			    	body: {
 			    		"_source": {
-					        "exclude": [ "attachments.*", "links.*", "content.*", "keywords.*", "url", "provider_guid", "guid" ]
+					        "exclude": [ "attachments.*", "links.*", "content.*", "url", "provider_guid", "guid" ]
 					    },
 			    		"query": {
 					        "match" : {

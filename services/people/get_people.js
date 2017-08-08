@@ -1,4 +1,5 @@
 var allNames = require("./names.json");
+var notNames = require("./notNames.json");
 
 function initialIsCapital( word ){
     if(!word) return false;
@@ -28,6 +29,7 @@ function dedupe(arr) {
 exports.get_people = function(text){
   return new Promise(function (resolve, reject) {
     var names = allNames.names;
+    var ignore = notNames.not_names;
     var titles = ["Mr","Mrs","Miss","Ms","Dr","Professor","Prof","Lord","Lady"];
     var sentences = text.replace(/(?:\r\n|\r|\n)/g, '.').match(/\(?[^\.\?\!\:]+[\.!:\?]\)?/g);
     if(!sentences){
@@ -44,14 +46,19 @@ exports.get_people = function(text){
         w.forEach(function(x,y){
             if(initialIsCapital(x)){
                 var tFound = titles.includes(x)
-                if(names.includes(x) || tFound ){
+                if(names.includes(x) || tFound && !ignore.includes(x)){
                     var tName = (tFound ? [] : [x]);
                     var t=(tFound ? y+1 : y);
                     var found = true;
-                    while (found === true) {
+                    var fNames = 0;
+                    while (found === true && fNames < 3) {
                         t++;
+                        fNames++;
                         found = initialIsCapital(w[t])
-                        if(found){tName.push(w[t].replace("'s",'').replace(/\W/g, ''))};
+                        if(found && !w[t].match(/\d+/g) && !ignore.includes(w[t])){
+                            tName.push(w[t].replace("'s",'').replace(/\W/g, ''))
+                            fNames++;
+                        };
                     }
                     if(tName.length > 1)foundNames.push(tName.join(' '));
                 };
