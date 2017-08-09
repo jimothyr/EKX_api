@@ -302,7 +302,7 @@ var request 	= require('request'),
 				    }else{
 				    	hits = [];
 					}  
-					return resolve({results: hits, suggestion: body.suggest});
+					return resolve({results: hits, suggestions: body.suggest});
 				});
 			}).catch((error) => {
 			    console.error('search - ', error)
