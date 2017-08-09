@@ -3,7 +3,7 @@ var search      = require('../search/elasticsearch'),
 
 exports.get_data = function(keywords){
     return new Promise(function (resolve, reject) {
-        search.getRelated(keywords, appGlobals.dataShard)
+        search.getRelated(keywords, null, appGlobals.dataShard)
         .then(function(ret_related){
             return resolve(ret_related)
         }).catch((error) => {

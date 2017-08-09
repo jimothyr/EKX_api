@@ -253,14 +253,15 @@ var datasets = require('../data/getData');
 							ret_obj.data = {'error' : 'invalid keywords'};
 							return resolve (ret_obj);
 						}
-						search.getEvents(data.keywords.string)
-						.then(function(ret_events){
-							ret_obj.data = {"eventBrite" : ret_events}
-							return resolve(ret_obj)
-						}).catch((error) => {
-							console.log('events - ', error)
-							return reject(error);
-						});
+						// search.getEvents(data.keywords.string)
+						// .then(function(ret_events){
+							// ret_obj.data = {"eventBrite" : ret_events}
+							ret_obj.data = {"eventBrite" : []}
+							// return resolve(ret_obj)
+						// }).catch((error) => {
+							// console.log('events - ', error)
+							// return reject(error);
+						// });
 					})
 				}
 			},
