@@ -13,7 +13,8 @@ const http         = require('http'),
       ingest      = require('./services/feeds/ingest'),
       ukerc       = require('./services/ukerc/ukerc'),
       env          = process.env;
-
+      global.updatingFeeds = false;
+      
 var app = express();
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({
@@ -141,12 +142,12 @@ var app = express();
 
     // --------------------------------------------------------┤ INGEST FEEDS
     app.get('/ingestFeeds/:providerID?', function(req,res){
-      ingest.ingest_feeds(req.params.providerID);
-      res.send('Request acknowledged');
+      ingest.ingest_feeds(req.params.providerID, function(){});
+      res.send('Request acknowledged', function(){});
     })
 
     app.get('/ingestData/:providerID?', function(req,res){
-      ingest.ingest_data(req.params.providerID);
+      ingest.ingest_data(req.params.providerID, function(){});
       res.send('Request acknowledged');
     })
 

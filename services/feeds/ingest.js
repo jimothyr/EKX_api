@@ -106,6 +106,7 @@ var search_engine = require('../search/elasticsearch'),
 // ║                                                                                                                      ║
     
     var completeIngest = function(providers){
+      global.updatingFeeds = false;
       providers.forEach(function(p,i){
         request({
           url: appGlobals.managerURL+'/update-feed-date/?providerId='+p,
@@ -125,7 +126,8 @@ var search_engine = require('../search/elasticsearch'),
       console.log('╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝');
     }
 
-    var process_items = exports.process_items = function(items, indexSearch){
+    var process_items = exports.process_items = function(items, indexSearch, completeProcess){
+      global.updatingFeeds = true;
       var count = 0, providers=[];
       function process_item(item){
         if(!providers.includes(item.provider.id)){
@@ -189,6 +191,7 @@ var search_engine = require('../search/elasticsearch'),
                 process_item(items[count]);
               }else{
                 completeIngest(providers);
+                completeProcess();
               }
             })
             // search_engine.index(item, function(){
@@ -241,7 +244,7 @@ var get_feeds = function(providerIds){
   });
 }
 
-var ingest_feeds = exports.ingest_feeds = function(provider_ids){
+var ingest_feeds = exports.ingest_feeds = function(provider_ids, ingestFinished){
  console.log('╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗');
  console.log('║                                                                                                                      ║');
  console.log('║                                           STARTING FEED INGEST                                                       ║');
@@ -274,6 +277,8 @@ var ingest_feeds = exports.ingest_feeds = function(provider_ids){
         search_engine.index(item, function(){
           callback();
         })
+      }, function(){
+        ingestFinished();
       });
     }else{
       completeIngest(provider_ids)
@@ -299,7 +304,7 @@ var get_data = function(providerId){
   });
 }
 
-var ingest_data = exports.ingest_data = function(provider_id){
+var ingest_data = exports.ingest_data = function(provider_id, ingestFinished){
   console.log('╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗');
   console.log('║                                                                                                                      ║');
   console.log('║                                           STARTING DATA INGEST                                                       ║');
@@ -330,6 +335,8 @@ var ingest_data = exports.ingest_data = function(provider_id){
       search_engine.indexData(item, function(){
         callback();
       })
+    }, function(){
+      ingestFinished();
     });
   })
 }
@@ -353,6 +360,7 @@ exports.check_valid_feed = function(feed_url, res){
 
 exports.get_requested_updates = function(){
   // return new Promise(function (resolve, reject) {
+    if(!global.updatingFeeds){
     request({
         url: appGlobals.managerURL+'/update-feed-request/',
         method: "GET",
@@ -361,11 +369,15 @@ exports.get_requested_updates = function(){
       function (error, response, body){
         if(body){
           if(body.length > 0){
-            ingest_feeds(body);
+            ingest_feeds(body, function(){
+              ingest_data(body, function(){
+                //no need to report back anything right now.
+              })
+            });
           }else{
             console.log('nothing to update')
           }
         }
       });
-  // })
+  }
 }
