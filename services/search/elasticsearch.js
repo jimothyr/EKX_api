@@ -301,8 +301,8 @@ var request 	= require('request'),
 						}, []);
 				    }else{
 				    	hits = [];
-					}  
-					return resolve({results: hits, suggestions: body.suggest});
+					}
+					return resolve({results: hits, suggestions: (body.suggest.suggestion ? body.suggest.suggestion : [])});
 				});
 			}).catch((error) => {
 			    console.error('search - ', error)
