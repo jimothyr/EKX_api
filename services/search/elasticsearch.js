@@ -303,7 +303,6 @@ var request 	= require('request'),
 				    }else{
 				    	hits = [];
 					}  
-					console.log(hits)
 					return resolve({results: hits, suggestion: body.suggest});
 				});
 			}).catch((error) => {
