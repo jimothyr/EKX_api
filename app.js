@@ -150,6 +150,11 @@ var app = express();
       res.send('Request acknowledged');
     })
 
+    app.get('/get_requested_updates', function(req,res){
+      ingest.get_requested_updates();
+       res.send('Request acknowledged');
+    })
+
     // --------------------------------------------------------┤ BROWSER EXTENSION GET RELATED
     app.post('/getFromURL/', function(req, res){
       res.setHeader('Access-Control-Allow-Origin','*');

@@ -224,10 +224,10 @@ var search_engine = require('../search/elasticsearch'),
 // ╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 // 
 
-var get_feeds = function(providerId){
+var get_feeds = function(providerIds){
   return new Promise(function (resolve, reject) {
     request({
-      url: appGlobals.managerURL+'/feeds-json/'+(providerId ? '?providerId='+providerId : ''),
+      url: appGlobals.managerURL+'/feeds-json/'+(providerIds ? '?providerId='+providerIds : ''),
       method: "GET",
       json: true,
     }, 
@@ -241,7 +241,7 @@ var get_feeds = function(providerId){
   });
 }
 
-exports.ingest_feeds = function(provider_id){
+var ingest_feeds = exports.ingest_feeds = function(provider_ids){
  console.log('╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗');
  console.log('║                                                                                                                      ║');
  console.log('║                                           STARTING FEED INGEST                                                       ║');
@@ -250,7 +250,7 @@ exports.ingest_feeds = function(provider_id){
  console.log('║                                                                                                                      ║');
  console.log('║                                                                                                                      ║');
 
- get_feeds(provider_id)
+ get_feeds(provider_ids)
  .then(function(providers){
     var feedProms = [];
 
@@ -269,11 +269,15 @@ exports.ingest_feeds = function(provider_id){
 
   })
   .then(function(retItems){
-    process_items([].concat.apply([], retItems), function(item, callback){
-      search_engine.index(item, function(){
-        callback();
-      })
-    });
+    if(retItems.length > 0){
+      process_items([].concat.apply([], retItems), function(item, callback){
+        search_engine.index(item, function(){
+          callback();
+        })
+      });
+    }else{
+      completeIngest(provider_ids)
+    }
   })
   
 }
@@ -295,7 +299,7 @@ var get_data = function(providerId){
   });
 }
 
-exports.ingest_data = function(provider_id){
+var ingest_data = exports.ingest_data = function(provider_id){
   console.log('╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗');
   console.log('║                                                                                                                      ║');
   console.log('║                                           STARTING DATA INGEST                                                       ║');
@@ -345,4 +349,23 @@ exports.check_valid_feed = function(feed_url, res){
     }
     // res.send(response.headers['content-type']) // 'image/png' 
   })
+}
+
+exports.get_requested_updates = function(){
+  // return new Promise(function (resolve, reject) {
+    request({
+        url: appGlobals.managerURL+'/update-feed-request/',
+        method: "GET",
+        json: true,
+      }, 
+      function (error, response, body){
+        if(body){
+          if(body.length > 0){
+            ingest_feeds(body);
+          }else{
+            console.log('nothing to update')
+          }
+        }
+      });
+  // })
 }
