@@ -145,6 +145,11 @@ var app = express();
       res.send('Request acknowledged');
     })
 
+    app.get('/ingestData/:providerID?', function(req,res){
+      ingest.ingest_data(req.params.providerID);
+      res.send('Request acknowledged');
+    })
+
     // --------------------------------------------------------┤ BROWSER EXTENSION GET RELATED
     app.post('/getFromURL/', function(req, res){
       res.setHeader('Access-Control-Allow-Origin','*');

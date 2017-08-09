@@ -4,6 +4,7 @@
 	"searchShard" : "ekx01",
 	"searchType" : "ekxIndex",
 	"eventShard" : "ekxevents",
+	"dataShard" : "ekxdata",
 	"extensionShard" : "ekxextension",
 	"crawlerShard" : "webcrawler",
 	"eventType" : "ekxEventIndex",

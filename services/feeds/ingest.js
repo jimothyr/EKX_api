@@ -72,22 +72,22 @@ var search_engine = require('../search/elasticsearch'),
     }
 
     // --------------------------------------------------------┤ GET EVENTBRITE EVENT ITEMS
-    var get_events = function(id, providerName){
-      return new Promise(function (resolve, reject) {
-        console.log('--------------┤ FETCHING EVENTS FOR - ' + providerName)
-        events.getEvents(id)
-        .then(function(results){
-          for(var i=0;i<results.length;i++){
-            results[i].provider = providerName;
-          }
-          return resolve(results);
-        }).catch((error) => {
-          console.log('get event error', error)
-        });
-      }).catch((error) => {
-        console.log('get event error', error)
-      });
-    }
+    // var get_events = function(id, providerName){
+    //   return new Promise(function (resolve, reject) {
+    //     console.log('--------------┤ FETCHING EVENTS FOR - ' + providerName)
+    //     events.getEvents(id)
+    //     .then(function(results){
+    //       for(var i=0;i<results.length;i++){
+    //         results[i].provider = providerName;
+    //       }
+    //       return resolve(results);
+    //     }).catch((error) => {
+    //       console.log('get event error', error)
+    //     });
+    //   }).catch((error) => {
+    //     console.log('get event error', error)
+    //   });
+    // }
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
@@ -125,7 +125,7 @@ var search_engine = require('../search/elasticsearch'),
       console.log('╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝');
     }
 
-    var process_items = exports.process_items = function(items){
+    var process_items = exports.process_items = function(items, indexSearch){
       var count = 0, providers=[];
       function process_item(item){
         if(!providers.includes(item.provider.id)){
@@ -181,7 +181,7 @@ var search_engine = require('../search/elasticsearch'),
 
             // --------------------------------------------------------┤ ADD THE OBJECT TO THE SEARCH ENGINE
             console.log('-------------------------┤ INDEXING '+count+' of '+ items.length);
-            search_engine.index(item, function(){
+            indexSearch(item, function(){
               count++;
               item = null;
               indexObj = null;
@@ -190,7 +190,9 @@ var search_engine = require('../search/elasticsearch'),
               }else{
                 completeIngest(providers);
               }
-            });
+            })
+            // search_engine.index(item, function(){
+            // });
           }else{
             console.log('-------------------------┤ COULD NOT INDEX '+count+' of '+ items.length)
             count++;
@@ -210,6 +212,10 @@ var search_engine = require('../search/elasticsearch'),
         })
       }
       process_item(items[count]);
+    }
+
+    var process_data = exports.process_data = function(items){
+
     }
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
@@ -238,7 +244,7 @@ var get_feeds = function(providerId){
 exports.ingest_feeds = function(provider_id){
  console.log('╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗');
  console.log('║                                                                                                                      ║');
- console.log('║                                                STARTING INGEST                                                       ║');
+ console.log('║                                           STARTING FEED INGEST                                                       ║');
  console.log('║                                                                                                                      ║');
  console.log('╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣');
  console.log('║                                                                                                                      ║');
@@ -263,15 +269,65 @@ exports.ingest_feeds = function(provider_id){
 
   })
   .then(function(retItems){
-    process_items([].concat.apply([], retItems));
+    process_items([].concat.apply([], retItems), function(item, callback){
+      search_engine.index(item, function(){
+        callback();
+      })
+    });
   })
   
-// --------------------------------------------------------┤ TOTDO: REDO EVENTS TO ALLOW WP JSON EVENTS - eg http://manage-ekx.rhcloud.com/feeds-json/?feedType=events
-// if(p.eventbrite){
-//   p.eventbrite.map(function(e){
-//     eventProms.push(get_events(e.id, p.provider.name))
-//   });
-// }
+}
+
+var get_data = function(providerId){
+  return new Promise(function (resolve, reject) {
+    request({
+      url: appGlobals.managerURL+'/feeds-json/?feedType=data'+(providerId ? '&providerId='+providerId : ''),
+      method: "GET",
+      json: true,
+    }, 
+    function (error, response, body){
+      if(error){
+        return reject(error);
+      }else{
+        return resolve(body);
+      }
+    });
+  });
+}
+
+exports.ingest_data = function(provider_id){
+  console.log('╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗');
+  console.log('║                                                                                                                      ║');
+  console.log('║                                           STARTING DATA INGEST                                                       ║');
+  console.log('║                                                                                                                      ║');
+  console.log('╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣');
+  console.log('║                                                                                                                      ║');
+  console.log('║                                                                                                                      ║');
+  get_data(provider_id)
+  .then(function(providers){
+    var feedProms = [];
+
+    providers.map(function(p){
+      if(p.feeds){
+        p.feeds.map(function(f){
+          feedProms.push(get_items(f.url, p.provider, f.id).then(function(res){
+            return res;
+          }))
+        });
+      }
+
+
+    });
+    return Promise.all(feedProms);
+
+  })
+  .then(function(retItems){
+    process_items([].concat.apply([], retItems), function(item, callback){
+      search_engine.indexData(item, function(){
+        callback();
+      })
+    });
+  })
 }
 
 exports.check_valid_feed = function(feed_url, res){

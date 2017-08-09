@@ -8,6 +8,7 @@ var eng_lang_score = require('../eng_lang/get_els');
 var people = require('../people/get_people');
 var people = require('../people/get_people');
 var funding = require('../funding/researchGateway');
+var datasets = require('../data/getData');
 
 // 
 // ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -119,6 +120,25 @@ var funding = require('../funding/researchGateway');
 			   			});
 					});
 				}
+			},
+			datasets : {
+				types : ['related'],
+				action : function(data){
+					var ret_obj={name: 'datasets'};
+					return new Promise(function (resolve, reject) {
+						if(!data.keywords.string){
+							ret_obj.data = {'error' : 'invalid keywords'};
+							return resolve (ret_obj);
+						}
+						datasets.get_data(data.keywords.string)
+						.then(function(ret_data){
+							ret_obj.data = ret_data
+							return resolve(ret_obj);
+						}).catch((error) => {
+				        console.log('datasets - ', error)
+				        return reject(error);
+					});
+				})
 			},
 			eng_lang_score :{
 				types : ['info'],

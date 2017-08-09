@@ -1,5 +1,8 @@
-var allNames = require("./names.json");
-var notNames = require("./notNames.json");
+var allNames = require("./names.json"),
+    notNames = require("./notNames.json");
+
+var ignore = notNames.not_names,
+    names = allNames.names;
 
 function initialIsCapital( word ){
     if(!word) return false;
@@ -26,10 +29,12 @@ function dedupe(arr) {
     }, { temp: [], out: [] }).out;
 }
 
+var checkWord = function(tWord){
+    return (initialIsCapital(tWord) && !tWord.match(/\d+/g) && !ignore.includes(tWord) && tWord.length > 1 && (/[aeiou]/gi).test(tWord));
+}
+
 exports.get_people = function(text){
   return new Promise(function (resolve, reject) {
-    var names = allNames.names;
-    var ignore = notNames.not_names;
     var titles = ["Mr","Mrs","Miss","Ms","Dr","Professor","Prof","Lord","Lady"];
     var sentences = text.replace(/(?:\r\n|\r|\n)/g, '.').match(/\(?[^\.\?\!\:]+[\.!:\?]\)?/g);
     if(!sentences){
@@ -37,28 +42,38 @@ exports.get_people = function(text){
     }
     var words = [];
     sentences.forEach(function(s,i) {
-    words.push(s.split(' ')); 
+    words.push(s.split(/[\s/,;]+/)); 
     });
 
     var foundNames = [];
-
     words.forEach(function(w,i){
         w.forEach(function(x,y){
             if(initialIsCapital(x)){
                 var tFound = titles.includes(x)
-                if(names.includes(x) || tFound && !ignore.includes(x)){
+                if(!ignore.includes(x) && (names.includes(x) || tFound)){
                     var tName = (tFound ? [] : [x]);
                     var t=(tFound ? y+1 : y);
                     var found = true;
-                    var fNames = 0;
-                    while (found === true && fNames < 3) {
+                    var tWord;
+                    var nameTally = 0;
+                    var nextWord;
+                    while (found === true ) {
                         t++;
-                        fNames++;
-                        found = initialIsCapital(w[t])
-                        if(found && !w[t].match(/\d+/g) && !ignore.includes(w[t])){
-                            tName.push(w[t].replace("'s",'').replace(/\W/g, ''))
-                            fNames++;
-                        };
+                       if(w[t]){
+                            tWord = w[t].replace("'s",'').replace(/\W/g, '')
+                            nextWord = w[t+1] || '';
+                            found = checkWord(tWord);
+                            // --------------------------------------------------------┤ If the next word is on the name list but this isn't the first word in the surname and the one after this is a valid word, let's plit them into a new name.
+                            if(names.includes(tWord) && nameTally > 0 && checkWord(nextWord)){
+                                found = false;
+                            }
+                            if(found){
+                                tName.push(tWord)
+                            };
+                       }else{
+                           found = false;
+                       }
+                        nameTally++;
                     }
                     if(tName.length > 1)foundNames.push(tName.join(' '));
                 };

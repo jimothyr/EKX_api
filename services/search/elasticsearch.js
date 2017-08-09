@@ -34,6 +34,29 @@ var request 	= require('request'),
 			});
 		}
 
+		var add_data = function(data){
+			return new Promise(function(resolve, reject){
+				request({
+					url: appGlobals.searchURL+appGlobals.dataShard+'/'+appGlobals.searchType+(data.guid ? '/'+data.guid : ''),
+					method: "POST",
+					json: true,
+					auth: appGlobals.indexAuth,
+					body: data
+				}, 
+				function (error, response, body){
+					if(error){
+						return reject(error);
+					}else{
+						if(body.result){
+							return resolve(response);
+						}else{
+							console.log(body)
+						}
+					}
+				});
+			});	
+		}
+
 		// --------------------------------------------------------┤ ADD OR UPDATE AN EVENT
 		var add_event = exports.add_event = function(event){
 			return new Promise(function(resolve, reject){
@@ -81,6 +104,11 @@ var request 	= require('request'),
 			// fake_update(doc).then(function(){
 			// 	callback('done');
 			// });
+		}
+		exports.indexData = function(doc, callback){
+			add_data(doc).then(function(){
+				callback('done');
+			})
 		}
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
@@ -229,10 +257,11 @@ var request 	= require('request'),
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		// --------------------------------------------------------┤ ALL RELATED
-		exports.getRelated = function(keywords, guid){
+		exports.getRelated = function(keywords, guid, shard){
+			shard = shard || appGlobals.searchShard;
 			return new Promise(function (resolve, reject) {
 				request({
-				    url: appGlobals.searchURL+appGlobals.searchShard+"/_search",
+				    url: appGlobals.searchURL+shard+"/_search",
 				    method: "POST",
 				    json: true,   // <--Very important!!!
 				    auth: appGlobals.indexAuth,
@@ -265,7 +294,7 @@ var request 	= require('request'),
 								hit._source.host = tUrl.hostname;
 								// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
 						    	hit._source.link = encryptLink(hit._source.link, hit._source.provider.id, hit._source.feed_id, hit._source.feed_url);
-						    	hit._source.url = hit._source.link;
+						    	hit._source.resource_uri = hit._source.url = hit._source.link;
 						        memo.push(hit);
 						    }
 						    return memo;
@@ -282,45 +311,45 @@ var request 	= require('request'),
 		}
 
 				// --------------------------------------------------------┤ FIND AN EVENT
-		exports.getEvents = function(keywords){
-			return new Promise(function (resolve, reject) {
-				request({
-				    url: appGlobals.searchURL+appGlobals.eventShard+"/_search",
-				    method: "POST",
-				    json: true,   // <--Very important!!!
-				    auth: appGlobals.indexAuth,
-				    body:{
-				    	"query": {
-					        "match" : {
-					            "_all" : keywords
-					        }
-					    },
-						"size" : 100,
-						"min_score": 1.7
-				    }
-				}, function (error, response, body){
-				   var hits;
-				    if(body.hits){
-				    	hits = body.hits.hits.map(function(memo, hit) {
-							var tUrl = URL.parse(hit._source.link);	
-							hit._source.host = tUrl.hostname;
-					    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
-					    	if(hit._source){
-								hit._source.resource_uri = encryptLink(hit._source.link, hit._source.provider.id, hit._source.feed_id, hit._source.feed_url);
-								hit._source.url = hit._source.resource_uri;
-								memo.push(hit);
-							}
-							return memo;						
-						}, []);
-				    }else{
-				    	hits = [];
-				    }  
-					return resolve(hits);
-				})
-			}).catch((error) => {
-		        console.error('events search - ', error)
-		    })
-		}
+		// exports.getEvents = function(keywords){
+		// 	return new Promise(function (resolve, reject) {
+		// 		request({
+		// 		    url: appGlobals.searchURL+appGlobals.eventShard+"/_search",
+		// 		    method: "POST",
+		// 		    json: true,   // <--Very important!!!
+		// 		    auth: appGlobals.indexAuth,
+		// 		    body:{
+		// 		    	"query": {
+		// 			        "match" : {
+		// 			            "_all" : keywords
+		// 			        }
+		// 			    },
+		// 				"size" : 100,
+		// 				"min_score": 1.7
+		// 		    }
+		// 		}, function (error, response, body){
+		// 		   var hits;
+		// 		    if(body.hits){
+		// 		    	hits = body.hits.hits.map(function(memo, hit) {
+		// 					var tUrl = URL.parse(hit._source.link);	
+		// 					hit._source.host = tUrl.hostname;
+		// 			    	// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
+		// 			    	if(hit._source){
+		// 						hit._source.resource_uri = encryptLink(hit._source.link, hit._source.provider.id, hit._source.feed_id, hit._source.feed_url);
+		// 						hit._source.url = hit._source.resource_uri;
+		// 						memo.push(hit);
+		// 					}
+		// 					return memo;						
+		// 				}, []);
+		// 		    }else{
+		// 		    	hits = [];
+		// 		    }  
+		// 			return resolve(hits);
+		// 		})
+		// 	}).catch((error) => {
+		//         console.error('events search - ', error)
+		//     })
+		// }
 
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
