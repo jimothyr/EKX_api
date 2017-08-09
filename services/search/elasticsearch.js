@@ -286,10 +286,10 @@ var request 	= require('request'),
 						// "min_score": 1.7
 					}
 				}, function (error, response, body){
-					console.log(body)
 				    var hits;
 				    if(body.hits){
 				    	hits = body.hits.hits.reduce(function(memo, hit) {
+							console.log(hit)
 						    if (hit.guid != guid) {
 								var tUrl = URL.parse(hit._source.link);	
 								hit._source.host = tUrl.hostname;
