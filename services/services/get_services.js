@@ -257,7 +257,7 @@ var datasets = require('../data/getData');
 						// .then(function(ret_events){
 							// ret_obj.data = {"eventBrite" : ret_events}
 							ret_obj.data = {"eventBrite" : []}
-							// return resolve(ret_obj)
+							return resolve(ret_obj)
 						// }).catch((error) => {
 							// console.log('events - ', error)
 							// return reject(error);
