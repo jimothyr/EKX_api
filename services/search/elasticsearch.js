@@ -259,7 +259,6 @@ var request 	= require('request'),
 		// --------------------------------------------------------┤ ALL RELATED
 		exports.getRelated = function(keywords, guid, shard){
 			shard = shard || appGlobals.searchShard;
-			console.log(appGlobals.searchURL+shard+"/_search")
 			return new Promise(function (resolve, reject) {
 				request({
 				    url: appGlobals.searchURL+shard+"/_search",
@@ -287,6 +286,7 @@ var request 	= require('request'),
 						// "min_score": 1.7
 					}
 				}, function (error, response, body){
+					console.log(body)
 				    var hits;
 				    if(body.hits){
 				    	hits = body.hits.hits.reduce(function(memo, hit) {
