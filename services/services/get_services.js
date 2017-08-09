@@ -135,10 +135,11 @@ var datasets = require('../data/getData');
 							ret_obj.data = ret_data
 							return resolve(ret_obj);
 						}).catch((error) => {
-				        console.log('datasets - ', error)
-				        return reject(error);
-					});
-				})
+				        	console.log('datasets - ', error)
+				        	return reject(error);
+						});
+					})
+				}
 			},
 			eng_lang_score :{
 				types : ['info'],
