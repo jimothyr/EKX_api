@@ -259,6 +259,7 @@ var request 	= require('request'),
 		// --------------------------------------------------------┤ ALL RELATED
 		exports.getRelated = function(keywords, guid, shard){
 			shard = shard || appGlobals.searchShard;
+			console.log(appGlobals.searchURL+shard+"/_search")
 			return new Promise(function (resolve, reject) {
 				request({
 				    url: appGlobals.searchURL+shard+"/_search",
