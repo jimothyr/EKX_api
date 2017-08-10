@@ -27,8 +27,8 @@ exports.get_twitter = function(keywords){
 			gzip: true,
 			json: true,   // <--Very important!!!
 			auth: {
-				'user': 'Encraft_UK',
-				'pass': '4Ncraft!'
+				'user': 'jperry1147@gmail.com',
+				'pass': 'eleven47'
 			}
 		}, function (error, response, body){
 			if(error){
