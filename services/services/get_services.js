@@ -228,19 +228,35 @@ var datasets = require('../data/getData');
 			social : {
 				types : ['related'],
 				action : function(data){
-					var ret_obj={name: 'social'};
+					var ret_obj={name: 'social', data:{}};
 					return new Promise(function (resolve, reject) {
+						var proms = [];
 						if(!data.keywords.string){
 							ret_obj.data = {'error' : 'invalid keywords'};
 							return resolve (ret_obj);
 						}
-						social.get_stackExchange(data.keywords.string)
-						.then(function(ret_social){
-							ret_obj.data = {"stackExchange" : ret_social}
-							return resolve(ret_obj);
-						}).catch((error) => {
-				        console.log('social - ', error)
-				    });
+						proms.push(
+							social.get_stackExchange(data.keywords.string)
+							.then(function(ret_se){
+								ret_obj.data.stackExchange = ret_se;
+								// return resolve(ret_obj);
+							}).catch((error) => {
+								console.log('social - ', error)
+							})
+						)
+						proms.push(
+							social.get_twitter(data.keywords.string)
+							.then(function(ret_twitter){
+								ret_obj.data.twitter = ret_twitter;
+								// return resolve(ret_obj);
+							}).catch((error) => {
+								console.log('social - ', error)
+							})
+						)
+						var items = Promise.all(proms);
+						items.then(function(results){
+							return resolve (ret_obj);
+						});
 					})
 				}
 			},

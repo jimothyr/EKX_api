@@ -18,3 +18,27 @@ exports.get_stackExchange = function(keywords){
 		});
 	})
 }
+
+exports.get_twitter = function(keywords){
+	return new Promise(function (resolve, reject) {
+		request({
+			url: "https://api.twitter.com/1.1/search/tweets.json?list:EnergySysCat/energy-knowledge-exchange&q="+encodeURIComponent(keywords),
+			method: "GET",
+			gzip: true,
+			json: true,   // <--Very important!!!
+			auth: {
+				'user': 'Encraft_UK',
+				'pass': '4Ncraft!'
+			}
+		}, function (error, response, body){
+			if(error){
+				return reject(error);
+			}
+			if(body){
+				return resolve(body)
+			}else{
+			   return resolve([]);
+			}
+		});
+	})
+}
