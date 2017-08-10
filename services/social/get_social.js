@@ -27,8 +27,7 @@ exports.get_twitter = function(keywords){
 			gzip: true,
 			json: true,   // <--Very important!!!
 			auth: {
-				'user': 'jperry1147@gmail.com',
-				'pass': 'eleven47'
+				'Bearer': 'AAAAAAAAAAAAAAAAAAAAACpEUwAAAAAAKh1ygUUTNmZv%2BOzK1etjVww4n%2Fk%3D7WJt0PdN6lDjurwlliPxNYnd6l3zNp4A5hwoZMA1K9EImULmfC'
 			}
 		}, function (error, response, body){
 			if(error){
