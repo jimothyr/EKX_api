@@ -83,3 +83,12 @@ exports.get_people = function(text){
     return resolve(dedupe(foundNames))
   });
 }
+
+exports.checkNames = function(namesArr){
+    return namesArr.filter(function(n){
+        var tN = n.split(' ');
+        return names.includes(tN[0]) && !tN.some(function(x){
+            return ignore.includes(x);
+        })
+    })
+}

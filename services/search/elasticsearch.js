@@ -1,5 +1,6 @@
 var request 	= require('request'),
 	appGlobals 	= require('../globals/globals.json'),
+	people 		= require('../people/get_people'),
 	crypto 		= require('crypto'),
 	URL 		= require('url');
 // 
@@ -294,7 +295,9 @@ var request 	= require('request'),
 								hit._source.host = tUrl.hostname;
 								// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
 						    	hit._source.link = encryptLink(hit._source.link, hit._source.provider.id, hit._source.feed_id, hit._source.feed_url);
-						    	hit._source.resource_uri = hit._source.url = hit._source.link;
+								hit._source.resource_uri = hit._source.url = hit._source.link;
+								// --------------------------------------------------------┤ DOUBLE CHECK THE NAMES IN THE DOC AGAINST LATEST LIST
+								hit._source.people = (hit._source.people.length > 0 ? people.checkNames(hit._source.people) : hit._source.people);
 						        memo.push(hit);
 						    }
 						    return memo;
