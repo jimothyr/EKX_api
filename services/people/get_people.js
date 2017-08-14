@@ -1,5 +1,5 @@
 var allNames = require("./names.json"),
-    notNames = require("./notNames.json");
+    notNames = require("./notNames.json"),
     notTerms = require("./terms.json");
 
 var ignore = notNames.not_names,
