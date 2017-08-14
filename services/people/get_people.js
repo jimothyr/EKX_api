@@ -122,6 +122,7 @@ function overWriteFile(remoteName, localName){
         }, 
         function (error, response, body){
             if(!error){
+                console.log(body)
                 var outputFilename = nameFilePath + localName+".json";
                 fs.truncate(outputFilename, 0, function() {
                     fs.writeFile(outputFilename, body, function (err) {
@@ -139,9 +140,9 @@ function overWriteFile(remoteName, localName){
 exports.updateNameFiles = function(){
     return new Promise(function (resolve, reject) {
         var proms = [
-            overWriteFile('names/terms'),
-            overWriteFile('names/names'),
-            overWriteFile('names/not-names')
+            overWriteFile('names/terms', 'terms'),
+            overWriteFile('names/names', 'names'),
+            overWriteFile('names/not-names', 'notNames')
         ];
         var items = Promise.all(proms);
         items.then(function(results){
