@@ -1,4 +1,4 @@
-var nameFilePath = (process.env.OPENSHIFT_DATA_DIR ? process.env.OPENSHIFT_DATA_DIR+"Names/" : "./");
+var nameFilePath = (process.env.OPENSHIFT_DATA_DIR ? process.env.OPENSHIFT_DATA_DIR+"Names/" : "");
 
 var appGlobals 	= require('../globals/globals.json'),
     fs          = require('fs'),
