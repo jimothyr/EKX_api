@@ -34,11 +34,12 @@ function dedupe(arr) {
     }, { temp: [], out: [] }).out;
 }
 
+
+exports.get_people = function(text){
+
 var checkWord = function(tWord){
     return (initialIsCapital(tWord) && !tWord.match(/\d+/g) && !ignore.includes(tWord) && tWord.length > 1 && (/[aeiou]/gi).test(tWord));
 }
-
-exports.get_people = function(text){
 
 var names = JSON.parse(fs.readFileSync(nameFilePath + "names.json", 'utf8')),
     ignore = JSON.parse(fs.readFileSync(nameFilePath + "notNames.json", 'utf8')),
