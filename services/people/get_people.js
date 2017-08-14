@@ -1,12 +1,16 @@
 var nameFilePath = (process.env.OPENSHIFT_DATA_DIR ? process.env.OPENSHIFT_DATA_DIR+"Names/" : "./");
 
-var allNames = require(nameFilePath + "names.json"),
-    notNames = require(nameFilePath + "notNames.json"),
-    notTerms = require(nameFilePath + "terms.json");
-
 var appGlobals 	= require('../globals/globals.json'),
     fs          = require('fs'),
     request     = require('request');
+
+var allNames = JSON.parse(fs.readFileSync(nameFilePath + "names.json", 'utf8')),
+    notNames = JSON.parse(fs.readFileSync(nameFilePath + "notNames.json", 'utf8')),
+    notTerms = JSON.parse(fs.readFileSync(nameFilePath + "terms.json", 'utf8'));
+
+// var allNames = require(nameFilePath + "names.json"),
+//     notNames = require(nameFilePath + "notNames.json"),
+//     notTerms = require(nameFilePath + "terms.json");
 
 var ignore = notNames,
     names = allNames,
@@ -126,7 +130,7 @@ function overWriteFile(remoteName, localName){
                 var outputFilename = nameFilePath + localName+".json";
                 fs.truncate(outputFilename, 0, function() {
                     fs.writeFile(outputFilename, JSON.stringify(body), function (err) { if (!err) {
-                            delete require.cache[require.resolve(outputFilename)]
+                            // delete require.cache[require.resolve(outputFilename)]
                             return resolve ('ok');
                         }
                     });
