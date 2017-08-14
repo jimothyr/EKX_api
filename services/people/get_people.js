@@ -37,13 +37,13 @@ function dedupe(arr) {
 
 exports.get_people = function(text){
 
-var checkWord = function(tWord){
-    return (initialIsCapital(tWord) && !tWord.match(/\d+/g) && !ignore.includes(tWord) && tWord.length > 1 && (/[aeiou]/gi).test(tWord));
-}
+    var names = JSON.parse(fs.readFileSync(nameFilePath + "names.json", 'utf8')),
+        ignore = JSON.parse(fs.readFileSync(nameFilePath + "notNames.json", 'utf8')),
+        terms = JSON.parse(fs.readFileSync(nameFilePath + "terms.json", 'utf8'));
 
-var names = JSON.parse(fs.readFileSync(nameFilePath + "names.json", 'utf8')),
-    ignore = JSON.parse(fs.readFileSync(nameFilePath + "notNames.json", 'utf8')),
-    terms = JSON.parse(fs.readFileSync(nameFilePath + "terms.json", 'utf8'));
+    var checkWord = function(tWord){
+        return (initialIsCapital(tWord) && !tWord.match(/\d+/g) && !ignore.includes(tWord) && tWord.length > 1 && (/[aeiou]/gi).test(tWord));
+    }
 
   return new Promise(function (resolve, reject) {
     var titles = ["Mr","Mrs","Miss","Ms","Dr","Professor","Prof","Lord","Lady"];
