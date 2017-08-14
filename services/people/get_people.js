@@ -4,17 +4,7 @@ var appGlobals 	= require('../globals/globals.json'),
     fs          = require('fs'),
     request     = require('request');
 
-var allNames = JSON.parse(fs.readFileSync(nameFilePath + "names.json", 'utf8')),
-    notNames = JSON.parse(fs.readFileSync(nameFilePath + "notNames.json", 'utf8')),
-    notTerms = JSON.parse(fs.readFileSync(nameFilePath + "terms.json", 'utf8'));
 
-// var allNames = require(nameFilePath + "names.json"),
-//     notNames = require(nameFilePath + "notNames.json"),
-//     notTerms = require(nameFilePath + "terms.json");
-
-var ignore = notNames,
-    names = allNames,
-    terms = notTerms;
 // var ignore = notNames.not_names,
 //     names = allNames.names,
 //     terms = notTerms.terms;
@@ -49,6 +39,11 @@ var checkWord = function(tWord){
 }
 
 exports.get_people = function(text){
+
+var names = JSON.parse(fs.readFileSync(nameFilePath + "names.json", 'utf8')),
+    ignore = JSON.parse(fs.readFileSync(nameFilePath + "notNames.json", 'utf8')),
+    terms = JSON.parse(fs.readFileSync(nameFilePath + "terms.json", 'utf8'));
+
   return new Promise(function (resolve, reject) {
     var titles = ["Mr","Mrs","Miss","Ms","Dr","Professor","Prof","Lord","Lady"];
     var sentences = text.replace(/(?:\r\n|\r|\n)/g, '.').match(/\(?[^\.\?\!\:]+[\.!:\?]\)?/g);
@@ -105,7 +100,9 @@ exports.get_people = function(text){
 }
 
 exports.checkNames = function(namesArr){
-    console.log(ignore[ignore.length-1])
+    var names = JSON.parse(fs.readFileSync(nameFilePath + "names.json", 'utf8')),
+    ignore = JSON.parse(fs.readFileSync(nameFilePath + "notNames.json", 'utf8')),
+    terms = JSON.parse(fs.readFileSync(nameFilePath + "terms.json", 'utf8'));
     return namesArr.filter(function(n){
         var tN = n.split(' ');
         return names.includes(tN[0]) 
@@ -149,7 +146,7 @@ exports.updateNameFiles = function(){
         ];
         var items = Promise.all(proms);
         items.then(function(results){
-            return resolve ('done');
+            return resolve ([]);
         })
     });
 }
