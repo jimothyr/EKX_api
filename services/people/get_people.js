@@ -101,7 +101,7 @@ exports.get_people = function(text){
 }
 
 exports.checkNames = function(namesArr){
-    console.log(ignore)
+    console.log(ignore[ignore.length-1])
     return namesArr.filter(function(n){
         var tN = n.split(' ');
         return names.includes(tN[0]) 
