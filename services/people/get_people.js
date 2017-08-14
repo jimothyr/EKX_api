@@ -124,7 +124,7 @@ function overWriteFile(remoteName, localName){
             if(!error){
                 var outputFilename = nameFilePath + localName+".json";
                 fs.truncate(outputFilename, 0, function() {
-                    fs.writeFile(outputFilename, JSONS.stringify(body), function (err) { if (!err) {
+                    fs.writeFile(outputFilename, JSON.stringify(body), function (err) { if (!err) {
                             delete require.cache[require.resolve(outputFilename)]
                             return resolve ('ok');
                         }
