@@ -77,7 +77,12 @@ exports.get_people = function(text){
                        }
                         nameTally++;
                     }
-                    if(tName.length > 1 && !terms.some(function(x){return tName.join(' ').includes(x);}))foundNames.push(tName.join(' '));
+                    var sName = tName.join(' ');
+                    terms.map(function(x){
+                        sName.replace(x, '');
+                    })
+                    tName = sName.split(' ');
+                    if(tName.length > 1 )foundNames.push(sName);
                 };
             }
         })
