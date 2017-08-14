@@ -5,6 +5,7 @@ var search_engine = require('../search/elasticsearch'),
     content       = require('../content/get_content'), 
     services      = require('../services/get_services'),
     events        = require('../events/eventbrite'),
+    people        = require('../people/get_people'),
     appGlobals    = require('../globals/globals.json');
 
 
@@ -229,6 +230,7 @@ var search_engine = require('../search/elasticsearch'),
 
 var get_feeds = function(providerIds){
   return new Promise(function (resolve, reject) {
+    console.log('  GETTING RSS FEEDS')
     request({
       url: appGlobals.managerURL+'/feeds-json/'+(providerIds ? '?providerId='+providerIds : ''),
       method: "GET",
@@ -252,8 +254,11 @@ var ingest_feeds = exports.ingest_feeds = function(provider_ids, ingestFinished)
  console.log('╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣');
  console.log('║                                                                                                                      ║');
  console.log('║                                                                                                                      ║');
-
- get_feeds(provider_ids)
+console.log('  UPDATING PEOPLE NAMES LIST')
+ people.updateNameFiles()
+.then(function(){
+  return get_feeds(provider_ids)
+})
  .then(function(providers){
     var feedProms = [];
 
