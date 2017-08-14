@@ -1,8 +1,10 @@
 var allNames = require("./names.json"),
     notNames = require("./notNames.json");
+    notTerms = require("./terms.json");
 
 var ignore = notNames.not_names,
-    names = allNames.names;
+    names = allNames.names,
+    terms = notTerms.terms;
 
 function initialIsCapital( word ){
     if(!word) return false;
@@ -75,7 +77,7 @@ exports.get_people = function(text){
                        }
                         nameTally++;
                     }
-                    if(tName.length > 1)foundNames.push(tName.join(' '));
+                    if(tName.length > 1 && !terms.some(function(x){return tName.join(' ').includes(x);}))foundNames.push(tName.join(' '));
                 };
             }
         })
@@ -87,8 +89,12 @@ exports.get_people = function(text){
 exports.checkNames = function(namesArr){
     return namesArr.filter(function(n){
         var tN = n.split(' ');
-        return names.includes(tN[0]) && !tN.some(function(x){
+        return names.includes(tN[0]) 
+        && !tN.some(function(x){
             return ignore.includes(x);
+        })
+        && !terms.some(function(x){
+            return tN.join(' ').includes(x);
         })
     })
 }
