@@ -1,10 +1,17 @@
-var allNames = require("./names.json"),
-    notNames = require("./notNames.json"),
-    notTerms = require("./terms.json");
+var nameFilePath = (process.env.OPENSHIFT_DATA_DIR ? process.env.OPENSHIFT_DATA_DIR+"Names/" : "./");
 
-var ignore = notNames.not_names,
-    names = allNames.names,
-    terms = notTerms.terms;
+var allNames = require(nameFilePath + "names.json"),
+    notNames = require(nameFilePath + "notNames.json"),
+    notTerms = require(nameFilePath + "terms.json");
+
+var request = require('request');
+
+var ignore = notNames,
+    names = allNames,
+    terms = notTerms;
+// var ignore = notNames.not_names,
+//     names = allNames.names,
+//     terms = notTerms.terms;
 
 function initialIsCapital( word ){
     if(!word) return false;
@@ -102,4 +109,41 @@ exports.checkNames = function(namesArr){
             return tN.join(' ').includes(x);
         })
     })
+}
+
+function overWriteFile(remoteName, localName){
+    return new Promise(function (resolve, reject) {
+        request({
+            url: appGlobals.managerURL+"/Names/"+remoteName,
+            method: "GET",
+            json: true,
+        }, 
+        function (error, response, body){
+            if(!error){
+                var outputFilename = nameFilePath + localName+".json";
+                fs.truncate(outputFilename, 0, function() {
+                    fs.writeFile(outputFilename, body, function (err) {
+                        if (!err) {
+                            delete require.cache[require.resolve(outputFilename)]
+                            return resolve ('ok');
+                        }
+                    });
+                });
+            }
+        });
+    });
+}
+
+exports.updateNameFiles = function(){
+    return new Promise(function (resolve, reject) {
+        var proms = [
+            overWriteFile('names/terms'),
+            overWriteFile('names/names'),
+            overWriteFile('names/not-names')
+        ];
+        var items = Promise.all(proms);
+        items.then(function(results){
+            return resolve ('done');
+        })
+    });
 }

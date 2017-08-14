@@ -9,6 +9,7 @@ const http         = require('http'),
       services     = require('./services/services/get_services'),
       search       = require('./services/search/elasticsearch'),
       appGlobals   = require('./services/globals/globals.json'),
+      people       = require('./services/people/get_people'),
       bounces      = require('./bounce/bounce'),
       ingest      = require('./services/feeds/ingest'),
       ukerc       = require('./services/ukerc/ukerc'),
@@ -207,6 +208,12 @@ var app = express();
         // res.setHeader('Content-Type', 'application/json');          
         res.send(data);
       })
+    })
+
+    // --------------------------------------------------------┤ UPDATE THE LIST OF PEOPLE'S NAMES, AND NOT NAMES, AND TERMS
+    app.get('/updatePeopleNames', function(req, res){
+      people.updateNameFiles();
+      res.send('fine fine, whatever.')
     })
 
 // ║                                                                                                                      ║
