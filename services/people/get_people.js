@@ -5,6 +5,7 @@ var allNames = require(nameFilePath + "names.json"),
     notTerms = require(nameFilePath + "terms.json");
 
 var appGlobals 	= require('../globals/globals.json'),
+    fs          = require('fs'),
     request     = require('request');
 
 var ignore = notNames,
