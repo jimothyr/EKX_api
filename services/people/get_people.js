@@ -9,6 +9,7 @@ var request = require('request');
 var ignore = notNames,
     names = allNames,
     terms = notTerms;
+    console.log(ignore)
 // var ignore = notNames.not_names,
 //     names = allNames.names,
 //     terms = notTerms.terms;
