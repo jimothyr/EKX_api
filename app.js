@@ -64,7 +64,7 @@ var app = express();
       // --------------------------------------------------------┤ FETCH ANALYTIC DATA FILE
       app.get('/getAnalytics', function(req, res){
         res.setHeader('Access-Control-Allow-Origin','*');        
-        res.send(process.env.OPENSHIFT_DATA_DIR+'Bounce/bounces.txt');
+        res.sendFile(process.env.OPENSHIFT_DATA_DIR+'Bounce/bounces.txt');
       })
 
       // --------------------------------------------------------┤ GET SERVICES
