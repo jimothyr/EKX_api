@@ -243,7 +243,7 @@ var request 	= require('request'),
 		exports.getByProviderID= function(providerID){
 			return new Promise(function (resolve, reject) {
 				request({
-					url: appGlobals.searchURL+appGlobals.searchShard+"/_search",
+					url: appGlobals.searchURL+appGlobals.searchShard+"/_search?size=10000",
 					method: "POST",
 					json: true,   // <--Very important!!!
 					auth: appGlobals.indexAuth,
