@@ -130,7 +130,7 @@ var datasets = require('../data/getData');
 							ret_obj.data = {'error' : 'invalid keywords'};
 							return resolve (ret_obj);
 						}
-						datasets.get_data(data.keywords.string)
+						datasets.get_data(data.keywords.string, data.providerId)
 						.then(function(ret_data){
 							ret_obj.data = ret_data
 							return resolve(ret_obj);
@@ -194,7 +194,7 @@ var datasets = require('../data/getData');
 							ret_obj.data = {'error' : 'invalid keywords'};
 							return resolve (ret_obj);
 						}
-						organisations.get_organisations(data.keywords.string)
+						organisations.get_organisations(data.keywords.string, data.providerId)
 						.then(function(ret_organisation){
 							ret_obj.data = ret_organisation
 							return resolve(ret_obj);
@@ -214,7 +214,7 @@ var datasets = require('../data/getData');
 							ret_obj.data = {'error' : 'invalid keywords'};
 							return resolve (ret_obj);
 						}
-						search.getRelated(data.keywords.string, (data.guid ? data.guid : 0))
+						search.getRelated(data.keywords.string,data.providerId,(data.guid ? data.guid : 0))
 						.then(function(ret_related){
 							ret_obj.data = ret_related
 							return resolve(ret_obj)
@@ -435,7 +435,10 @@ var datasets = require('../data/getData');
 // ║                                                                                                                      ║
 		var get_services = exports.getServices = function(data){
 			return new Promise(function (resolve, reject) {
-			var proms = [], retObj = {};
+			if(!data.providerId){
+				return resolve ({error:'no providerId'});
+			}
+			var proms = [], retObj = {provider : data.providerId};
 				if(data.rssItemGUID){
 					if(data.rssItemGUID != ''){
 						proms.push(

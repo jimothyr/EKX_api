@@ -1,7 +1,7 @@
 var request = require('request');
 var search = require('../search/elasticsearch');
 
-exports.get_organisations = function(keywords){
+exports.get_organisations = function(keywords, providerId){
 	return new Promise(function (resolve, reject) {
 		request({
 		    url: 'http://esc.connector.services/api/search.php?keywords='+encodeURIComponent(keywords),
@@ -14,7 +14,7 @@ exports.get_organisations = function(keywords){
 			if(body.data){
 				body.data = body.data.map(function(item){
 					item.websites = item.websites.map(function(website){
-						return search.encryptLink(website);
+						return search.encryptLink(website, providerId);
 					});
 					return item;
 				})

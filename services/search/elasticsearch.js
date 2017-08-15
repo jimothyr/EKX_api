@@ -146,9 +146,9 @@ var request 	= require('request'),
 		}
 
 		// --------------------------------------------------------┤ CREATE ENCRYPTED TEXT FOR LINKS
-		var encryptLink = exports.encryptLink = function(text, provider, feedid, feedurl){
+		var encryptLink = exports.encryptLink = function(text, requester, provider, feedid, feedurl){
 		  var cipher = crypto.createCipher(appGlobals.cryptoAlgorithm,appGlobals.cryptoPassword);
-		  var crypted = cipher.update(text+'|'+provider+'|'+feedid+'|'+feedurl+'|'+new Date(),'utf8','hex')
+		  var crypted = cipher.update(text+'|'+requester+'|'+provider+'|'+feedid+'|'+feedurl+'|'+new Date(),'utf8','hex')
 		  crypted += cipher.final('hex');
 		  return appGlobals.apiManager+'/'+appGlobals.bounceRoute+'?q='+encodeURIComponent(crypted)+'&'+appGlobals.apiManagerKey;
 		}
@@ -287,7 +287,7 @@ var request 	= require('request'),
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 		// --------------------------------------------------------┤ ALL RELATED
-		exports.getRelated = function(keywords, guid, shard){
+		exports.getRelated = function(keywords, providerId, guid, shard){
 			shard = shard || appGlobals.searchShard;
 			return new Promise(function (resolve, reject) {
 				request({
@@ -323,7 +323,7 @@ var request 	= require('request'),
 								var tUrl = URL.parse(hit._source.link);	
 								hit._source.host = tUrl.hostname;
 								// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
-						    	hit._source.link = encryptLink(hit._source.link, hit._source.provider.id, hit._source.feed_id, hit._source.feed_url);
+						    	hit._source.link = encryptLink(hit._source.link, providerId, hit._source.provider.id, hit._source.feed_id, hit._source.feed_url);
 								hit._source.resource_uri = hit._source.url = hit._source.link;
 								// --------------------------------------------------------┤ DOUBLE CHECK THE NAMES IN THE DOC AGAINST LATEST LIST
 								hit._source.people = (hit._source.people.length > 0 ? people.checkNames(hit._source.people) : hit._source.people);
