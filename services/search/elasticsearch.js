@@ -238,6 +238,35 @@ var request 	= require('request'),
 		        console.error('guid search - ', error)
 		    })
 		}
+
+		// --------------------------------------------------------┤ FIND ITEMS BY PROVIDER ID
+		exports.getByProviderID= function(providerID){
+			return new Promise(function (resolve, reject) {
+				request({
+					url: appGlobals.searchURL+appGlobals.searchShard+"/_search",
+					method: "POST",
+					json: true,   // <--Very important!!!
+					auth: appGlobals.indexAuth,
+					body:{
+						"query": {
+							"match": {
+								"provider.id": providerID
+							  }
+						}
+					}
+				}, function (error, response, body){
+					var hits;
+					if(body.hits){
+						hits = body.hits.hits;
+					}else{
+						hits = [];
+					}
+					return resolve(hits);
+				});
+			}).catch((error) => {
+				console.error('providerID search - ', error)
+			})
+		}
 // ║                                                                                                                      ║
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣

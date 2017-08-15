@@ -216,6 +216,18 @@ var app = express();
       res.send('fine fine, whatever.')
     })
 
+    // --------------------------------------------------------┤ UPDATE THE LIST OF PEOPLE'S NAMES, AND NOT NAMES, AND TERMS
+    app.get('/findbyProvider/:providerID', function(req, res){
+      search.getByProviderID(req.params.providerID)
+      .then(function(results){
+        res.setHeader('Access-Control-Allow-Origin','*');
+        res.setHeader('Content-Type', 'application/json');
+        res.send(results);
+      })
+      // people.updateNameFiles();
+      // res.send('fine fine, whatever.')
+    })
+
 // ║                                                                                                                      ║
 // ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 // ║                                                END OF SECTION                                                        ║
