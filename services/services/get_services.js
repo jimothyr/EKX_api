@@ -438,7 +438,7 @@ var datasets = require('../data/getData');
 			if(!data.providerId){
 				return resolve ({error:'no providerId'});
 			}
-			var proms = [], retObj = {provider : data.providerId};
+			var proms = [], retObj = {providerId : data.providerId};
 				if(data.rssItemGUID){
 					if(data.rssItemGUID != ''){
 						proms.push(
