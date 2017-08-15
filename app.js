@@ -57,7 +57,7 @@ var app = express();
       // --------------------------------------------------------┤ RECORD A LINK CLICK
       app.post('/'+appGlobals.bounceRoute, function(req, res){
         var tto = search.decrypt(req.body.q).split('|');
-        bounces.bounce(req.get('Referrer'), tto[0], tto[1], tto[2], tto[3], req.fingerprint.hash);
+        bounces.bounce({data:tto, user: req.fingerprint.hash, referrer: req.get('Referrer'), clicked: new Date()});
         res.redirect(tto[0]);
       });
 
