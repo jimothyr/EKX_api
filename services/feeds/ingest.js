@@ -379,8 +379,8 @@ exports.get_requested_updates = function(){
                 //no need to report back anything right now.
               })
             });
-          }else{
-            console.log('nothing to update')
+          // }else{
+            // console.log('nothing to update')
           }
         }
       });
