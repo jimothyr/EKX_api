@@ -146,7 +146,7 @@ var request 	= require('request'),
 		}
 
 		// --------------------------------------------------------┤ CREATE ENCRYPTED TEXT FOR LINKS
-		var encryptLink = exports.encryptLink = function(text, requester, keywords, provider, feedid, feedurl, guid, keywords){
+		var encryptLink = exports.encryptLink = function(text, requester, keywords, provider, feedid, feedurl, guid){
 		  var cipher = crypto.createCipher(appGlobals.cryptoAlgorithm,appGlobals.cryptoPassword);
 		  var crypted = cipher.update(text+'|'+requester+'|'+provider+'|'+feedid+'|'+feedurl+'|'+guid+'|'+keywords+'|'+new Date(),'utf8','hex')
 		  crypted += cipher.final('hex');
