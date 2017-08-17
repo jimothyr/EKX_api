@@ -14,7 +14,7 @@ exports.get_organisations = function(keywords, providerId){
 			if(body.data){
 				body.data = body.data.map(function(item){
 					item.websites = item.websites.map(function(website){
-						return search.encryptLink(website, providerId);
+						return search.encryptLink(website, providerId, keywords);
 					});
 					return item;
 				})
