@@ -257,7 +257,20 @@ var request 	= require('request'),
 				}, function (error, response, body){
 					var hits;
 					if(body.hits){
-						hits = body.hits.hits;
+						// hits = body.hits.hits;
+						hits = body.hits.hits.reduce(function(memo, hit) {
+						    if (hit.guid != guid || !guid) {
+								var tUrl = URL.parse(hit._source.link);	
+								hit._source.host = tUrl.hostname;
+								// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
+						    	// hit._source.link = encryptLink(hit._source.link, providerId, keywords, hit._source.provider.id, hit._source.feed_id, hit._source.feed_url, hit._source.item_guid);
+								// hit._source.resource_uri = hit._source.url = hit._source.link;
+								// --------------------------------------------------------┤ DOUBLE CHECK THE NAMES IN THE DOC AGAINST LATEST LIST
+								hit._source.people = (hit._source.people.length > 0 ? people.checkNames(hit._source.people) : hit._source.people);
+						        memo.push(hit);
+						    }
+						    return memo;
+						}, []);
 					}else{
 						hits = [];
 					}
