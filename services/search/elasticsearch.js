@@ -259,7 +259,7 @@ var request 	= require('request'),
 					if(body.hits){
 						// hits = body.hits.hits;
 						hits = body.hits.hits.reduce(function(memo, hit) {
-						    if (hit.guid != guid || !guid) {
+						    // if (hit.guid != guid || !guid) {
 								var tUrl = URL.parse(hit._source.link);	
 								hit._source.host = tUrl.hostname;
 								// --------------------------------------------------------┤ CONVERT LINKS INTO BOUNCING LINKS
@@ -268,7 +268,7 @@ var request 	= require('request'),
 								// --------------------------------------------------------┤ DOUBLE CHECK THE NAMES IN THE DOC AGAINST LATEST LIST
 								hit._source.people = (hit._source.people.length > 0 ? people.checkNames(hit._source.people) : hit._source.people);
 						        memo.push(hit);
-						    }
+						    // }
 						    return memo;
 						}, []);
 					}else{
